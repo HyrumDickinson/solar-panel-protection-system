@@ -16,8 +16,6 @@ In accordance with the convention for projects using the Git version control sys
 Until code is fully ported to Python 3, these branches are the `main` branches the code in their respective language.
 ### `original`
 It is important to note that the original code for this project is not my own. It was written by Dillon Vadgama, Douglas Lee, and Sachin Reddy as part of their original design project. The exact original code, including the original README, is stored in this branch. Under no circumstances should anything in the `original` branch be edited.
-### `box-files`
-This branch represents the exact state of the software in the official project Box files. There are only minimal differences between this and the `original` code: changes to the README, a print statement, slight changes to the import statements that reflect changes in the import packages, and very minor, basic python corrections such as wrapping parenthesis around the arguments of two print statements. The files in the `box-files` should only be edited if the official Box files are edited, and the official Box files should not be edited except with the approval of Arijit Banerjee or Kevin Colravy.
 #### All others
 All other repos exist for code editing purposes and are changed or deleted at the discretion of Hyrum Dickinson or Benjamin Olaivar.
 
