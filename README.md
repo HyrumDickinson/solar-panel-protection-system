@@ -16,6 +16,7 @@ In accordance with the convention for projects using the Git version control sys
 Until code is fully ported to Python 3, these branches are the `main` branches the code in their respective language.
 ### `original`
 It is important to note that the original code for this project is not my own. It was written by Dillon Vadgama, Douglas Lee, and Sachin Reddy as part of their original design project. The exact original code, including the original README, is stored in this branch. Under no circumstances should anything in the `original` branch be edited.
+
 The `original` branch is an exact copy of the files in <https://github.com/sachinreddy1/SolarPanelMonitor>. There may be instances over the course of this project where viewing his git commit history, rather than only his final project files, is useful.
 #### All others
 All other repos exist for code editing purposes and are changed or deleted at the discretion of Hyrum Dickinson or Benjamin Olaivar.
