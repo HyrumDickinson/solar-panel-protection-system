@@ -11,7 +11,7 @@ The original solar panel protection system was created by then-undergraduate stu
 ## Branches
 
 ### `main`
-In accordance with the convention for projects using the Git version control system, the latest stable, deployable version of the code is stored in the `main` branch.
+The latest stable, deployable version of the code is stored in the `main` branch.
 ### `python-2-version` and `python-3-version`
 Until code is fully ported to Python 3, these branches are the `main` branches the code in their respective language.
 ### `original`
