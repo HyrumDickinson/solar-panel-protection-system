@@ -6,7 +6,7 @@ This code represents the software portion of an ongoing effort to build a tool t
 
 This project is funded by the University of Illinois Department of Electrical & Computer Engineering and is based out of the department's Center for Electric Machinery & Electromechanics. The project is under the direction of Arijit Banerjee, Assistant Professor in Electrical & Computer Engineering. The software is undergoing construction by undergraduate student workers Hyrum Dickinson and Benjamin Olaivar, supervised by Kevin Colravy, Research Engineer at the Center for Electric Machinery & Electromechanics.
 
-The original solar panel protection system was created by then-undergraduate students Dillon Vadgama, Douglas Lee, and Sachin Reddy for their senior design project in the fall of 2019. Dubbed "Smart Interface for ECEB Research Solar Panels," their project won the Texas Instruments Best Project Award. Now, researchers from the University of Illinois are attempting to improve their prototype and create a robust, scalable tool that can monitor entire solar energy systems and reliably keep individual panels from overheating.
+The original solar panel protection system was created by then-undergraduate students Dillon Vadgama, Douglas Lee, and Sachin Reddy for their senior design project in the fall of 2019. Dubbed "Smart Interface for ECEB Research Solar Panels," their project won the Texas Instruments Best Project Award. Now, researchers from the University of Illinois are attempting to improve on the original prototype to create a robust, scalable tool that can monitor entire solar energy systems and reliably keep individual panels from overheating.
 
 ## Branches
 
