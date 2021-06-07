@@ -38,7 +38,7 @@ All README files are written in Markdown.
 - pillow
 - datetime
 
-The original code was written to run with PIL instead of pillow. However, PIL is now an unsupported package whose own website strongly recommends against using it. Pillow is a maintained fork of PIL, which should be backwards compatible with PIL.
+The original code was written to run with PIL instead of pillow. However, PIL is now an unsupported package whose own website strongly recommends against using it. Pillow is a maintained fork of PIL, which should be backwards compatible.
 
 ## Run
 
