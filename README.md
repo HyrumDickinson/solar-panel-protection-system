@@ -28,7 +28,7 @@ All other repos exist for code editing purposes and are changed or deleted at th
 - `python-2-version` : Python 2
 - `original` : Python 2
 
-All README files are written in Markdown.
+All README and WRITEME files are written in Markdown.
 
 ## Dependencies
 
