@@ -1,5 +1,5 @@
-import tkinter as tk
-from tkinter import ttk
+import Tkinter as tk
+from Tkinter import ttk
 from PIL import Image, ImageTk
 from Graph import *
 from Globs import *
