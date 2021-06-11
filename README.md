@@ -13,7 +13,7 @@ The original solar panel protection system was created by then-undergraduate stu
 ### `main`
 The latest stable, deployable version of the code is stored in the `main` branch.
 ### `python-2-version` and `python-3-version`
-Until code is fully ported to Python 3, these branches are the `main` branches the code in their respective language.
+Until code is fully ported to Python 3, these branches are the `main` branches the code in their respective language. Currently, python-2-version runs very responsively in a python 2 anaconda environment. Python-3-version is extreamely slow. I am in the process of figuring out why this is and how the Python 3 version can be sped up.
 ### `original`
 It is important to note that the original code for this project is not my own. It was written by Dillon Vadgama, Douglas Lee, and Sachin Reddy as part of their original design project. The exact original code, including the original README, is stored in this branch. Under no circumstances should anything in the `original` branch be edited.
 
