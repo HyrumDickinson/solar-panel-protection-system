@@ -1,5 +1,5 @@
 import Tkinter as tk
-from Tkinter import ttk
+# from Tkinter import tkk
 from PIL import Image, ImageTk
 from Graph import *
 from Globs import *

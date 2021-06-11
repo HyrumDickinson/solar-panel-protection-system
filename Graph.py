@@ -5,7 +5,7 @@ from matplotlib.figure import Figure
 import matplotlib.animation as animation
 from matplotlib import style
 import Tkinter as tk
-from Tkinter import ttk
+# from Tkinter import tkk
 import sqlite3
 from Globs import *
 style.use("ggplot")
