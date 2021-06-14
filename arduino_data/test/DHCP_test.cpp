@@ -29,7 +29,7 @@ IPAddress ip(128, 174, 186, 99);
 IPAddress gateway(128, 174, 186, 1);
 IPAddress subnet(255, 255, 254, 0);
 int ledPin = 11;
-int readPin = A10;
+int readPin = A0;
 
 // telnet defaults to port 23
 EthernetServer server(23);
