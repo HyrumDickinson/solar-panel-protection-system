@@ -1,5 +1,5 @@
 # WRITEME
-btw you don't need a text editor for this file; GitHub already has a text editor and a great Markdown previewer built into the website,
+YO BEN btw you don't need a text editor for this file; GitHub already has a text editor and a great Markdown previewer built into the website,
 just click that pencil button in the upper right corner when you open this file in GitHub online
 
 ### 6-2-2021
