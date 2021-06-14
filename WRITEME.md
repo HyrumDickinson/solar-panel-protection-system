@@ -1,6 +1,6 @@
 # WRITEME
 YO BEN btw you don't need a text editor for this file; GitHub already has a text editor and a great Markdown previewer built into the website,
-just click that pencil button in the upper right corner when you open this file in GitHub online
+just click that pencil button in the upper right corner when you open this file in GitHub online to make edits, and use the `preview` button to see what your edits will look like once you've made them
 
 ### 6-2-2021
 - [X] **Hyrum Dickinson** - ported code to this new repo & deleted old one
