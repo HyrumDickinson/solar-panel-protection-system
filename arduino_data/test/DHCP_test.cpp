@@ -55,8 +55,39 @@ void loop() {
 }
 
 
+/* SETUP ETHERNET 
+  By calling ethernet.begin(mac), it first tries to make a unique ip address. If that fails, it uses the fallback ip address (made above).
+  begin(mac) keeps failing. fallback is always used for some reason
+*/
+void ethernetSetup() {
+  Serial.println("Trying to get an IP address using DHCP");
+  //! This way for sake of testing... delete next line and uncomment 'if' statement
+  Ethernet.begin(mac, ip, gateway, subnet);
+//  if (Ethernet.begin(mac) == 0) {
+//    Serial.println("Failed to configure Ethernet using DHCP");
+////    initialize the ethernet device not using DHCP:
+//    Ethernet.begin(mac, ip, gateway, subnet);
+//  }
+
+  ip = Ethernet.localIP();
+  //checking valid ip (not 0.0.0.0)
+  if (ip[0] == 0 && ip[1] == 0 && ip[2] == 0 && ip[3] == 0) {
+    Serial.print(Ethernet.localIP());
+    Serial.println(" is not a valid IP Address. No connection made.");
+    Serial.println("Stopping Program................");
+    while (true) {}
+  }
+  // print your local IP address:
+  Serial.print("My IP address: ");
+  Serial.print(Ethernet.localIP());
+  Serial.println();
+  server.begin();
+}
+
+
 /* Command Processing Function
   takes string input from client and responds accordingly
+  IN FUTURE WILL RESPOND TO GUI STARTUP AND WILL BE RAN 
 */
 void processCommand(String command)
 {
@@ -71,52 +102,30 @@ void processCommand(String command)
     return;
   } 
   
-  if (command.indexOf("ledoff") > -1){
-    Serial.println("LED Off command received"); 
-    digitalWrite(ledPin, LOW);   // sets the LED off
-    server.println("LED was turned off");
+  if (command.indexOf("setTempThresh") > -1){
+    
     commandString = "";
     return;
   } 
 
+  if (command.indexOf("readTemp") > -1){
+    
+    commandString = "";
+    return;
+  } 
+
+  if (command.indexOf("setVoltageThresh") > -1){
+    
+    commandString = "";
+    return;
+  } 
+  
+  if (command.indexOf("readVoltage") > -1){
+    
+    commandString = "";
+    return;
+  }
+
   // wipes the command string
   commandString = "";
-}
-
-
-//SETUP ETHERNET
-void ethernetSetup() {
-   // start the Ethernet connection:
-  /* ?By calling ethernet.begin(mac), it first tries to make a unique ip address. If that fails, it uses the fallback ip address (made above).
-     begin(mac) keeps failing. fallback is always used for some reason */
-  Serial.println("Trying to get an IP address using DHCP");
-  //! This way for sake of testing... delete next line and uncomment 'if' statement
-  Ethernet.begin(mac, ip, gateway, subnet);
-//  if (Ethernet.begin(mac) == 0) {
-//    Serial.println("Failed to configure Ethernet using DHCP");
-////    initialize the ethernet device not using DHCP:
-//    Ethernet.begin(mac, ip, gateway, subnet);
-//  }
-
-  ip = Ethernet.localIP();
-  if (checkValidIP(ip) == false) {
-    Serial.println("Stopping Program");
-    while (true) {}
-  }
-  // print your local IP address:
-  Serial.print("My IP address: ");
-  Serial.print(Ethernet.localIP());
-  Serial.println();
-  server.begin();
-}
-
-// verifying IP address
-boolean checkValidIP(IPAddress address) {
-  if (address[0] == 0 && address[1] == 0 && address[2] == 0 && address[3] == 0) {
-    Serial.print(Ethernet.localIP());
-    Serial.println(" is not a valid IP Address. No connection made.");
-    return false;
-  } else {
-    return true;
-  }
 }
