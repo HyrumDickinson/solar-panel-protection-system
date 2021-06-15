@@ -101,6 +101,8 @@ void setupDS18B20(){
   // locate devices on the bus
   Serial.print("Locating devices...");
   Serial.print("Found ");
+
+  //DEC stands for decimal. Can also use HEX for hexidecimal and so on
   Serial.print(numberOfDevices, DEC);
   Serial.println(" devices.");
 
@@ -159,6 +161,8 @@ void setupW5500(){
   
   server.begin();
 }
+
+
 //Get and print temp
 void printTemp(){
   sensors.requestTemperatures(); // Send the command to get temperatures

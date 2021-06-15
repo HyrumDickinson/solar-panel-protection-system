@@ -6,3 +6,10 @@ just click that pencil button in the upper right corner when you open this file 
 - [X] Hyrum Dickinson - ported code to this new repo & deleted old one
 - [X] Hyrum Dickinson - Main branch - made changes to README
 - [ ] this is what an empty box would look like
+
+### 6-15-2021
+- [X] Ben Olaivar - fixed analog pin in dhcp_test
+- [X] Ben Olaivar - ethernet connection is working
+- [X] Ben Olaivar - converted DHCP_test to command-based instead of letter based (allows for future expansion)
+- [ ] Try to get 'enter/return' to work instead of using ','
+- [ ] Incorporate temp/voltage sensors
