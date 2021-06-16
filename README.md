@@ -46,7 +46,7 @@ Run SolarPanelMonitor.py in your preferred python environment.
 
 ## Building
 
-source venv/bin/activate
+source venv/bin/activate  
 python2 Setup.py py2app -A
 
 **For questions about this README, the repository, or the code in it, please contact Hyrum Dickinson at hyrumsd2@illinois.edu.**
