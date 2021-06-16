@@ -5,12 +5,14 @@ just click that pencil button in the upper right corner when you open this file 
 ### 6-15-2021
 - [X] **Hyrum Dickinson** - `python-2-version` - fixed syntax errors and made slight changes to imports for the GUI code. It now runs responsively in a correctly set up python environment (see python-2-version README). 
 - [X] **Hyrum Dickinson** - `python-3-version` - made parallel changes as to python-2-version. When ran on python 3 instead of 2, the GUI continues to run extremely slow.
-- [X] Ben Olaivar - `arduino_dev` - fixed analog pin in dhcp_test
-- [X] Ben Olaivar - `arduino_dev` - ethernet connection is working
-- [X] Ben Olaivar - `arduino_dev` - converted DHCP_test to command-based instead of letter based (allows for future expansion)
-- [X] Ben Olaivar - `arduino_dev` - simplified ip confirmation and added space for future commands
+- [X] **Ben Olaivar** - `arduino_dev` - fixed analog pin in dhcp_test
+- [X] **Ben Olaivar** - `arduino_dev` - ethernet connection is working
+- [X] **Ben Olaivar** - `arduino_dev` - converted DHCP_test to command-based instead of letter based (allows for future expansion)
+- [X] **Ben Olaivar** - `arduino_dev` - simplified ip confirmation and added space for future commands
 - [ ] Try to get 'enter/return' to work instead of using ','
 - [ ] Incorporate temp/voltage sensors 
 
 ### 6-16-2021
-
+- [X] **Hyrum Dickinson** - `python_2_version` - changed some GUI display labels (at Kevin's request)
+- [ ] **Hyrum Dickinson** - `python_3_version` - still can't figure out why code won't run in python 3. Porting the code is starting to seem like a waste of time. I'll probably just leave it in python 2. 
+- [ ] desktop computers don't have onboard wifi; IT apparently doesn't want us to use routers. Will get a USB Wifi Adapter from ECE store tomorrow so I can practice connecting arduino through wifi.
