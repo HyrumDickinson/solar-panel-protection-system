@@ -10,5 +10,5 @@ Run `CheckWiFiNINAFirmwareVersion.ino`
 Follow instructions on <https://www.arduino.cc/en/Tutorial/WiFiNINAFirmwareUpdater>  
 This may take a while
 
-
+To be continued...
 
