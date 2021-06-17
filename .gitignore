@@ -1,0 +1,5 @@
+# Compiled Python files
+.pyc
+
+# Arduino secrets file (these should be different for each individual who uses this code, depending on their specific arduino board and internet network)
+arduino_secrets.h
