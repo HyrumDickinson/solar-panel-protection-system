@@ -11,12 +11,12 @@ The original solar panel protection system was created by then-undergraduate stu
 ## Branches
 
 ### `main`
-The latest stable, deployable version of the code is stored in the `main` branch.
+The latest stable, deployable version of the code is stored in the `main` branch. Currently, Python 2 is the primary programming language of this project.
 
-### `python-2-version` and `python-3-version`
-Until code is fully ported to Python 3, these branches are the `main` branches the code in their respective language. Currently, 
-python-2-version runs very responsively in a python 2 anaconda environment. Python-3-version is extreamely slow. I am in the process 
-of figuring out why this is and how the Python 3 version can be sped up.
+### `python-3-version`
+Python 2 is an old langauge. Efforts are underway to port the GUI code to Python 3; however, there has been little success. 
+Until code is fully ported to Python 3, these branches are the `main` branches the code in their respective language. Currently, the `main` 
+Python 2 version runs very responsively in a python 2 anaconda environment, while Python-3-version remains extremely slow. The `python_3_version` branch may eventually merge into `main`, but only if it can be fixed to run as responsibly as the legacy Python 2 version of the GUI code.
 
 ### `original`
 It is important to note that the original code for this project is not my own. It was written by Dillon Vadgama, Douglas Lee, and 
@@ -31,16 +31,15 @@ All other repos exist for code editing purposes and are changed or deleted at th
 
 ## Languages
 
-- `main` : Python 3
+- `main` : Python 2
 - `python-3-version` : Python 3
-- `python-2-version` : Python 2
 - `original` : Python 2
 
 All README and WRITEME files are written in Markdown.
 
 ## Dependencies
 
-Create a new anaconda python 2 environment and install the following packages in the listed order:
+Create a new anaconda python 2 environment and install the following packages in order:
 - pillow
 - matplotlib
 
