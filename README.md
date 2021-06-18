@@ -2,11 +2,7 @@
 
 
 ## Overview
-This code represents the software portion of an ongoing effort to build a tool that monitors solar energy systems and keeps panels from overheating.
-
-This project is funded by the University of Illinois Department of Electrical & Computer Engineering and is based out of the Center for Electric Machinery & Electromechanics. The project lies under the direction of Arijit Banerjee, Assistant Professor in ECE. The software is undergoing construction by undergraduate student workers Hyrum Dickinson and Benjamin Olaivar, supervised by Kevin Colravy, Research Engineer at CEME.
-
-The original solar panel protection system was created by then-undergraduate students Dillon Vadgama, Douglas Lee, and Sachin Reddy for their senior design project in the fall of 2019. Dubbed "Smart Interface for ECEB Research Solar Panels," their project won the Texas Instruments Best Project Award. Now, researchers from the University of Illinois are attempting to improve on the original prototype to create a robust, scalable tool that can monitor entire solar energy systems and reliably keep individual panels from overheating.
+This branch is primarily focused on the development of the onboard arduino code. This code will encompass everything from ethernet communication to sensor data reading. The majority of work done in this branch will be done under the 'arduino_data' directory, specifically in 'main.cpp' and 'DHCP_test.cpp'. Files in this directory are organized using platformio, which allows for convenient access/storage of libraries, test code, and other files. 
 
 ## Branches
 
@@ -42,7 +38,7 @@ The original code was written to run with PIL, not pillow. However, PIL is curre
 
 ## Run
 
-Run SolarPanelMonitor.py in your preferred python environment.
+
 
 ## Building
 
