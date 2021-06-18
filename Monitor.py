@@ -1,5 +1,5 @@
-import tkinter as tk
-from tkinter import ttk
+import Tkinter as tk
+# from Tkinter import tkk
 from PIL import Image, ImageTk
 from Graph import *
 from Globs import *
@@ -46,13 +46,13 @@ class Monitor():
 		# Threshold Title
 		thresholdFrame_1 = tk.Frame(thresholdFrame, bg=LIGHT_GRAY)
 		thresholdFrame_1.pack(side="top", padx=30, pady=2.5, fill="x")
-		thresholdTitle = tk.Label(thresholdFrame_1, text="Thresholds:", bg=LIGHT_GRAY, font='Helvetica_Neue 13 bold')
+		thresholdTitle = tk.Label(thresholdFrame_1, text="Trip points:", bg=LIGHT_GRAY, font='Helvetica_Neue 13 bold')
 		thresholdTitle.pack(side="left")
 
 		# Voltage Threshold Label and Entry
 		thresholdFrame_2 = tk.Frame(thresholdFrame, bg=LIGHT_GRAY)
 		thresholdFrame_2.pack(side="top", padx=43, pady=2.5, fill="x")
-		voltageEntryThreshold = tk.Label(thresholdFrame_2, text="Voltage: ", bg=LIGHT_GRAY)
+		voltageEntryThreshold = tk.Label(thresholdFrame_2, text="Max voltage: ", bg=LIGHT_GRAY)
 		voltageEntryThreshold.pack(side="left")
 		self.voltageEntry = tk.Entry(thresholdFrame_2, highlightbackground=LIGHT_GRAY, bg=DARK_GRAY, font=40, width=5)
 		self.voltageEntry.insert(0, DEFAULT_VOLTAGE_THRES)
@@ -66,7 +66,7 @@ class Monitor():
 		# Current Threshold Label and Entry
 		self.thresholdFrame_3 = tk.Frame(thresholdFrame, bg=LIGHT_GRAY)
 		self.thresholdFrame_3.pack(side="top", padx=43, pady=2.5, fill="x")
-		currentEntryThreshold = tk.Label(self.thresholdFrame_3, text="Current: ", bg=LIGHT_GRAY)
+		currentEntryThreshold = tk.Label(self.thresholdFrame_3, text="Max current: ", bg=LIGHT_GRAY)
 		currentEntryThreshold.pack(side="left")
 		self.currentEntry = tk.Entry(self.thresholdFrame_3, highlightbackground=LIGHT_GRAY, bg=DARK_GRAY, font=40, width=5)
 		self.currentEntry.insert(0, DEFAULT_CURRENT_THRES)
@@ -80,7 +80,7 @@ class Monitor():
 		# Temperature Threshold Label and Entry
 		thresholdFrame_4 = tk.Frame(thresholdFrame, bg=LIGHT_GRAY)
 		thresholdFrame_4.pack(side="top", padx=10, pady=2.5, fill="x")
-		temperatureEntryThreshold = tk.Label(thresholdFrame_4, text="Temperature: ", bg=LIGHT_GRAY)
+		temperatureEntryThreshold = tk.Label(thresholdFrame_4, text="Max temperature: ", bg=LIGHT_GRAY)
 		temperatureEntryThreshold.pack(side="left")
 		self.temperatureEntry = tk.Entry(thresholdFrame_4, highlightbackground=LIGHT_GRAY, bg=DARK_GRAY, font=40, width=5)
 		self.temperatureEntry.insert(0, DEFAULT_TEMPERATURE_THRES)

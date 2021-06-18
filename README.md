@@ -12,12 +12,20 @@ The original solar panel protection system was created by then-undergraduate stu
 
 ### `main`
 The latest stable, deployable version of the code is stored in the `main` branch.
-### `python-2-version` and `python-3-version`
-Until code is fully ported to Python 3, these branches are the `main` branches the code in their respective language. Currently, python-2-version runs very responsively in a python 2 anaconda environment. Python-3-version is extreamely slow. I am in the process of figuring out why this is and how the Python 3 version can be sped up.
-### `original`
-It is important to note that the original code for this project is not my own. It was written by Dillon Vadgama, Douglas Lee, and Sachin Reddy as part of their original design project. The exact original code, including the original README, is stored in this branch. Under no circumstances should anything in the `original` branch be edited.
 
-The `original` branch is an exact copy of the files in <https://github.com/sachinreddy1/SolarPanelMonitor>. There may be instances over the course of this project where viewing his git commit history, rather than only his final project files, is useful.
+### `python-2-version` and `python-3-version`
+Until code is fully ported to Python 3, these branches are the `main` branches the code in their respective language. Currently, 
+python-2-version runs very responsively in a python 2 anaconda environment. Python-3-version is extreamely slow. I am in the process 
+of figuring out why this is and how the Python 3 version can be sped up.
+
+### `original`
+It is important to note that the original code for this project is not my own. It was written by Dillon Vadgama, Douglas Lee, and 
+Sachin Reddy as part of their original design project. The exact original code, including the original README, is stored in this branch. 
+Under no circumstances should anything in the `original` branch be edited.
+
+The `original` branch is an exact copy of the files in <https://github.com/sachinreddy1/SolarPanelMonitor>. There may be instances 
+over the course of this project where viewing his git commit history, rather than only his final project files, is useful.
+
 #### All others
 All other repos exist for code editing purposes and are changed or deleted at the discretion of Hyrum Dickinson or Benjamin Olaivar.
 
@@ -32,13 +40,16 @@ All README and WRITEME files are written in Markdown.
 
 ## Dependencies
 
-- matplotlib
-- tkinter (Python 3) or Tkinter (Python 2)
-- sqlite3
+Create a new anaconda python 2 environment and install the following packages in the listed order:
 - pillow
-- datetime
+- matplotlib
 
-The original code was written to run with PIL, not pillow. However, PIL is currently an unsupported package whose own website recommends against its use. Pillow is a maintained fork of PIL, and should be backwards compatible.
+There were significant import issues with the code previously and with my anaconda installation, particularly with the Tkinter package. For whatever reason, 
+the code worked when I completely reinstalled anaconda and did exactly what I instructed above, even though the same code would not work on my existing 
+anaconda python 2 environment with all the `original` branch's recommended dependecies installed. 
+
+The original code was written to run with PIL, not pillow. However, PIL is currently an unsupported package whose own website recommends against its use. 
+Pillow is a maintained fork of PIL. It should be backwards compatible.
 
 ## Run
 
@@ -50,3 +61,4 @@ source venv/bin/activate
 python2 Setup.py py2app -A
 
 **For questions about `Solar-Panel-Protection-System`, please contact Hyrum Dickinson at hyrumsd2@illinois.edu.**
+
