@@ -17,3 +17,10 @@
 
 ### 6-17-2021
 - [X] **Hyrum Dickinson** - `arduino_dev` - added folder to arduino_data section with (unfinished) instructions on connecting arduino to wifi. 
+
+### 6-18-2021
+- [X] Ben Olaivar - made placeholder functions for voltage/current sensor
+- [X] Ben Olaivar - made changes to main.cpp to account for voltage sensor test functions
+- [X] Ben Olaivar - fixed bug with DHCP_test that would cause infinite loop with multiple commands
+- [ ] Webserver?
+- [ ] review conversion numbers
