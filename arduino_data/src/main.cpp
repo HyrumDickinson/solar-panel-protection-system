@@ -1,22 +1,26 @@
-// https://www.youtube.com/watch?v=vcOE2XAQHzY
-// https://www.youtube.com/watch?v=jgKPmjQtJG4
-
+/* Libararies */
 #include <Arduino.h>
 #include <SPI.h>
 #include <Ethernet.h>
 #include <MCP3428.h>
 
-/* MCP3428 Voltage and Current Sensor setup */
+/* Constants */
+#define CHANNEL_ONE 1     // Panel A
+#define CHANNEL_TWO 2     // Panel B
+#define CHANNEL_THREE 3   // Panel C
+#define CHANNEL_FOUR 4    //! Current (where is panel D being read???)
+#define NUM_CHANNELS 4 
+
+/* MCP3428 Voltage and Current Sensor variables */
 MCP3428 mcp3428;
+channelArra9[NUM_CHANNELS] = {0.0, 0.0, 0.0, 0.0}; // accounts for all 4 channels
+float voltageThreshold;   // max voltage desired
+float currentThreshold;   // max current desired
 
-float voltageThreshold;
-float currentThreshold;
 
-
-/* ETHERNET SETUP
+/* ETHERNET Variables
  * The mac (media access controller) address is the hardware address for this unit.
- * This MUST be different in each arduino.
- */
+ * This MUST be different in each arduino. */
 byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x04};
 IPAddress ip(128, 174, 186, 99); 
 IPAddress gateway(128, 174, 186, 1);
@@ -27,9 +31,12 @@ boolean gotMessage = false; // message from cleint
 void setup() {
   pinMode(ledPin, OUTPUT);
   Serial.begin(9600);
-  while (!Serial) {;}
+  while (!Serial) {}
 
+  while(!mcp3428.test()) {} // won't run if sensors don't work
+  Serial.println("All sensors connected");
   ethernetSetup();
+  Serial.println("Ethernet Connected");
 }
 
 
@@ -61,6 +68,10 @@ void loop() {
         server.println(analogRead(readPin));
       }
     }
+
+    if (thisChar == 'v')
+
+
   }
 }
 
@@ -80,25 +91,23 @@ void setupMCP3428(){
   Serial.println("SUCCESS: MCP3428 found");
 }
 
-// Prints the readings from the MCP3428
-//Renamed to readVoltage() instead of printVoltage()
-//TODO: do more than print. Integrate this into ETHERNET response. Review readADC function in MCP3428.cpp
-// void readVoltage() {
-//   float channel_A_volt = mcp3428.readADC(1)*57;
-//   float channel_B_volt = mcp3428.readADC(2)*43.2;
-//   float channel_C_volt = mcp3428.readADC(3)*14.3;
+// Make this a sensible function later
+void printVoltage() {
+  //TODO: Check 'readADC' function. It includes a 'convertRaw()' and other steps that use random numbers. Find out what they are
+  //TODO: wtf are these conversion numbers (57, 43.2, 14.3)?????
+  float CHANNEL_ONE_VOLT = mcp3428.readADC(1) * 57;
+  float CHANNEL_TWO_VOLT = mcp3428.readADC(2) * 43.2;
+  float CHANNEL_THREE_VOLT = mcp3428.readADC(3) * 14.3;
   
-//   Serial.println("ADC Voltages:");
-//   Serial.print("CH_A: ");
-//   Serial.println(channel_A_volt, 7);
-//   Serial.print("CH_B: ");
-//   Serial.println(channel_B_volt, 7);
-//   Serial.print("CH_C: ");
-//   Serial.println(channel_C_volt, 7);
-//   //? Why delay??
-//   delay(1000);
-// }
-
+  //TODO: Confirm 7-decimal accuracy
+  Serial.println("ADC Voltages:");
+  Serial.print("Channel A: ");
+  Serial.println(CHANNEL_ONE_VOLT, 7);
+  Serial.print("Channel B: ");
+  Serial.println(CHANNEL_TWO_VOLT, 7);
+  Serial.print("Channel C: ");
+  Serial.println(CHANNEL_THREE_VOLT, 7);
+}
 
 //SETUP ETHERNET
 /* By calling ethernet.begin(mac), it first tries to make a unique ip address. If that fails, it uses the fallback ip address (made above) */

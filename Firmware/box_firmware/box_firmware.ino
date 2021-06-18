@@ -195,9 +195,10 @@ void printAddress(DeviceAddress deviceAddress) {
   }
 }
 //Print the voltages read from the MCP3428 sensor.
+//? Why delay??
 void printVoltage(){
   float channel_A_volt = mcp3428.readADC(1)*57;
-  float channel_B_volt = mcp3428.readADC(2)*43.2;
+  float channel_B_volt = mcp3428.readADC(2)*43.2;F
   float channel_C_volt = mcp3428.readADC(3)*14.3;
   
   Serial.println("ADC Voltages:");

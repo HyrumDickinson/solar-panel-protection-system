@@ -17,7 +17,7 @@ MCP3428::MCP3428(){
 // Test to see that device acknowledges on attempted communication.
 bool MCP3428::test(){
   Wire.beginTransmission(MCP3428_ADDRESS);
-  return(Wire.endTransmission() == 0);
+  return(Wire.endTransmission() == 0); // 0 means success
 }
 
 // Set and write the configuration byte to the device.

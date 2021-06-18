@@ -1,10 +1,25 @@
 /*
   This is main program (blablabla add more later)
+  https://www.youtube.com/watch?v=vcOE2XAQHzY
+  https://www.youtube.com/watch?v=jgKPmjQtJG4
 */
 
 //LIBARARIES
 #include <SPI.h>
 #include <Ethernet.h>
+// #include <MCP3428.h>
+
+//CONSTATNS
+#define CHANNEL_ONE 1     // Panel A
+#define CHANNEL_TWO 2     // Panel B
+#define CHANNEL_THREE 3   // Panel C
+#define CHANNEL_FOUR 4    // Current
+#define NUM_CHANNELS 4 
+
+//ADC VARIABLES
+float voltageThresh;
+float currentThresh;
+
 
 //ETHERNET VARIABLES
 byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x04};
@@ -102,30 +117,33 @@ void processCommand(String command)
     return;
   } 
   
-  if (command.indexOf("setTempThresh") > -1){
-    
-    commandString = "";
-    return;
-  } 
-
-  if (command.indexOf("readTemp") > -1){
-    
-    commandString = "";
-    return;
-  } 
-
-  if (command.indexOf("setVoltageThresh") > -1){
-    
-    commandString = "";
-    return;
-  } 
-  
   if (command.indexOf("readVoltage") > -1){
-    
+    server.println("Checking for sensor connection...")
+    // while(!mcp3428.test()) {} //must check connection every time
+    server.println("Sensor connected!");
+    // printVoltage();
+    server.println("pretend this is a valid search");
     commandString = "";
     return;
   }
 
   // wipes the command string
   commandString = "";
+}
+
+void printVoltage() {
+  //TODO: Check 'readADC' function. It includes a 'convertRaw()' and other steps that use random numbers. Find out what they are
+  //TODO: wtf are these conversion numbers (57, 43.2, 14.3)?????
+  float CHANNEL_ONE_VOLT = mcp3428.readADC(1) * 57;
+  float CHANNEL_TWO_VOLT = mcp3428.readADC(2) * 43.2;
+  float CHANNEL_THREE_VOLT = mcp3428.readADC(3) * 14.3;
+  
+  //TODO: Confirm 7-decimal accuracy
+  Serial.println("ADC Voltages:");
+  Serial.print("Channel A: ");
+  Serial.println(CHANNEL_ONE_VOLT, 7);
+  Serial.print("Channel B: ");
+  Serial.println(CHANNEL_TWO_VOLT, 7);
+  Serial.print("Channel C: ");
+  Serial.println(CHANNEL_THREE_VOLT, 7);
 }

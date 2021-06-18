@@ -14,3 +14,10 @@ just click that pencil button in the upper right corner when you open this file 
 - [X] Ben Olaivar - simplified ip confirmation and added space for future commands
 - [ ] Try to get 'enter/return' to work instead of using ','
 - [ ] Incorporate temp/voltage sensors
+
+### 6-18-2021
+- [X] Ben Olaivar - made placeholder functions for voltage/current sensor
+- [X] Ben Olaivar - made changes to main.cpp to account for voltage sensor test functions
+- [X] Ben Olaivar - fixed bug with DHCP_test that would cause infinite loop with multiple commands
+- [ ] Webserver?
+- [ ] review conversion numbers
