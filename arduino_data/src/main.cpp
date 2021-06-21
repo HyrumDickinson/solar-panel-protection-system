@@ -150,3 +150,24 @@ void setVoltThreshold() {
   client.println("Enter MAX Voltage Threshold (0 to 72.9): ");
   while 
 }
+
+void setCurrentThreshold() {
+
+}
+
+void setTempThreshold() {
+  
+}
+
+
+void checkVoltage() {
+
+}
+
+void checkCurrent() {
+
+}
+
+void checkTemp() {
+
+}

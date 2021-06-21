@@ -59,8 +59,6 @@ void loop() {
     while (client.available()) {
       char newChar = client.read();
       if (newChar == ',') {   // ',' is taking place of enter/return. Using enter/return adds extra character that messes up frequently
-        server.print("Received command: ");
-        server.println(commandString);
         processCommand(commandString);
       } else {
         commandString += newChar;
@@ -110,15 +108,35 @@ void processCommand(String command)
   server.println(command);
   
   if (command.indexOf("ledon") > -1){
-    server.println("LED On command received"); 
     digitalWrite(ledPin, HIGH);   // sets the LED on
     server.println("LED was turned on");
     commandString = "";
+    server.println("-----------------");
     return;
   } 
+
+  if (command.indexOf("ledoff") > -1) {
+    digitalWrite(ledPin, LOW);
+    commandString = "";
+    server.println("-----------------");
+    return;
+  }
+
+  if (command.indexOf("voltThresh") > -1) {
+    int newIndex = command.indexOf("voltThresh") + 11;
+    String newString = command.substring(newIndex);
+    voltageTrhesh = newString.toInt();
+    commandString = "";
+    server.println("-----------------");
+    return;
+  }
+
+  if (command.indexOf("gim thresh") > -1) {
+    server.println(voltageThresh);
+  }
   
   if (command.indexOf("readVoltage") > -1){
-    server.println("Checking for sensor connection...")
+    server.println("Checking for sensor connection...");
     // while(!mcp3428.test()) {} //must check connection every time
     server.println("Sensor connected!");
     // printVoltage();
@@ -131,19 +149,29 @@ void processCommand(String command)
   commandString = "";
 }
 
+//void printVoltage() {
+//  //TODO: Check 'readADC' function. It includes a 'convertRaw()' and other steps that use random numbers. Find out what they are
+//  //TODO: wtf are these conversion numbers (57, 43.2, 14.3)?????
+//  float CHANNEL_ONE_VOLT = mcp3428.readADC(1) * 57;
+//  float CHANNEL_TWO_VOLT = mcp3428.readADC(2) * 43.2;
+//  float CHANNEL_THREE_VOLT = mcp3428.readADC(3) * 14.3;
+//  
+//  //TODO: Confirm 7-decimal accuracy
+//  Serial.println("ADC Voltages:");
+//  Serial.print("Channel A: ");
+//  Serial.println(CHANNEL_ONE_VOLT, 7);
+//  Serial.print("Channel B: ");
+//  Serial.println(CHANNEL_TWO_VOLT, 7);
+//  Serial.print("Channel C: ");
+//  Serial.println(CHANNEL_THREE_VOLT, 7);
+//}
+
+
+void setVoltThresh() {
+
+}
+
 void printVoltage() {
-  //TODO: Check 'readADC' function. It includes a 'convertRaw()' and other steps that use random numbers. Find out what they are
-  //TODO: wtf are these conversion numbers (57, 43.2, 14.3)?????
-  float CHANNEL_ONE_VOLT = mcp3428.readADC(1) * 57;
-  float CHANNEL_TWO_VOLT = mcp3428.readADC(2) * 43.2;
-  float CHANNEL_THREE_VOLT = mcp3428.readADC(3) * 14.3;
-  
-  //TODO: Confirm 7-decimal accuracy
-  Serial.println("ADC Voltages:");
-  Serial.print("Channel A: ");
-  Serial.println(CHANNEL_ONE_VOLT, 7);
-  Serial.print("Channel B: ");
-  Serial.println(CHANNEL_TWO_VOLT, 7);
-  Serial.print("Channel C: ");
-  Serial.println(CHANNEL_THREE_VOLT, 7);
+  server.print("Voltage thresh is : ");
+  server.println(voltageThresh);
 }
