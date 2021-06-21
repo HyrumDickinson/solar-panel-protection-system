@@ -45,7 +45,7 @@ class Monitor():
 
 		# Threshold Title
 		thresholdFrame_1 = tk.Frame(thresholdFrame, bg=LIGHT_GRAY)
-		thresholdFrame_1.pack(side="top", padx=30, pady=2.5, fill="x")
+		thresholdFrame_1.pack(side="top", padx=43, pady=2.5, fill="x")
 		thresholdTitle = tk.Label(thresholdFrame_1, text="Trip points:", bg=LIGHT_GRAY, font='Helvetica_Neue 13 bold')
 		thresholdTitle.pack(side="left")
 
@@ -79,7 +79,7 @@ class Monitor():
 
 		# Temperature Threshold Label and Entry
 		thresholdFrame_4 = tk.Frame(thresholdFrame, bg=LIGHT_GRAY)
-		thresholdFrame_4.pack(side="top", padx=43, pady=2.5, fill="x")
+		thresholdFrame_4.pack(side="top", padx=43, pady=2.5, fill="both")
 		temperatureEntryThreshold = tk.Label(thresholdFrame_4, text="Max temperature: ", bg=LIGHT_GRAY)
 		temperatureEntryThreshold.pack(side="left")
 		self.temperatureEntry = tk.Entry(thresholdFrame_4, highlightbackground=LIGHT_GRAY, bg=DARK_GRAY, font=40, width=5)
@@ -129,7 +129,7 @@ class Monitor():
 		# self.syncButton.pack(side="bottom", padx=40)
 
 		thresholdEntryButton = tk.Button(self.thresholdFrame_3, text="OK", highlightbackground=LIGHT_GRAY, font=40, command=lambda: self.application.thresholdInputting(self.voltageEntry.get(), self.currentEntry.get(), self.temperatureEntry.get(), self.selected))
-		thresholdEntryButton.pack(side="left", padx=5)
+		thresholdEntryButton.pack(side="left", padx=35)
 
 		manualConfigFrame = tk.Frame(self.configFrame, bg=LIGHT_GRAY)
 		manualConfigFrame.pack(side="top", pady=2.5)
