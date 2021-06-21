@@ -24,3 +24,9 @@
 - [X] Ben Olaivar - fixed bug with DHCP_test that would cause infinite loop with multiple commands
 - [ ] Webserver?
 - [ ] review conversion numbers
+
+### 6-21-2021
+- [X] Ben Olaivar - additional thresh commands added to DHCP_test and main
+- [X] Ben Olaivar - successfully tested thresh functions
+- [ ] may want to find a way for ethernet connection to be accessed anywhere (can currently only be accessed through local network)
+- [ ] need to order adapters for wifi card (currently having trouble uploading);
