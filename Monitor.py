@@ -79,7 +79,7 @@ class Monitor():
 
 		# Temperature Threshold Label and Entry
 		thresholdFrame_4 = tk.Frame(thresholdFrame, bg=LIGHT_GRAY)
-		thresholdFrame_4.pack(side="top", padx=10, pady=2.5, fill="x")
+		thresholdFrame_4.pack(side="top", padx=43, pady=2.5, fill="x")
 		temperatureEntryThreshold = tk.Label(thresholdFrame_4, text="Max temperature: ", bg=LIGHT_GRAY)
 		temperatureEntryThreshold.pack(side="left")
 		self.temperatureEntry = tk.Entry(thresholdFrame_4, highlightbackground=LIGHT_GRAY, bg=DARK_GRAY, font=40, width=5)
