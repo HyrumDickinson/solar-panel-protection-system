@@ -21,3 +21,9 @@ just click that pencil button in the upper right corner when you open this file 
 - [X] Ben Olaivar - fixed bug with DHCP_test that would cause infinite loop with multiple commands
 - [ ] Webserver?
 - [ ] review conversion numbers
+
+### 6-18-2021
+- [X] Ben Olaivar - additional thresh commands added to DHCP_test and main
+- [X] Ben Olaivar - successfully tested thresh functions
+- [ ] may want to find a way for ethernet connection to be accessed anywhere (can currently only be accessed through local network)
+- [ ] need to order adapters for wifi card (currently having trouble uploading);
