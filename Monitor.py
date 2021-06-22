@@ -6,8 +6,8 @@ from Globs import *
 
 import matplotlib.animation as animation
 
-HEIGHT = 540
-WIDTH = 710 #670
+HEIGHT = 600 #540
+WIDTH = 700
 
 class Monitor():
 	def __init__ (self, application):
@@ -37,7 +37,7 @@ class Monitor():
 
 		# Data frame
 		self.dataFrame = tk.Frame(self.root, bg=LIGHT_GRAY, highlightbackground="black", highlightcolor="black", highlightthickness=2)
-		self.dataFrame.pack(side="left", fill="both", padx="25", pady="5")
+		self.dataFrame.pack(side="right", fill="both", padx="25", pady="25")
 
 	def setupThresholds(self):
 		thresholdFrame = tk.Frame(self.topFrame, bg=LIGHT_GRAY)
