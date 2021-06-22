@@ -45,8 +45,8 @@ class Monitor():
 
 		# Threshold Title
 		thresholdFrame_1 = tk.Frame(thresholdFrame, bg=LIGHT_GRAY)
-		thresholdFrame_1.pack(side="top", padx=43, pady=2.5, fill="x")
-		thresholdTitle = tk.Label(thresholdFrame_1, text="Trip points:", bg=LIGHT_GRAY, font='Helvetica_Neue 13 bold')
+		thresholdFrame_1.pack(side="top", padx=40, pady=2.5, fill="x")
+		thresholdTitle = tk.Label(thresholdFrame_1, text="Trip points:", bg=LIGHT_GRAY, font='Helvetica_Neue 15 bold')
 		thresholdTitle.pack(side="left")
 
 		# Voltage Threshold Label and Entry
