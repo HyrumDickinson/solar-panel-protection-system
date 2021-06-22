@@ -37,7 +37,7 @@ class Monitor():
 
 		# Data frame
 		self.dataFrame = tk.Frame(self.root, bg=LIGHT_GRAY, highlightbackground="black", highlightcolor="black", highlightthickness=2)
-		self.dataFrame.pack(side="left", fill="both", padx="25", pady="25")
+		self.dataFrame.pack(side="left", fill="both", padx="25", pady="5")
 
 	def setupThresholds(self):
 		thresholdFrame = tk.Frame(self.topFrame, bg=LIGHT_GRAY)
