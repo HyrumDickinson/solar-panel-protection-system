@@ -19,14 +19,17 @@
 - [X] **Hyrum Dickinson** - `arduino_dev` - added folder to arduino_data section with (unfinished) instructions on connecting arduino to wifi. 
 
 ### 6-18-2021
-- [X] Ben Olaivar - made placeholder functions for voltage/current sensor
-- [X] Ben Olaivar - made changes to main.cpp to account for voltage sensor test functions
-- [X] Ben Olaivar - fixed bug with DHCP_test that would cause infinite loop with multiple commands
+- [X] **Ben Olaivar** - made placeholder functions for voltage/current sensor
+- [X] **Ben Olaivar** - made changes to main.cpp to account for voltage sensor test functions
+- [X] **Ben Olaivar** - fixed bug with DHCP_test that would cause infinite loop with multiple commands
 - [ ] Webserver?
 - [ ] review conversion numbers
 
 ### 6-21-2021
-- [X] Ben Olaivar - additional thresh commands added to DHCP_test and main
-- [X] Ben Olaivar - successfully tested thresh functions
+- [X] **Ben Olaivar** - additional thresh commands added to DHCP_test and main
+- [X] **Ben Olaivar** - successfully tested thresh functions
 - [ ] may want to find a way for ethernet connection to be accessed anywhere (can currently only be accessed through local network)
 - [ ] need to order adapters for wifi card (currently having trouble uploading);
+
+### 6-22-2021
+- [X] **Hyrum Dickinson** - `main` - made cosmetic improvements to GUI
