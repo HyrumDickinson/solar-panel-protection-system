@@ -243,7 +243,7 @@ class Monitor():
 	def labelInteraction(self, event, index):
 		color = MID_GRAY_1
 
-		if event.type is '4':	# Clicked
+		if event.type == 4 :	# Clicked
 			self.clearWidgetColors()
 			color = MID_GRAY_1	
 			self.selected = index
@@ -255,17 +255,17 @@ class Monitor():
 	def frameInteraction(self, event, index, bg):
 		color = MID_GRAY_1
 
-		if event.type is '4':	# Clicked
+		if event.type == 4 :	# Clicked
 			self.clearWidgetColors()
 			color = MID_GRAY_1	
 			self.selected = index
 			self.switchConnections(self.selected)
 			self.graph.a.clear()
 
-		if event.type is '7':	# Entered
+		if event.type == 7 :	# Entered
 			color = MID_GRAY_1 if self.selected == index else MID_GRAY_3
 
-		if event.type is '8':	# Exited
+		if event.type == 8 :	# Exited
 			color = MID_GRAY_1 if self.selected == index else DARK_GRAY
 
 		for i in self.widgetFrames[index]: i.configure(bg=color)
