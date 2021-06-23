@@ -60,7 +60,7 @@ class Monitor():
 		self.voltageEntry.bind('<FocusOut>', lambda event, i=0: self.on_focusout(event, i))
 		self.voltageEntry.config(fg = 'grey')
 		self.voltageEntry.pack(side="left")
-		voltageUnit = tk.Label(thresholdFrame_2, text="V", bg=LIGHT_GRAY, font='Helvetica_Neue 12 bold')
+		voltageUnit = tk.Label(thresholdFrame_2, text="V", bg=LIGHT_GRAY, font='Helvetica_Neue 12 bold italic')
 		voltageUnit.pack(side="left", padx=15)
 
 		# Current Threshold Label and Entry
@@ -74,7 +74,7 @@ class Monitor():
 		self.currentEntry.bind('<FocusOut>', lambda event, i=1: self.on_focusout(event, i))
 		self.currentEntry.config(fg = 'grey')
 		self.currentEntry.pack(side="left", padx=1)
-		currentUnit = tk.Label(self.thresholdFrame_3, text="A", bg=LIGHT_GRAY, font='Helvetica_Neue 12 bold')
+		currentUnit = tk.Label(self.thresholdFrame_3, text="A", bg=LIGHT_GRAY, font='Helvetica_Neue 12 bold italic')
 		currentUnit.pack(side="left", padx=15)
 
 		# Temperature Threshold Label and Entry
@@ -88,7 +88,7 @@ class Monitor():
 		self.temperatureEntry.bind('<FocusOut>', lambda event, i=2: self.on_focusout(event, i))
 		self.temperatureEntry.config(fg = 'grey')
 		self.temperatureEntry.pack(side="left", padx=15)
-		temperatureUnit = tk.Label(thresholdFrame_4, text="C", bg=LIGHT_GRAY, font='Helvetica_Neue 12 bold')
+		temperatureUnit = tk.Label(thresholdFrame_4, text="C", bg=LIGHT_GRAY, font='Helvetica_Neue 12 bold italic')
 		temperatureUnit.pack(side="left")
 
 	def setupCheckboxes(self):
