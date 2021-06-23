@@ -30,3 +30,7 @@
 - [X] Ben Olaivar - successfully tested thresh functions
 - [ ] may want to find a way for ethernet connection to be accessed anywhere (can currently only be accessed through local network)
 - [ ] need to order adapters for wifi card (currently having trouble uploading);
+
+### 6-23-2021
+- [X] **Hyrum Dickinson** - `main` - fixed issue where parts of GUI weren't displaying & improved cosmetics
+- [X] **Hyrum Dickinson** - `main` - renamed some python files to make them more self-explanatory. All other files that reference the renamed files were updated.
