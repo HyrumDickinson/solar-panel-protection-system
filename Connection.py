@@ -1,4 +1,4 @@
-from DefaultSettings import *
+from Settings import *
 
 # Main class for connections
 class Connection:
