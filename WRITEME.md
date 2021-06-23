@@ -1,7 +1,7 @@
 # WRITEME
 
 ### 6-15-2021
-- [X] **Hyrum Dickinson** - `python-2-version` - fixed syntax errors and made slight changes to imports for the GUI code. It now runs responsively in a correctly set up python environment (see python-2-version README)
+- [X] **Hyrum Dickinson** - `python-2-version` - fixed syntax errors and made slight changes to imports for the GUI code. Previously, the code wouldn't run. Now, it runs responsively in a correctly set up python environment (see python-2-version README)
 - [X] **Hyrum Dickinson** - `python-3-version` - made parallel changes as to python-2-version. When ran on python 3 instead of 2, the GUI continues to run extremely slowly
 - [X] **Ben Olaivar** - `arduino_dev` - fixed analog pin in dhcp_test
 - [X] **Ben Olaivar** - `arduino_dev` - ethernet connection is working
