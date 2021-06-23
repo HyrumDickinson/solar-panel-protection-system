@@ -7,7 +7,7 @@ from Globs import *
 import matplotlib.animation as animation
 
 HEIGHT = 600 #540
-WIDTH = 700
+WIDTH = 780
 
 class Monitor():
 	def __init__ (self, application):
@@ -51,8 +51,8 @@ class Monitor():
 
 		# Voltage Threshold Label and Entry
 		thresholdFrame_2 = tk.Frame(thresholdFrame, bg=LIGHT_GRAY)
-		thresholdFrame_2.pack(side="top", padx=43, pady=2.5, fill="x")
-		voltageEntryThreshold = tk.Label(thresholdFrame_2, text="Max voltage: ", bg=LIGHT_GRAY)
+		thresholdFrame_2.pack(side="top", pady=2.5, fill="x")
+		voltageEntryThreshold = tk.Label(thresholdFrame_2, text="Max voltage: ", padx=43, bg=LIGHT_GRAY)
 		voltageEntryThreshold.pack(side="left")
 		self.voltageEntry = tk.Entry(thresholdFrame_2, highlightbackground=LIGHT_GRAY, bg=DARK_GRAY, font=40, width=5)
 		self.voltageEntry.insert(0, DEFAULT_VOLTAGE_THRES)
@@ -60,22 +60,22 @@ class Monitor():
 		self.voltageEntry.bind('<FocusOut>', lambda event, i=0: self.on_focusout(event, i))
 		self.voltageEntry.config(fg = 'grey')
 		self.voltageEntry.pack(side="left")
-		voltageUnit = tk.Label(thresholdFrame_2, text="V", bg=LIGHT_GRAY)
-		voltageUnit.pack(side="left")
+		voltageUnit = tk.Label(thresholdFrame_2, text="V", bg=LIGHT_GRAY, font='Helvetica_Neue 12 bold')
+		voltageUnit.pack(side="left", padx=15)
 
 		# Current Threshold Label and Entry
 		self.thresholdFrame_3 = tk.Frame(thresholdFrame, bg=LIGHT_GRAY)
-		self.thresholdFrame_3.pack(side="top", padx=43, pady=2.5, fill="x")
-		currentEntryThreshold = tk.Label(self.thresholdFrame_3, text="Max current: ", bg=LIGHT_GRAY)
+		self.thresholdFrame_3.pack(side="top", pady=2.5, fill="x")
+		currentEntryThreshold = tk.Label(self.thresholdFrame_3, text="Max current: ", padx=43, bg=LIGHT_GRAY)
 		currentEntryThreshold.pack(side="left")
 		self.currentEntry = tk.Entry(self.thresholdFrame_3, highlightbackground=LIGHT_GRAY, bg=DARK_GRAY, font=40, width=5)
 		self.currentEntry.insert(0, DEFAULT_CURRENT_THRES)
 		self.currentEntry.bind('<FocusIn>', lambda event, i=1: self.on_entry_click(event, i))
 		self.currentEntry.bind('<FocusOut>', lambda event, i=1: self.on_focusout(event, i))
 		self.currentEntry.config(fg = 'grey')
-		self.currentEntry.pack(side="left")
-		currentUnit = tk.Label(self.thresholdFrame_3, text="A", bg=LIGHT_GRAY)
-		currentUnit.pack(side="left")
+		self.currentEntry.pack(side="left", padx=1)
+		currentUnit = tk.Label(self.thresholdFrame_3, text="A", bg=LIGHT_GRAY, font='Helvetica_Neue 12 bold')
+		currentUnit.pack(side="left", padx=15)
 
 		# Temperature Threshold Label and Entry
 		thresholdFrame_4 = tk.Frame(thresholdFrame, bg=LIGHT_GRAY)
@@ -87,8 +87,8 @@ class Monitor():
 		self.temperatureEntry.bind('<FocusIn>', lambda event, i=2: self.on_entry_click(event, i))
 		self.temperatureEntry.bind('<FocusOut>', lambda event, i=2: self.on_focusout(event, i))
 		self.temperatureEntry.config(fg = 'grey')
-		self.temperatureEntry.pack(side="left")
-		temperatureUnit = tk.Label(thresholdFrame_4, text="C", bg=LIGHT_GRAY)
+		self.temperatureEntry.pack(side="left", padx=15)
+		temperatureUnit = tk.Label(thresholdFrame_4, text="C", bg=LIGHT_GRAY, font='Helvetica_Neue 12 bold')
 		temperatureUnit.pack(side="left")
 
 	def setupCheckboxes(self):
