@@ -13,7 +13,7 @@ class Connector:
       self.threads = []
       self.connections = []
       # Default IP address
-      self.ip = "192.168.1."
+      self.ip = "192.168.1." # ! this is an incomplete IP address
 
    def scan(self, i):
       address = self.ip + str(i) 
