@@ -1,9 +1,28 @@
-import threading
+# import threading # this line is redundant; Connector has already imported threading
 import json
 import sqlite3
 import time
-from Connector import *
-from Monitor import *
+from Connector import * # this line imports the following:
+	 # import socket
+     # import threading
+     # from Connection import * # imports Settings
+from Monitor import * # this line imports the following:
+     # from PIL import Image, ImageTk
+     # from Graph import *
+    # import matplotlib
+    # matplotlib.use("TkAgg")
+    # from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+    # from matplotlib.figure import Figure
+    # import matplotlib.animation as animation
+    # from matplotlib import style
+    # import Tkinter as tk
+    # import sqlite3
+    # from Settings import * # imports default trip points and color definitions
+    # style.use("ggplot")
+    # import matplotlib.dates as mdates
+    # import numpy as np
+    # import datetime
+    # import time
 # from Connection import * # this line is redundant; Connector has already imported everything from Connection
 
 BUFFER_SIZE = 1024

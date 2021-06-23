@@ -1,6 +1,6 @@
 import socket
 import threading
-from Connection import * 
+from Connection import * # imports Settings
 
 TCP_PORT = 23
 INIT_CONNECTION = 0

@@ -1,10 +1,25 @@
-import Tkinter as tk
+# import Tkinter as tk # this line is redundant; Graph has already imported Tkinter as tk
 # from Tkinter import tkk
 from PIL import Image, ImageTk
-from Graph import *
+from Graph import * # this line imports the following:
+     # import matplotlib
+     # matplotlib.use("TkAgg")
+     # from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+     # from matplotlib.figure import Figure
+     # import matplotlib.animation as animation
+     # from matplotlib import style
+     # import Tkinter as tk
+     # import sqlite3
+     # from Settings import * # imports default trip points and color definitions
+     # style.use("ggplot")
+     # import matplotlib.dates as mdates
+     # import numpy as np
+     # import datetime
+     # import time
+
 # from Settings import * # this line is redundant; Graph has already imported everything from Settings
 
-import matplotlib.animation as animation
+# import matplotlib.animation as animation # this line is redundant; Graph already imported matplotlib.animation as animation
 
 HEIGHT = 600 #540
 WIDTH = 780
