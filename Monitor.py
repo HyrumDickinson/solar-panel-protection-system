@@ -2,7 +2,7 @@ import Tkinter as tk
 # from Tkinter import tkk
 from PIL import Image, ImageTk
 from Graph import *
-from Settings import *
+# from Settings import * # this line is redundant; Graph has already imported everything from Settings
 
 import matplotlib.animation as animation
 

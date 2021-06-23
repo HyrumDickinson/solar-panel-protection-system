@@ -4,7 +4,7 @@ import sqlite3
 import time
 from Connector import *
 from Monitor import *
-from Connection import *
+# from Connection import * # this line is redundant; Connector has already imported everything from Connection
 
 BUFFER_SIZE = 1024
 

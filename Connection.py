@@ -1,4 +1,4 @@
-from Settings import *
+from Settings import * # imports default trip points and color definitions
 
 # Main class for connections
 class Connection:

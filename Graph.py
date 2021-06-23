@@ -7,7 +7,7 @@ from matplotlib import style
 import Tkinter as tk
 # from Tkinter import tkk
 import sqlite3
-from Settings import *
+from Settings import * # imports default trip points and color definitions
 style.use("ggplot")
 
 import matplotlib.dates as mdates
