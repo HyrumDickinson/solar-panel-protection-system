@@ -2,7 +2,7 @@ import Tkinter as tk
 # from Tkinter import tkk
 from PIL import Image, ImageTk
 from Graph import *
-from Globs import *
+from DefaultSettings import *
 
 import matplotlib.animation as animation
 

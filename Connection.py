@@ -1,4 +1,4 @@
-from Globs import *
+from DefaultSettings import *
 
 # Main class for connections
 class Connection:

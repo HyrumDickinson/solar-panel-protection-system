@@ -7,7 +7,7 @@ from matplotlib import style
 import Tkinter as tk
 # from Tkinter import tkk
 import sqlite3
-from Globs import *
+from DefaultSettings import *
 style.use("ggplot")
 
 import matplotlib.dates as mdates
