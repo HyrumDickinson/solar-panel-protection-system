@@ -200,6 +200,7 @@ class Monitor():
 			ipLabel = tk.Label(widgetFrame, text='IP: ' + self.application.c.connections[i].ip, bg=BACKGROUND, font='TkDefaultFont 10')
 			ipLabel.pack(side="top", fill="x", padx=10, pady=5)
 			ipLabel.config(fg=LIGHT_GRAY)
+			
 			# IP Status
 			ipStatus = tk.Label(widgetFrame, text="Status: Connected", bg=BACKGROUND, font='TkDefaultFont 10')
 			ipStatus.pack(side="bottom", fill="x", padx=10, pady=5)
