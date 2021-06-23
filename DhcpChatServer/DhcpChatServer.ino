@@ -70,11 +70,11 @@ void loop() {
       manualSwitch = receiveObj["M"];
 
       // Printing values individually
-      Serial.print("Voltage Threshold: ");
+      Serial.print("Voltage TripPoint: ");
       Serial.println(voltageVal);
-      Serial.print("Current Threshold: ");
+      Serial.print("Current TripPoint: ");
       Serial.println(currentVal);
-      Serial.print("Temperature Threshold: ");
+      Serial.print("Temperature TripPoint: ");
       Serial.println(temperatureVal);
       Serial.print("Switch Configuration: ");
       Serial.println(relayConfig);

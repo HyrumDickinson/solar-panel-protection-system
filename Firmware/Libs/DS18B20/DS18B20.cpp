@@ -26,7 +26,7 @@ DS18B20::DS18B20(){
 /*
  *Function: setConfig - allows user to set the max operating temperature based on the design parameters
                         based on the Solar Panel operating temperature range.
- *Inputs: temperature_threshold
+ *Inputs: temperature_TripPoint
  *Outputs: Boolean
 */
 bool DS18B20::setConfig(float tempLimit){
@@ -94,9 +94,9 @@ int DS18B20::getNumberOfDevices(){
 }
 
 /*
- *Function: getTempLimit- gets the current temperature set threshold.
+ *Function: getTempLimit- gets the current temperature set TripPoint.
  *Inputs: None
- *Outputs: temprature threshold set value.
+ *Outputs: temprature TripPoint set value.
 */
 float DS18B20::getTempLimit(){
   return tempLimit;

@@ -10,9 +10,9 @@ class Connection:
 		self.connected = connected
 
 		# Values to configure
-		self.voltageValue = DEFAULT_VOLTAGE_THRES
-		self.currentValue = DEFAULT_CURRENT_THRES
-		self.temperatureValue = DEFAULT_TEMPERATURE_THRES
+		self.voltageValue = DEFAULT_VOLTAGE_TRIP_POINT
+		self.currentValue = DEFAULT_CURRENT_TRIP_POINT
+		self.temperatureValue = DEFAULT_TEMPERATURE_TRIP_POINT
 		self.configSwitch = 0
 		self.manualSwitch = 0
 

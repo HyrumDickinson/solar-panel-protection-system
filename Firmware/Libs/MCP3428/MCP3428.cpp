@@ -1,6 +1,6 @@
 /*
  * Edit History:
- * 11/12/2019 -- Added in the threshold variables and associated functions. -dlee242.
+ * 11/12/2019 -- Added in the TripPoint variables and associated functions. -dlee242.
  */
 #include "MCP3428.h"
 #include "Arduino.h"
@@ -10,8 +10,8 @@
 // Class constructor. I2C adddress is non-configurable and set to 0x68.
 MCP3428::MCP3428(){
   Wire.begin();
-  this->voltThreshold = MAX_VOLT_DEFAULT;
-  this->currentThreshold = MAX_CURRENT_DEFAULT;
+  this->voltTripPoint = MAX_VOLT_DEFAULT;
+  this->currentTripPoint = MAX_CURRENT_DEFAULT;
 }
 
 // Test to see that device acknowledges on attempted communication.
@@ -107,38 +107,38 @@ double MCP3428::readADC(uint8_t channel){
     return convertRaw(raw_adc);
 }
 
-/*Function: Sets the Maximum Voltage Threshold
-* Input: voltageThreshold
+/*Function: Sets the Maximum Voltage TripPoint
+* Input: voltageTripPoint
 * Output: Boolean
 */
-bool MCP3428::setVoltage(float voltThreshold){
-  if( voltThreshold < MIN_VOLT_DEFAULT || voltThreshold > MAX_VOLT_DEFAULT){
+bool MCP3428::setVoltage(float voltTripPoint){
+  if( voltTripPoint < MIN_VOLT_DEFAULT || voltTripPoint > MAX_VOLT_DEFAULT){
     return false;
   }
   else{
-    this->voltThreshold = voltThreshold;
+    this->voltTripPoint = voltTripPoint;
     return true;
   }
 }
 
-/*Function: Sets the Maximum Current Threshold
-* Input:currentThreshold
+/*Function: Sets the Maximum Current TripPoint
+* Input:currentTripPoint
 * Output: Boolean
 */
-bool MCP3428::setCurrent(float currentThreshold){
-  if( currentThreshold < MIN_CURRENT_DEFAULT || currentThreshold > MAX_CURRENT_DEFAULT){
+bool MCP3428::setCurrent(float currentTripPoint){
+  if( currentTripPoint < MIN_CURRENT_DEFAULT || currentTripPoint > MAX_CURRENT_DEFAULT){
     return false;
   }
   else{
-    this->currentThreshold = currentThreshold;
+    this->currentTripPoint = currentTripPoint;
     return true;
   }
 }
 
-float MCP3428::getVoltThreshold(){
-  return this->voltThreshold;
+float MCP3428::getVoltTripPoint(){
+  return this->voltTripPoint;
 }
 
-float MCP3428::getCurrentThreshold(){
-  return this->currentThreshold;
+float MCP3428::getCurrentTripPoint(){
+  return this->currentTripPoint;
 }

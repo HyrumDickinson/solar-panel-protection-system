@@ -65,7 +65,7 @@ class Application:
 				try:
 					packet = json.loads(self.lastData)
 
-					# Switch relay configuration if threshold reached
+					# Switch relay configuration if trip point reached
 					currConnection = self.c.findConnection(self.lastIP)
 					if currConnection != -1 and self.c.connections[currConnection].configSwitch != packet["S"] and packet["X"] != 0:
 						self.monitor.updateCheckbox(packet["S"])
@@ -168,14 +168,14 @@ class Application:
 	def inputting(self, command):
 		self.command = command
 
-	def thresholdInputting(self, voltageValue, currentValue, temperatureValue, i):
+	def TripPointInputting(self, voltageValue, currentValue, temperatureValue, i):
 		if len(self.c.connections) == 0:
 			return
 
 		try:
-			self.c.connections[i].voltageValue = max(min(float(voltageValue), MAX_VOLTAGE_THRES), MIN_VOLTAGE_THRES)
-			self.c.connections[i].currentValue = max(min(float(currentValue), MAX_CURRENT_THRES), MIN_CURRENT_THRES)
-			self.c.connections[i].temperatureValue = max(min(float(temperatureValue), MAX_TEMPERATURE_THRES), MIN_TEMPERATURE_THRES)
+			self.c.connections[i].voltageValue = max(min(float(voltageValue), MAX_VOLTAGE_TRIP_POINT), MIN_VOLTAGE_TRIP_POINT)
+			self.c.connections[i].currentValue = max(min(float(currentValue), MAX_CURRENT_TRIP_POINT), MIN_CURRENT_TRIP_POINT)
+			self.c.connections[i].temperatureValue = max(min(float(temperatureValue), MAX_TEMPERATURE_TRIP_POINT), MIN_TEMPERATURE_TRIP_POINT)
 		except:
 			pass
 

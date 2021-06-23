@@ -54,56 +54,56 @@ class Monitor():
 		self.dataFrame = tk.Frame(self.root, bg=LIGHT_GRAY, highlightbackground="black", highlightcolor="black", highlightthickness=2)
 		self.dataFrame.pack(side="right", fill="both", padx="25", pady="25")
 
-	def setupThresholds(self):
-		thresholdFrame = tk.Frame(self.topFrame, bg=LIGHT_GRAY)
-		thresholdFrame.pack(side="left")
+	def setupTripPoints(self):
+		TripPointFrame = tk.Frame(self.topFrame, bg=LIGHT_GRAY)
+		TripPointFrame.pack(side="left")
 
-		# Threshold Title
-		thresholdFrame_1 = tk.Frame(thresholdFrame, bg=LIGHT_GRAY)
-		thresholdFrame_1.pack(side="top", padx=40, pady=2.5, fill="x")
-		thresholdTitle = tk.Label(thresholdFrame_1, text="Trip points:", bg=LIGHT_GRAY, font='Helvetica_Neue 15 bold')
-		thresholdTitle.pack(side="left")
+		# TripPoint Title
+		TripPointFrame_1 = tk.Frame(TripPointFrame, bg=LIGHT_GRAY)
+		TripPointFrame_1.pack(side="top", padx=40, pady=2.5, fill="x")
+		TripPointTitle = tk.Label(TripPointFrame_1, text="Trip points:", bg=LIGHT_GRAY, font='Helvetica_Neue 15 bold')
+		TripPointTitle.pack(side="left")
 
-		# Voltage Threshold Label and Entry
-		thresholdFrame_2 = tk.Frame(thresholdFrame, bg=LIGHT_GRAY)
-		thresholdFrame_2.pack(side="top", pady=2.5, fill="x")
-		voltageEntryThreshold = tk.Label(thresholdFrame_2, text="Max voltage: ", padx=43, bg=LIGHT_GRAY)
-		voltageEntryThreshold.pack(side="left")
-		self.voltageEntry = tk.Entry(thresholdFrame_2, highlightbackground=LIGHT_GRAY, bg=DARK_GRAY, font=40, width=5)
-		self.voltageEntry.insert(0, DEFAULT_VOLTAGE_THRES)
+		# Voltage Trip Point Label and Entry
+		TripPointFrame_2 = tk.Frame(TripPointFrame, bg=LIGHT_GRAY)
+		TripPointFrame_2.pack(side="top", pady=2.5, fill="x")
+		voltageEntryTripPoint = tk.Label(TripPointFrame_2, text="Max voltage: ", padx=43, bg=LIGHT_GRAY)
+		voltageEntryTripPoint.pack(side="left")
+		self.voltageEntry = tk.Entry(TripPointFrame_2, highlightbackground=LIGHT_GRAY, bg=DARK_GRAY, font=40, width=5)
+		self.voltageEntry.insert(0, DEFAULT_VOLTAGE_TRIP_POINT)
 		self.voltageEntry.bind('<FocusIn>', lambda event, i=0: self.on_entry_click(event, i))
 		self.voltageEntry.bind('<FocusOut>', lambda event, i=0: self.on_focusout(event, i))
 		self.voltageEntry.config(fg = 'grey')
 		self.voltageEntry.pack(side="left")
-		voltageUnit = tk.Label(thresholdFrame_2, text="V", bg=LIGHT_GRAY, font='Helvetica_Neue 12 bold italic')
+		voltageUnit = tk.Label(TripPointFrame_2, text="V", bg=LIGHT_GRAY, font='Helvetica_Neue 12 bold italic')
 		voltageUnit.pack(side="left", padx=15)
 
-		# Current Threshold Label and Entry
-		self.thresholdFrame_3 = tk.Frame(thresholdFrame, bg=LIGHT_GRAY)
-		self.thresholdFrame_3.pack(side="top", pady=2.5, fill="x")
-		currentEntryThreshold = tk.Label(self.thresholdFrame_3, text="Max current: ", padx=43, bg=LIGHT_GRAY)
-		currentEntryThreshold.pack(side="left")
-		self.currentEntry = tk.Entry(self.thresholdFrame_3, highlightbackground=LIGHT_GRAY, bg=DARK_GRAY, font=40, width=5)
-		self.currentEntry.insert(0, DEFAULT_CURRENT_THRES)
+		# Current Trip Point Label and Entry
+		self.TripPointFrame_3 = tk.Frame(TripPointFrame, bg=LIGHT_GRAY)
+		self.TripPointFrame_3.pack(side="top", pady=2.5, fill="x")
+		currentEntryTripPoint = tk.Label(self.TripPointFrame_3, text="Max current: ", padx=43, bg=LIGHT_GRAY)
+		currentEntryTripPoint.pack(side="left")
+		self.currentEntry = tk.Entry(self.TripPointFrame_3, highlightbackground=LIGHT_GRAY, bg=DARK_GRAY, font=40, width=5)
+		self.currentEntry.insert(0, DEFAULT_CURRENT_TRIP_POINT)
 		self.currentEntry.bind('<FocusIn>', lambda event, i=1: self.on_entry_click(event, i))
 		self.currentEntry.bind('<FocusOut>', lambda event, i=1: self.on_focusout(event, i))
 		self.currentEntry.config(fg = 'grey')
 		self.currentEntry.pack(side="left", padx=1)
-		currentUnit = tk.Label(self.thresholdFrame_3, text="A", bg=LIGHT_GRAY, font='Helvetica_Neue 12 bold italic')
+		currentUnit = tk.Label(self.TripPointFrame_3, text="A", bg=LIGHT_GRAY, font='Helvetica_Neue 12 bold italic')
 		currentUnit.pack(side="left", padx=15)
 
-		# Temperature Threshold Label and Entry
-		thresholdFrame_4 = tk.Frame(thresholdFrame, bg=LIGHT_GRAY)
-		thresholdFrame_4.pack(side="top", padx=43, pady=2.5, fill="both")
-		temperatureEntryThreshold = tk.Label(thresholdFrame_4, text="Max temperature: ", bg=LIGHT_GRAY)
-		temperatureEntryThreshold.pack(side="left")
-		self.temperatureEntry = tk.Entry(thresholdFrame_4, highlightbackground=LIGHT_GRAY, bg=DARK_GRAY, font=40, width=5)
-		self.temperatureEntry.insert(0, DEFAULT_TEMPERATURE_THRES)
+		# Temperature Trip Point Label and Entry
+		TripPointFrame_4 = tk.Frame(TripPointFrame, bg=LIGHT_GRAY)
+		TripPointFrame_4.pack(side="top", padx=43, pady=2.5, fill="both")
+		temperatureEntryTripPoint = tk.Label(TripPointFrame_4, text="Max temperature: ", bg=LIGHT_GRAY)
+		temperatureEntryTripPoint.pack(side="left")
+		self.temperatureEntry = tk.Entry(TripPointFrame_4, highlightbackground=LIGHT_GRAY, bg=DARK_GRAY, font=40, width=5)
+		self.temperatureEntry.insert(0, DEFAULT_TEMPERATURE_TRIP_POINT)
 		self.temperatureEntry.bind('<FocusIn>', lambda event, i=2: self.on_entry_click(event, i))
 		self.temperatureEntry.bind('<FocusOut>', lambda event, i=2: self.on_focusout(event, i))
 		self.temperatureEntry.config(fg = 'grey')
 		self.temperatureEntry.pack(side="left", padx=15)
-		temperatureUnit = tk.Label(thresholdFrame_4, text="C", bg=LIGHT_GRAY, font='Helvetica_Neue 12 bold italic')
+		temperatureUnit = tk.Label(TripPointFrame_4, text="C", bg=LIGHT_GRAY, font='Helvetica_Neue 12 bold italic')
 		temperatureUnit.pack(side="left")
 
 	def setupCheckboxes(self):
@@ -117,6 +117,7 @@ class Monitor():
 		configFrame1.pack(side="left", pady=2.5)
 		configFrame2 = tk.Frame(configFrame, bg=LIGHT_GRAY)
 		configFrame2.pack(side="left", pady=2.5)
+
 		# Output Configuration
 		var4 = tk.IntVar()
 		checkboxD = tk.Checkbutton(configFrame2, text="AD", background=LIGHT_GRAY, variable=var4, command=lambda: self.updateCheckbox(3))
@@ -143,8 +144,8 @@ class Monitor():
 		# self.syncButton = tk.Button(self.syncFrame, text='sync', highlightbackground=MID_GRAY_1, font=20, command=lambda: self.application.inputting('sync'))
 		# self.syncButton.pack(side="bottom", padx=40)
 
-		thresholdEntryButton = tk.Button(self.thresholdFrame_3, text="OK", highlightbackground=LIGHT_GRAY, font=40, command=lambda: self.application.thresholdInputting(self.voltageEntry.get(), self.currentEntry.get(), self.temperatureEntry.get(), self.selected))
-		thresholdEntryButton.pack(side="left", padx=35)
+		TripPointEntryButton = tk.Button(self.TripPointFrame_3, text="OK", highlightbackground=LIGHT_GRAY, font=40, command=lambda: self.application.TripPointInputting(self.voltageEntry.get(), self.currentEntry.get(), self.temperatureEntry.get(), self.selected))
+		TripPointEntryButton.pack(side="left", padx=35)
 
 		manualConfigFrame = tk.Frame(self.configFrame, bg=LIGHT_GRAY)
 		manualConfigFrame.pack(side="top", pady=2.5)
@@ -181,7 +182,7 @@ class Monitor():
 		self.setupFrames()
 		self.topFrame = tk.Frame(self.dataFrame, bg=LIGHT_GRAY)
 		self.topFrame.pack(side="top", fill="x", pady=10)
-		self.setupThresholds()
+		self.setupTripPoints()
 		self.setupCheckboxes()
 		self.setupSyncButton()
 		self.setupQueryButtons()
@@ -218,7 +219,7 @@ class Monitor():
 		# Change checkbox
 		self.updateCheckbox(self.application.c.connections[i].configSwitch)
 
-		# Change threshold values
+		# Change Trip Point values
 		self.voltageEntry.delete(0, "end")
 		self.voltageEntry.insert(0, self.application.c.connections[i].voltageValue)
 		self.voltageEntry.config(fg = 'grey')
@@ -293,15 +294,15 @@ class Monitor():
 		if len(self.application.c.connections) == 0:
 			if i == 0:
 				if self.voltageEntry.get() == '':
-					self.voltageEntry.insert(0, DEFAULT_VOLTAGE_THRES)
+					self.voltageEntry.insert(0, DEFAULT_VOLTAGE_TRIP_POINT)
 					self.voltageEntry.config(fg = 'grey')
 			if i == 1:
 				if self.currentEntry.get() == '':
-					self.currentEntry.insert(0, DEFAULT_CURRENT_THRES)
+					self.currentEntry.insert(0, DEFAULT_CURRENT_TRIP_POINT)
 					self.currentEntry.config(fg = 'grey')
 			if i == 2:
 				if self.temperatureEntry.get() == '':
-					self.temperatureEntry.insert(0, DEFAULT_TEMPERATURE_THRES)
+					self.temperatureEntry.insert(0, DEFAULT_TEMPERATURE_TRIP_POINT)
 					self.temperatureEntry.config(fg = 'grey')
 		else:
 			if i == 0:
