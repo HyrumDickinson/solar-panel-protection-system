@@ -1,3 +1,6 @@
+# This file contains the default customizable settings and color settings for the solar panel monitor.
+# The original project owners called this file "Globs.py", but it was renamed to better reflect its purpose.
+
 DEFAULT_VOLTAGE_THRES = 100.0
 DEFAULT_CURRENT_THRES = 10.0
 DEFAULT_TEMPERATURE_THRES = 85.0
