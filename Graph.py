@@ -23,13 +23,13 @@ class Graph:
 	def __init__ (self, monitor):
 		self.monitor = monitor
 		self.f = Figure(figsize=(5,5), dpi=100)
-		self.f.patch.set_facecolor(LIGHT_GRAY)
+		self.f.patch.set_facecolor(DATA_WIDGET_COLOR)
 		self.a = self.f.add_subplot(111)
 		self.a.set_facecolor(DARK_GRAY)
-		self.a.tick_params(axis='x', colors="black")
-		self.a.tick_params(axis='y', colors="black")
+		self.a.tick_params(axis='x', colors=TEXT_COLOR)
+		self.a.tick_params(axis='y', colors=TEXT_COLOR)
 		self.field = 'voltage_1'
-		self.f.suptitle(title[self.getFieldIndex()], fontsize=10, color="black")
+		self.f.suptitle(title[self.getFieldIndex()], fontsize=10, color=TEXT_COLOR)
 
 	def run(self):
 		self.setupValueFrame()
@@ -51,7 +51,7 @@ class Graph:
 				yList.append(y)
 
 			self.a.clear()
-			self.a.plot_date(xList, yList, color=GREEN, fmt='-r')
+			self.a.plot_date(xList, yList, color=ACTIVE_BUTTON_COLOR, fmt='-r')
 			self.a.xaxis.set_major_formatter(mdates.DateFormatter('%M:%S'))
 			self.a.tick_params(axis='both', which='major', labelsize=8)
 			self.getLastData(self.monitor.application.c.connections[self.monitor.selected].ip)
@@ -130,34 +130,34 @@ class Graph:
 	# ------------- #
 
 	def setupValueFrame(self):
-		valueFrame = tk.Frame(self.monitor.dataFrame, bg=LIGHT_GRAY)
+		valueFrame = tk.Frame(self.monitor.dataFrame, bg=DATA_WIDGET_COLOR)
 		valueFrame.pack(side="top")
 
-		self.pValue = tk.Label(valueFrame, text="P: XX", bg=LIGHT_GRAY, font='Helvetica_Neue 11 bold')
+		self.pValue = tk.Label(valueFrame, text="P: XX", bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 11 bold')
 		self.pValue.pack(side="left", padx=5)
-		self.v1Value = tk.Label(valueFrame, text="V_ad: XX", bg=LIGHT_GRAY, font='Helvetica_Neue 11 bold')
+		self.v1Value = tk.Label(valueFrame, text="V_ad: XX", bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 11 bold')
 		self.v1Value.pack(side="left", padx=5)
-		self.v2Value = tk.Label(valueFrame, text="V_bc: XX", bg=LIGHT_GRAY, font='Helvetica_Neue 11 bold')
+		self.v2Value = tk.Label(valueFrame, text="V_bc: XX", bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 11 bold')
 		self.v2Value.pack(side="left", padx=5)
-		self.v3Value = tk.Label(valueFrame, text="V_cd: XX", bg=LIGHT_GRAY, font='Helvetica_Neue 11 bold')
+		self.v3Value = tk.Label(valueFrame, text="V_cd: XX", bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 11 bold')
 		self.v3Value.pack(side="left", padx=5)
-		self.c1Value = tk.Label(valueFrame, text="I: XX", bg=LIGHT_GRAY, font='Helvetica_Neue 11 bold')
+		self.c1Value = tk.Label(valueFrame, text="I: XX", bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 11 bold')
 		self.c1Value.pack(side="left", padx=5)
 
-		temperatureFrame = tk.Frame(self.monitor.dataFrame, bg=LIGHT_GRAY)
+		temperatureFrame = tk.Frame(self.monitor.dataFrame, bg=DATA_WIDGET_COLOR)
 		temperatureFrame.pack(side="top", padx=5)
 
-		self.t1Value = tk.Label(temperatureFrame, text="T1: XX", bg=LIGHT_GRAY, font='Helvetica_Neue 11 bold')
+		self.t1Value = tk.Label(temperatureFrame, text="T1: XX", bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 11 bold')
 		self.t1Value.pack(side="left", padx=5)
-		self.t2Value = tk.Label(temperatureFrame, text="T2: XX", bg=LIGHT_GRAY, font='Helvetica_Neue 11 bold')
+		self.t2Value = tk.Label(temperatureFrame, text="T2: XX", bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 11 bold')
 		self.t2Value.pack(side="left", padx=5)
-		self.t3Value = tk.Label(temperatureFrame, text="T3: XX", bg=LIGHT_GRAY, font='Helvetica_Neue 11 bold')
+		self.t3Value = tk.Label(temperatureFrame, text="T3: XX", bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 11 bold')
 		self.t3Value.pack(side="left", padx=5)
-		self.t4Value = tk.Label(temperatureFrame, text="T4: XX", bg=LIGHT_GRAY, font='Helvetica_Neue 11 bold')
+		self.t4Value = tk.Label(temperatureFrame, text="T4: XX", bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 11 bold')
 		self.t4Value.pack(side="left", padx=5)
-		self.t5Value = tk.Label(temperatureFrame, text="T5: XX", bg=LIGHT_GRAY, font='Helvetica_Neue 11 bold')
+		self.t5Value = tk.Label(temperatureFrame, text="T5: XX", bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 11 bold')
 		self.t5Value.pack(side="left", padx=5)
-		self.t6Value = tk.Label(temperatureFrame, text="T6: XX", bg=LIGHT_GRAY, font='Helvetica_Neue 11 bold')
+		self.t6Value = tk.Label(temperatureFrame, text="T6: XX", bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 11 bold')
 		self.t6Value.pack(side="left", padx=5)
 
 	# ------------- #

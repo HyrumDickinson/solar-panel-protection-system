@@ -27,6 +27,9 @@ from Monitor import * # this line imports the following:
 
 BUFFER_SIZE = 1024
 
+TEXT_COLOR = '#000000' # BLACK
+# this color highlights text
+
 class Application:
 	def __init__ (self):
 		self.lastData = None
