@@ -20,4 +20,4 @@ MID_GRAY_2 = '#383735' # this color highlights the space between and around the 
 DARK_GRAY = '#262523'
 BLACK = '#000000' # this color highlights text
 RED = '#ff6262'
-GREEN = WHITE  # '#32cd32' # this color highlights interactive components when they are interacted with
+GREEN = '#cccccc'  # '#32cd32' # this color highlights interactive components when they are interacted with
