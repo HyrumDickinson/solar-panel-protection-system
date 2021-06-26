@@ -36,9 +36,9 @@
 
 
 ### 6-23-2021
-- [X] **Hyrum Dickinson** - `main` - resized GUI; moved some widgets around so all of them display completely
+- [X] **Hyrum Dickinson** - `main` - resized GUI; moved some widgets so all display correctly
 - [X] **Hyrum Dickinson** - `main` - renamed some python files to make them more self-explanatory. All files that reference the renamed files were also updated.
-- [X] **Hyrum Dickinson** - `main` - removed redundant imports. Several files were importing the same files and libraries more than once. not any more. Since the cleanup, I'm observing a noticable improvement in the time it takes our application to load.
+- [X] **Hyrum Dickinson** - `main` - removed redundant imports. Several files were importing the same files and libraries more than once. Not any more. Since the cleanup, there is a noticable improvement in the time it takes our application to load.
 
 ### 6-26-2021
-- [X] **Hyrum Dickinson** - `main` - changed how the GUI does colors to make them futureproof and easily customizable
+- [X] **Hyrum Dickinson** - `main` - rebuilt GUI color system
