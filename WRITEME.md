@@ -36,7 +36,9 @@
 
 
 ### 6-23-2021
-- [X] **Hyrum Dickinson** - `main` - fixed issue where parts of GUI weren't displaying & improved cosmetics
+- [X] **Hyrum Dickinson** - `main` - resized GUI; moved some widgets around so all of them display completely
 - [X] **Hyrum Dickinson** - `main` - renamed some python files to make them more self-explanatory. All files that reference the renamed files were also updated.
 - [X] **Hyrum Dickinson** - `main` - removed redundant imports. Several files were importing the same files and libraries more than once. not any more. Since the cleanup, I'm observing a noticable improvement in the time it takes our application to load.
 
+### 6-26-2021
+- [X] **Hyrum Dickinson** - `main` - changed setup of GUI colors to make them more easily editable
