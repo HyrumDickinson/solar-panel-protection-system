@@ -41,4 +41,4 @@
 - [X] **Hyrum Dickinson** - `main` - removed redundant imports. Several files were importing the same files and libraries more than once. not any more. Since the cleanup, I'm observing a noticable improvement in the time it takes our application to load.
 
 ### 6-26-2021
-- [X] **Hyrum Dickinson** - `main` - changed setup of GUI colors to make them more easily editable
+- [X] **Hyrum Dickinson** - `main` - changed how the GUI does colors to make them futureproof and easily customizable
