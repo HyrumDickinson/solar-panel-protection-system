@@ -32,13 +32,15 @@
 - [ ] need to order adapters for wifi card (currently having trouble uploading);
 
 ### 6-22-2021
-- [X] **Hyrum Dickinson** - `main` - made cosmetic improvements to GUI
+- [X] **Hyrum Dickinson** - `main` - relabeled parts of the GUI, increased text size for a header, made some boxes and their text labels line up, and made other minor cosmetic GUI improvements.
 
 
 ### 6-23-2021
-- [X] **Hyrum Dickinson** - `main` - resized GUI; moved some widgets so all display correctly
-- [X] **Hyrum Dickinson** - `main` - renamed some python files to make them more self-explanatory. All files that reference the renamed files were also updated.
-- [X] **Hyrum Dickinson** - `main` - removed redundant imports. Several files were importing the same files and libraries more than once. Not any more. Since the cleanup, there is a noticable improvement in the time it takes our application to load.
+- [X] **Hyrum Dickinson** - `main` - resized GUI and moved some widgets so everything displays completely. A graph was partially cut off, beforehand.
+- [X] **Hyrum Dickinson** - `main` - renamed some python files. All files that reference the renamed files were also updated.
+- [X] **Hyrum Dickinson** - `main` - removed redundant imports of project files and python libraries. Several files were importing the same file or library more than once. Not any more. I also added comments to the import section of several files to show which libraries were already being imported from other file imports, to futureproof the program against coders unintentially adding redundant imports in the future. Since the cleanup, there is a noticable improvement in the time it takes our application to load.
 
 ### 6-26-2021
-- [X] **Hyrum Dickinson** - `main` - rebuilt GUI color system
+- [X] **Hyrum Dickinson** - `main` - added active button highlighting. Now, when an interactive element of the GUI is interacted with, the user will receive visual feedback letting them know that the GUI has received their input.
+- [X] **Hyrum Dickinson** - `main` - overhauled GUI color system backend to make it customizable and consistent. Now, each interactive element of the GUI has the same default background, same active background, same text color, etc. Each one can be changed for all interactive elements with a single line of code in Settings.py.
+
