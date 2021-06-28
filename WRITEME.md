@@ -19,11 +19,24 @@ just click that pencil button in the upper right corner when you open this file 
 - [X] Ben Olaivar - made placeholder functions for voltage/current sensor
 - [X] Ben Olaivar - made changes to main.cpp to account for voltage sensor test functions
 - [X] Ben Olaivar - fixed bug with DHCP_test that would cause infinite loop with multiple commands
-- [ ] Webserver?
+- [X] Webserver? (no. Simply won't work well with both ethernet and wifi card)
 - [ ] review conversion numbers
 
 ### 6-18-2021
 - [X] Ben Olaivar - additional thresh commands added to DHCP_test and main
 - [X] Ben Olaivar - successfully tested thresh functions
 - [ ] may want to find a way for ethernet connection to be accessed anywhere (can currently only be accessed through local network)
-- [ ] need to order adapters for wifi card (currently having trouble uploading);
+- [X] need to order adapters for wifi card (currently having trouble uploading);
+
+
+### 6-25-21
+- [X] Started temperature sensor code
+- [X] successfully implemented threshold for single temp sensor
+- [X] got adapters for wifi card...having difficulties
+- [ ] wifi card needs network name and password to connect to network...university wifi has name, username, and password??
+- [ ] ask seniors/IT for help
+
+### 6-28-2021
+- [X] successfully implimented multiple sensor readings for temperature sensors (add as many as you want...the libarary detects everything you connect)
+- [X] connected temperature sensors to ethernet. Can now read data from TELNET server...no threshold implementation
+- [ ] implement temp thresholds into code

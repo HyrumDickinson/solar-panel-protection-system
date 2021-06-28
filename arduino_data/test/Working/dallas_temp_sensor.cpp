@@ -1,3 +1,5 @@
+// reference: https://www.youtube.com/watch?v=lSVOtoMqtrI&ab_channel=DPVTECHNOLOGY
+
 //LIBARARIES
 #include <OneWire.h>
 #include <DallasTemperature.h>
@@ -11,14 +13,11 @@ DallasTemperature sensors(&oneWire);
 int numberOfDevices;
 DeviceAddress tempDeviceAddress;
 
-/*------------------------------------------------*/
 
 void setup() {
   Serial.begin(9600);
   sensorSetup();
 }
-
-
 
 
 void loop() {
@@ -76,6 +75,6 @@ void printAddress(DeviceAddress deviceAddress) {
       Serial.print("0");
       Serial.print(deviceAddress[i], HEX);
       
-  }//End of for loop
+  }
   
 }
