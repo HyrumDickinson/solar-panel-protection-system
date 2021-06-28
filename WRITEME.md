@@ -40,7 +40,18 @@
 - [X] **Hyrum Dickinson** - `main` - renamed some python files. All files that reference the renamed files were also updated.
 - [X] **Hyrum Dickinson** - `main` - removed redundant imports of project files and python libraries. Several files were importing the same file or library more than once. Not any more. I also added comments to the import section of several files to show which libraries were already being imported from other file imports, to futureproof the program against coders unintentially adding redundant imports in the future. Since the cleanup, there is a noticable improvement in the time it takes our application to load.
 
+### 6-25-21
+- [X]  **Ben Olaivar** - `arduino_dev` - Started temperature sensor code
+- [X]  **Ben Olaivar** - `arduino_dev` - successfully implemented threshold for single temp sensor
+- [X]  **Ben Olaivar** - `arduino_dev` - got adapters for wifi card...having difficulties
+- [ ]  **Ben Olaivar** - `arduino_dev` - wifi card needs network name and password to connect to network...university wifi has name, username, and password??
+- [ ]  **Ben Olaivar** - `arduino_dev` - ask seniors/IT for help
+
 ### 6-26-2021
 - [X] **Hyrum Dickinson** - `main` - added active button highlighting. Now, when an interactive element of the GUI is interacted with, the user will receive visual feedback letting them know that the GUI has received their input.
 - [X] **Hyrum Dickinson** - `main` - overhauled GUI color system backend to make it customizable and consistent. Now, each interactive element of the GUI has the same default background, same active background, same text color, etc. Each one can be changed for all interactive elements with a single line of code in Settings.py.
 
+### 6-28-2021
+- [X]  **Ben Olaivar** - `arduino_dev` - successfully implimented multiple sensor readings for temperature sensors (add as many as you want...the libarary detects everything you connect)
+- [X]  **Ben Olaivar** - `arduino_dev` - connected temperature sensors to ethernet. Can now read data from TELNET server...no threshold implementation
+- [ ]  **Ben Olaivar** - `arduino_dev` - implement temp thresholds into code
