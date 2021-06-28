@@ -10,6 +10,7 @@
 #define CHANNEL_THREE 3   // Panel C
 #define CHANNEL_FOUR 4    //! Current (where is panel D being read???)
 #define NUM_CHANNELS 4 
+#define TEMP_PIN 5
 
 /* MCP3428 Voltage and Current Sensor variables */
 MCP3428 mcp3428;
@@ -17,6 +18,11 @@ channelArra9[NUM_CHANNELS] = {0.0, 0.0, 0.0, 0.0}; // accounts for all 4 channel
 float voltageThreshold;   // max voltage desired
 float currentThreshold;   // max current desired
 
+/* TEMPERATURE variables */
+float farenheitThresh;
+float farenheitTemp;
+float cleciusThresh;
+float celciusTemp;
 
 /* ETHERNET Variables
  * The mac (media access controller) address is the hardware address for this unit.
@@ -42,6 +48,7 @@ void setup() {
 
 void loop() {
   // wait for a new client:
+  // we don't want this to update every millisecond (for sensor updates/actual reading)
   EthernetClient client = server.available();
   
   if (client) {
@@ -50,28 +57,12 @@ void loop() {
       client.println("Hello, client!"); 
       gotAMessage = true;
     }
-    // read the bytes incoming from the client:
-    char thisChar = client.read();
-    // Controlls an LED
-    if (thisChar == 'l') {
-      server.write("led ON");
-      server.write("\n");
-      digitalWrite(ledPin, HIGH);
-    }
-    if (thisChar == 'o') {
-      server.write("led OFF");
-      digitalWrite(ledPin, LOW);
-    }
-    // reads pot data
-    if (thisChar == 'p') {
-      while (true) {
-        server.println(analogRead(readPin));
-      }
-    }
+    delay(1000);
+    farenheitTemp = dht.readTemperature(true);
+    celciusTemp = ;
+    
 
-    if (thisChar == 'v')
-
-
+    
   }
 }
 
@@ -122,26 +113,14 @@ void ethernetSetup() {
 //  }
 
   ip = Ethernet.localIP();
-  if (checkValidIP(ip) == false) {
+  if (address[0] == 0 && address[1] == 0 && address[2] == 0 && address[3] == 0) {
     Serial.println("Stopping Program");
     while (true) {}
   }
   // print local IP address:
   Serial.print("My IP address: ");
-  Serial.print(Ethernet.localIP());
-  Serial.println();
+  Serial.println(Ethernet.localIP());
   server.begin();
-}
-
-//verifying IP address
-boolean checkValidIP(IPAddress address) {
-  if (address[0] == 0 && address[1] == 0 && address[2] == 0 && address[3] == 0) {
-    Serial.print(Ethernet.localIP());
-    Serial.println(" is not a valid IP Address. No connection made.");
-    return false;
-  } else {
-    return true;
-  }
 }
 
 /* Communicates with user to determine max desired voltage. Modified for Ethernet connection) */
