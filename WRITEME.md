@@ -36,7 +36,14 @@ just click that pencil button in the upper right corner when you open this file 
 - [ ] **Ben Olaivar** - `arduino_dev` - ask seniors/IT for help
 
 ### 6-28-2021
+- [X] **Ben Olaivar** - `arduino_dev` - added "temperature_ethernet.cpp" for ethernet development
 - [X] **Ben Olaivar** - `arduino_dev` - successfully implimented multiple sensor readings for temperature sensors (add as many as you want...the libarary detects everything you connect)
 - [X] **Ben Olaivar** - `arduino_dev` - connected temperature sensors to ethernet. Can now read data from TELNET server...no threshold implementation
-- [ ] **Ben Olaivar** - `arduino_dev` - implement temp thresholds into code
-- [ ] **Ben Olaivar** - `arduino_dev` -
+- [X] **Ben Olaivar** - `arduino_dev` - removed DHT temp sensor files. They were only for testing and are no longer needed
+- [X] **Ben Olaivar** - `arduino_dev` - implement temp thresholds into code
+- [ ] **Ben Olaivar** - `arduino_dev` - convert data to JSON. Current implimintation will send one at a time. We want to push everything to the server at once
+
+### 6-28-2021
+- [X] **Ben Olaivar** - `arduino_dev` - successfully implimented array-based functionality in threshold_test.cpp
+- [X] **Ben Olaivar** - `arduino_dev` - removed client dependency and print statements in "readTemperature" function
+- [X] **Ben Olaivar** - `arduino_dev` - tweaked print statements on overheat
