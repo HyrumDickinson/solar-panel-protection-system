@@ -5,12 +5,12 @@
 #include <MCP3428.h>
 
 /* Constants */
-#define CHANNEL_ONE 1     // Panel A
-#define CHANNEL_TWO 2     // Panel B
-#define CHANNEL_THREE 3   // Panel C
-#define CHANNEL_FOUR 4    //! Current (where is panel D being read???)
+#define CHANNEL_ONE 1     // Panel A - B
+#define CHANNEL_TWO 2     // Panel B - C
+#define CHANNEL_THREE 3   // Panel C - D
+#define CHANNEL_FOUR 4    
 #define NUM_CHANNELS 4 
-#define TEMP_PIN 5
+#define TEMP_PIN 8
 
 /* MCP3428 Voltage and Current Sensor variables */
 MCP3428 mcp3428;
@@ -52,14 +52,7 @@ void loop() {
   EthernetClient client = server.available();
   
   if (client) {
-    if (!gotAMessage) {
-      Serial.println("We have a new client");
-      client.println("Hello, client!"); 
-      gotAMessage = true;
-    }
-    delay(1000);
-    farenheitTemp = dht.readTemperature(true);
-    celciusTemp = ;
+    
     
 
     
@@ -128,25 +121,4 @@ void setVoltThreshold() {
   char input = client.read();
   client.println("Enter MAX Voltage Threshold (0 to 72.9): ");
   while 
-}
-
-void setCurrentThreshold() {
-
-}
-
-void setTempThreshold() {
-  
-}
-
-
-void checkVoltage() {
-
-}
-
-void checkCurrent() {
-
-}
-
-void checkTemp() {
-
 }

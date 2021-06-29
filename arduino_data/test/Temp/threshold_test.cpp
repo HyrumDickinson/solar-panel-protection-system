@@ -8,16 +8,15 @@
 
 /* CONSTANTS */
 #define ONE_WIRE_BUS 8
+#define NUM_TEMP_SENSORS 6      //report calls for 6 temp sensors. If you use more/less, you only need to change it here
 //TODO: find realistic values for these temperatures
-#define TEMP_THRESH 85 // this threshold is an arbitrary number used for testing. Not actual field-use temp
-#define TEMP_RESET 85  // system must cool down to this temp to resume functions. (currently arbitrary for testing)
 
 /* TEMPERATURE SETUP */
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 DeviceAddress tempDeviceAddress;
-int numberOfDevices;
-float temperatureReads[6];     //report calls for 6 temp sensors. If you use more/less, you only need to change it here
+float tempArray[NUM_TEMP_SENSORS];
+int TEMP_THRESH = 90;   //! not making constant (#define). When in overheat, thresh is lower number. Allows for autonomous restart. Consult Kevin about this. number is arbitrary rn
 bool overheat = false;
 int tempThresholdsBroken; /* Reads how many temp sensors have detected an exceeded temp thresh (don't want a faulty sensor setting it off) 
 - Lab report displays 6 temp sensors. Shut down at 3 or 4 */
@@ -70,17 +69,14 @@ void ethernetSetup() {
 /* SETUP TEMP SENSOR(s) */
 void tempSensorSetup() {
   sensors.begin();
-  
-  numberOfDevices = sensors.getDeviceCount();
-  Serial.print(numberOfDevices, DEC);
-  Serial.println(" devices found");
 
   //print the address of each sensor
-  for (int i = 0; i < numberOfDevices; i++) {
+  for (int i = 0; i < NUM_TEMP_SENSORS; i++) {
     //searches for data wires. Stores device addresses in "tempDeviceAddress" variable
     if (sensors.getAddress(tempDeviceAddress, i)) {
       Serial.print("Address ");
       Serial.print(i);
+      Serial.print(": ");
       printAddress(tempDeviceAddress);
       Serial.println();
 
@@ -90,7 +86,6 @@ void tempSensorSetup() {
     }
   }
 }
-
 
 /* PRINT THE HEX ADDRESS FOR TEMPERATURE SENSORS */
 void printAddress(DeviceAddress deviceAddress) {
@@ -103,15 +98,6 @@ void printAddress(DeviceAddress deviceAddress) {
 
 
 
-
-
-
-
-
-
-
-
-
 //TODO: convert loop and other functinos to use/export JSON. Also listen for SHUTDOWN command
 void loop() {
   // wait for a new client:
@@ -120,24 +106,24 @@ void loop() {
   if (client) { //makes sure client is connected
     readTemperatures();
 
-    for (int i = 0; i < 6; i++) {
-        if (temperatureReads[i] > TEMP_THRESH) {
-            client.print("TEMP THRESH EXCEEDED AT SENSOR: ");
-        } else {
-            client.print("Temperature at sensor: ");
-        }
-
-        client.println(i);
-        client.print("Farenheit: ");
-        client.println(temperatureReads[i]);
-    }
-
-    if (overheat) {  //calls cooldown function if more than 3 sensors detect an overheat
+    if (overheat) { //calls cooldown function if more than 3 sensors detect an overheat
         client.println();
         client.println("************SYSTEM OVERHEAT************");
         client.println("3 or more temp sensors have exceeded the temperature threshold...waiting for cooldown");
         client.println("***************************************");
+        //TODO: add some function to shut things down when in overheat
     }
+    for (int i = 0; i < NUM_TEMP_SENSORS; i++) {
+        if (tempArray[i] > TEMP_THRESH) {
+            client.print("TEMP THRESH EXCEEDED AT SENSOR: ");
+        } else {
+            client.print("Temperature at sensor: ");
+        }
+        client.println(i);
+        client.print("Farenheit: ");
+        client.println(tempArray[i]);
+    }
+
     client.println("-----------------------");
     //delay(1000);    //! Possibly use delay later. Code works with or without, just slower with delay
   }
@@ -146,22 +132,25 @@ void loop() {
 
 /* READS TEMPERATURE */
 void readTemperatures() {
-    //TODO: Once converted to JSON, remove client/ethernet code
+    //TODO: Convert to JSON (possibly continue as is, just write array values into JSON in loop)
     sensors.requestTemperatures(); // reads temps from all sensors
     tempThresholdsBroken = 0;   //! Resets to 0 to allow for overheat setting to change. May modify later
         
-    // loop through each device & assign temperature value to "temperatureReads" array
-    for (int i = 0; i < numberOfDevices; i++) {
+    // loop through each device & assign temperature value to "tempArray" array
+    for (int i = 0; i < NUM_TEMP_SENSORS; i++) {
         if (sensors.getAddress(tempDeviceAddress, i)) {
-            temperatureReads[i] = sensors.getTempF(tempDeviceAddress);  //reads temperature in degrees farenheit
-            if (temperatureReads[i] >= TEMP_THRESH) {
+            tempArray[i] = sensors.getTempF(tempDeviceAddress);  // reads temperature in degrees farenheit
+            if (tempArray[i] >= TEMP_THRESH) {
                 tempThresholdsBroken += 1;
             }
         }
     }
-    if (tempThresholdsBroken >= 3) {
+    if (tempThresholdsBroken >= 3) {    /* After initial overheat, other sensors may trigger as overheating due to TEMP_THRESH change. This is expected */
         overheat = true;
-    } else {
+        TEMP_THRESH = 85;
+    } else {     // does not wait for entire system cooldown. Again, going back to 1 or 2 faulty sensors ruining everything... this was an issue found in testing
+        //TODO: find a way to get around faulty temperature sensors. Testing found that resetting the system worked...Maybe re-run tempSensorSetup occasionally
         overheat = false;
+        TEMP_THRESH = 90;
     }
 }
