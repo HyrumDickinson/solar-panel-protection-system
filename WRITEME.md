@@ -42,3 +42,8 @@
 
 ### 6-26-2021
 - [X] **Hyrum Dickinson** - `main` - rebuilt GUI color system
+
+### 6-30-2021
+- [X] **Hyrum Dickinson** - `main` - made connection status display even if no connection
+- [ ] need to figure out how to delete old statuses instead of having them pile on top of each other
+- [ ] need to figure out why two "disconnected" statuses pop up instead of one, starting with the second `sync` button click. It would make more sense to just display one per click.
