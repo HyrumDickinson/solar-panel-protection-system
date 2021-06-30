@@ -17,7 +17,7 @@ class Connector:
 
    def scan(self, i):
       address = self.ip + str(i) 
-      s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+      s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       s.settimeout(TIMEOUT)
       try:
          s.connect((address, TCP_PORT))
@@ -71,8 +71,11 @@ if __name__ == "__main__":
    print(c.get_ip_address().rpartition('.')[0] + ".")
    c.connect()
 
-   print (len(c.connections))
+   print(len(c.connections))
    for i in c.connections:
       print (i.ip)
-      print (i.connected)
+      print (i.isConnected)
       i.socket.close()
+   
+   if len(c.connections) == 0:
+      c.isConnected == False

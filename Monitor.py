@@ -69,7 +69,7 @@ class Monitor():
 		TripPointFrame_2.pack(side="top", pady=2.5, fill="x")
 		voltageEntryTripPoint = tk.Label(TripPointFrame_2, text="Max voltage: ", padx=43, bg=DATA_WIDGET_COLOR)
 		voltageEntryTripPoint.pack(side="left")
-		self.voltageEntry = tk.Entry(TripPointFrame_2, highlightbackground=ACTIVE_BUTTON_COLOR, font=40, width=5)
+		self.voltageEntry = tk.Entry(TripPointFrame_2, font=40, width=5)
 		self.voltageEntry.insert(0, DEFAULT_VOLTAGE_TRIP_POINT)
 		self.voltageEntry.bind('<FocusIn>', lambda event, i=0: self.on_entry_click(event, i))
 		self.voltageEntry.bind('<FocusOut>', lambda event, i=0: self.on_focusout(event, i))
@@ -83,7 +83,7 @@ class Monitor():
 		self.TripPointFrame_3.pack(side="top", pady=2.5, fill="x")
 		currentEntryTripPoint = tk.Label(self.TripPointFrame_3, text="Max current: ", padx=43, bg=DATA_WIDGET_COLOR)
 		currentEntryTripPoint.pack(side="left")
-		self.currentEntry = tk.Entry(self.TripPointFrame_3, highlightbackground=DATA_WIDGET_COLOR, font=40, width=5)
+		self.currentEntry = tk.Entry(self.TripPointFrame_3, font=40, width=5)
 		self.currentEntry.insert(0, DEFAULT_CURRENT_TRIP_POINT)
 		self.currentEntry.bind('<FocusIn>', lambda event, i=1: self.on_entry_click(event, i))
 		self.currentEntry.bind('<FocusOut>', lambda event, i=1: self.on_focusout(event, i))
@@ -97,7 +97,7 @@ class Monitor():
 		TripPointFrame_4.pack(side="top", padx=43, pady=2.5, fill="both")
 		temperatureEntryTripPoint = tk.Label(TripPointFrame_4, text="Max temperature: ", bg=DATA_WIDGET_COLOR)
 		temperatureEntryTripPoint.pack(side="left")
-		self.temperatureEntry = tk.Entry(TripPointFrame_4, highlightbackground=DARK_GRAY, font=40, width=5)
+		self.temperatureEntry = tk.Entry(TripPointFrame_4, font=40, width=5)
 		self.temperatureEntry.insert(0, DEFAULT_TEMPERATURE_TRIP_POINT)
 		self.temperatureEntry.bind('<FocusIn>', lambda event, i=2: self.on_entry_click(event, i))
 		self.temperatureEntry.bind('<FocusOut>', lambda event, i=2: self.on_focusout(event, i))
@@ -120,16 +120,16 @@ class Monitor():
 
 		# Output Configuration
 		var4 = tk.IntVar()
-		checkboxD = tk.Checkbutton(configFrame2, text="AD", background=DATA_WIDGET_COLOR, activebackground=ACTIVE_BUTTON_COLOR, variable=var4, command=lambda: self.updateCheckbox(3))
+		checkboxD = tk.Checkbutton(configFrame2, text="AD", background=DATA_WIDGET_COLOR, activebackground=DATA_WIDGET_COLOR, variable=var4, command=lambda: self.updateCheckbox(3))
 		checkboxD.pack(side="bottom", pady=2.5)
 		var3 = tk.IntVar()
-		checkboxC = tk.Checkbutton(configFrame2, text="BC", background=DATA_WIDGET_COLOR, activebackground=ACTIVE_BUTTON_COLOR, variable=var3, command=lambda: self.updateCheckbox(2))
+		checkboxC = tk.Checkbutton(configFrame2, text="BC", background=DATA_WIDGET_COLOR, activebackground=DATA_WIDGET_COLOR, variable=var3, command=lambda: self.updateCheckbox(2))
 		checkboxC.pack(side="bottom", pady=2.5)
 		var2 = tk.IntVar()
-		checkboxB = tk.Checkbutton(configFrame2, text="CD", background=DATA_WIDGET_COLOR, activebackground=ACTIVE_BUTTON_COLOR, variable=var2, command=lambda: self.updateCheckbox(1))
+		checkboxB = tk.Checkbutton(configFrame2, text="CD", background=DATA_WIDGET_COLOR, activebackground=DATA_WIDGET_COLOR, variable=var2, command=lambda: self.updateCheckbox(1))
 		checkboxB.pack(side="bottom", pady=2.5)
 		var1 = tk.IntVar()
-		checkboxA = tk.Checkbutton(configFrame2, text="XX", background=DATA_WIDGET_COLOR, activebackground=ACTIVE_BUTTON_COLOR, variable=var1, command=lambda: self.updateCheckbox(0))
+		checkboxA = tk.Checkbutton(configFrame2, text="XX", background=DATA_WIDGET_COLOR, activebackground=DATA_WIDGET_COLOR, variable=var1, command=lambda: self.updateCheckbox(0))
 		checkboxA.pack(side="bottom", pady=2.5)
 		configLabel = tk.Label(configFrame1, text="Config Switch: ", bg=DATA_WIDGET_COLOR)
 		configLabel.pack(side="bottom")
@@ -144,16 +144,17 @@ class Monitor():
 
 		# the two lines below add a sync button. However, it's an ugly one, and furthurmore there's already
 		# a sync button in the form of sync.png
+
 		# self.syncButton = tk.Button(self.syncFrame, text='sync', highlightbackground=CONNECTOR_WIDGET_COLOR, font=20, command=lambda: self.application.inputting('sync'))
 		# self.syncButton.pack(side="bottom", padx=40)
 
 		TripPointEntryButton = tk.Button(self.TripPointFrame_3, text="OK", background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=40, command=lambda: self.application.TripPointInputting(self.voltageEntry.get(), self.currentEntry.get(), self.temperatureEntry.get(), self.selected))
-		TripPointEntryButton.pack(side="left", padx=35)
+		TripPointEntryButton.pack(side="left", padx=30)
 
 		manualConfigFrame = tk.Frame(self.configFrame, bg=DATA_WIDGET_COLOR)
 		manualConfigFrame.pack(side="top", pady=2.5)
 		self.toggleManualSwitchButton = tk.Button(manualConfigFrame, text="ON", background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=40, command=lambda: self.application.manualSwitchInputting(self.selected))
-		self.toggleManualSwitchButton.pack(side="right", pady=2.5)
+		self.toggleManualSwitchButton.pack(side="right", pady=5, padx=5)
 		manualConfigLabel = tk.Label(manualConfigFrame, text="Manual Switch: ", bg=DATA_WIDGET_COLOR)
 		manualConfigLabel.pack(side="right")
 
@@ -185,6 +186,8 @@ class Monitor():
 		self.setupFrames()
 		self.topFrame = tk.Frame(self.dataFrame, bg=DATA_WIDGET_COLOR)
 		self.topFrame.pack(side="top", fill="x", pady=10)
+		# self.topFrame = tk.Frame(self.connFrame, bg=CONNECTOR_WIDGET_COLOR)
+		# self.topFrame.pack(side="bottom", fill="x", pady=10)
 		self.setupTripPoints()
 		self.setupCheckboxes()
 		self.setupSyncButton()
@@ -193,29 +196,43 @@ class Monitor():
 	def updateWidgets(self):
 		connLength = len(self.application.c.connections)
 
-		for i in range(0, connLength):
-			BACKGROUND = CONNECTOR_WIDGET_COLOR if i == 0 else DARK_GRAY
+		if connLength == 0:
+			BACKGROUND = DARK_GRAY
+
 			# Frame for Widget
 			widgetFrame = tk.Frame(self.connFrame, bg=BACKGROUND)
 			widgetFrame.pack(side="top", fill="x")
 
-			# IP Label
-			ipLabel = tk.Label(widgetFrame, text='IP: ' + self.application.c.connections[i].ip, bg=BACKGROUND, font='TkDefaultFont 10')
-			ipLabel.pack(side="top", fill="x", padx=10, pady=5)
-			ipLabel.config(fg=DATA_WIDGET_COLOR)
-			
 			# IP Status
-			ipStatus = tk.Label(widgetFrame, text="Status: Connected", bg=BACKGROUND, font='TkDefaultFont 10')
-			ipStatus.pack(side="bottom", fill="x", padx=10, pady=5)
-			ipStatus.config(fg=ACTIVE_BUTTON_COLOR)
+			ipStatus = tk.Label(widgetFrame, text="Status: Not Connected", bg=BACKGROUND, font='TkDefaultFont 8')
+			ipStatus.pack(side="bottom", fill="x", padx=5, pady=5)
+			ipStatus.config(fg=RED)
 
-			self.widgetFrames.append([widgetFrame, ipLabel, ipStatus])
-			index = len(self.widgetFrames) - 1
-			widgetFrame.bind('<Button-1>', lambda event, i=index: self.frameInteraction(event, i, BACKGROUND))
-			ipLabel.bind('<Button-1>', lambda event, i=index: self.labelInteraction(event, i))
-			ipStatus.bind('<Button-1>', lambda event, i=index: self.labelInteraction(event, i))
-			widgetFrame.bind("<Enter>", lambda event, i=index: self.frameInteraction(event, i, BACKGROUND))
-			widgetFrame.bind("<Leave>", lambda event, i=index: self.frameInteraction(event, i, BACKGROUND))
+		else :
+			for i in range(0, connLength):
+				BACKGROUND = CONNECTOR_WIDGET_COLOR if i == 0 else DARK_GRAY
+
+				# Frame for Widget
+				widgetFrame = tk.Frame(self.connFrame, bg=BACKGROUND)
+				widgetFrame.pack(side="top", fill="x")
+
+				# IP Label
+				ipLabel = tk.Label(widgetFrame, text='IP: ' + self.application.c.connections[i].ip, bg=BACKGROUND, font='TkDefaultFont 10')
+				ipLabel.pack(side="top", fill="x", padx=10, pady=5)
+				ipLabel.config(fg=GREEN)
+			
+				# IP Status
+				ipStatus = tk.Label(widgetFrame, text="Status: Connected", bg=BACKGROUND, font='TkDefaultFont 10')
+				ipStatus.pack(side="bottom", fill="x", padx=10, pady=5)
+				ipStatus.config(fg=ACTIVE_BUTTON_COLOR)
+
+				self.widgetFrames.append([widgetFrame, ipLabel, ipStatus])
+				index = len(self.widgetFrames) - 1
+				widgetFrame.bind('<Button-1>', lambda event, i=index: self.frameInteraction(event, i, BACKGROUND))
+				ipLabel.bind('<Button-1>', lambda event, i=index: self.labelInteraction(event, i))
+				ipStatus.bind('<Button-1>', lambda event, i=index: self.labelInteraction(event, i))
+				widgetFrame.bind("<Enter>", lambda event, i=index: self.frameInteraction(event, i, BACKGROUND))
+				widgetFrame.bind("<Leave>", lambda event, i=index: self.frameInteraction(event, i, BACKGROUND))
 
 	# ------------- #
 
@@ -284,15 +301,15 @@ class Monitor():
 		if i == 0:
 			self.voltageEntry.delete(0, "end")
 			self.voltageEntry.insert(0, '')
-			self.voltageEntry.config(bg=ACTIVE_BUTTON_COLOR, fg=TEXT_COLOR)
+			self.voltageEntry.config(bg=INACTIVE_BUTTON_COLOR, fg=TEXT_COLOR)
 		if i == 1:
 			self.currentEntry.delete(0, "end")
 			self.currentEntry.insert(0, '')
-			self.currentEntry.config(bg=ACTIVE_BUTTON_COLOR, fg=TEXT_COLOR)
+			self.currentEntry.config(bg=INACTIVE_BUTTON_COLOR, fg=TEXT_COLOR)
 		if i == 2:
 			self.temperatureEntry.delete(0, "end")
 			self.temperatureEntry.insert(0, '')
-			self.temperatureEntry.config(bg=ACTIVE_BUTTON_COLOR, fg=TEXT_COLOR)
+			self.temperatureEntry.config(bg=INACTIVE_BUTTON_COLOR, fg=TEXT_COLOR)
 
 	def on_focusout(self, event, i):
 		if len(self.application.c.connections) == 0:
@@ -368,7 +385,7 @@ class Monitor():
 		# Button Images
 		sync_button = Image.open('sync.png')
 		sync_image_for_button = ImageTk.PhotoImage(sync_button)
-		self.syncButton = tk.Button(self.syncFrame, image=sync_image_for_button, bg=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, highlightcolor=ACTIVE_BUTTON_COLOR, command=lambda: self.application.inputting('sync'))
+		self.syncButton = tk.Button(self.syncFrame, image=sync_image_for_button, bg=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, command=lambda: self.application.inputting('sync'))
 		self.syncButton.config(width="120", height="20")
 		self.syncButton.pack(side="bottom")
 		self.syncButton.config(image=sync_image_for_button) 

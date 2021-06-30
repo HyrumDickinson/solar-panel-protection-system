@@ -17,25 +17,27 @@ MIN_TEMPERATURE_TRIP_POINT = -40.0
 
     # ---------- Colors ---------- #
 
-DATA_WIDGET_COLOR = '#ababab' #LIGHT_GRAY
-# this color highlights the data widget and should not be changed
+MAIN_BACKGROUND_COLOR = '#383735' # MID_GRAY_2
+# this color highlights the space between and around the main widgets
 
 CONNECTOR_WIDGET_COLOR = '#464646' # MID_GRAY_1 
 # this color highlights the connection widget
 
-MAIN_BACKGROUND_COLOR = '#383735' # MID_GRAY_2
-# this color highlights the space between and around the main widgets
+DATA_WIDGET_COLOR =  '#ababab' #LIGHT_GRAY
+# this color highlights the data widget and should not be changed
 
 INACTIVE_BUTTON_COLOR = '#ffffff' # WHITE
 # this color highlights interactive elements of the GUI when they are not being pressed
 
-ACTIVE_BUTTON_COLOR = '#cccccc' # GREEN
+ACTIVE_BUTTON_COLOR = '#ababab' # '#cccccc' # GREEN
 # this color highlights interactive components when they are interacted with
+
+DARK_GRAY = '#262523'
 
 TEXT_COLOR = '#000000' # BLACK
 # this color highlights text
 
-DARK_GRAY = '#262523'
-
 RED = '#ff6262'
+
+GREEN = '#cccccc'
 

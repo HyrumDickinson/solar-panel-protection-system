@@ -2,7 +2,7 @@
 import json
 # import sqlite3 # this line is redundant; Monitor has already imported sqlite3
 # import time # this line is redundant; Monitor has already imported time
-from Connector import * # this line imports the following:
+from Connector import * # this line imports the following: # this is redundant because Monitor imports Connector
 	 # import socket
      # import threading
      # from Connection import * # imports Settings
@@ -36,7 +36,7 @@ class Application:
 		self.lastIP = None
 
 		self.command = None
-		self.monitor = None
+		self.Monitor = None
 		self.c = Connector()
 
 	# ----------------- #
@@ -71,33 +71,33 @@ class Application:
 					# Switch relay configuration if trip point reached
 					currConnection = self.c.findConnection(self.lastIP)
 					if currConnection != -1 and self.c.connections[currConnection].configSwitch != packet["S"] and packet["X"] != 0:
-						self.monitor.updateCheckbox(packet["S"])
+						self.Monitor.updateCheckbox(packet["S"])
 
 					if packet["X"] != 0 and self.c.connections[currConnection].manualSwitch == 0:
 						self.c.connections[currConnection].currentAck = 1
 						
 						if packet["X"] == 1:
-							self.monitor.widgetFrames[currConnection][2]['fg'] = RED
-							self.monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Voltage'
+							self.Monitor.widgetFrames[currConnection][2]['fg'] = RED
+							self.Monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Voltage'
 						if packet["X"] == 2:
-							self.monitor.widgetFrames[currConnection][2]['fg'] = RED
-							self.monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Current'
+							self.Monitor.widgetFrames[currConnection][2]['fg'] = RED
+							self.Monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Current'
 						if packet["X"] == 3:
-							self.monitor.widgetFrames[currConnection][2]['fg'] = RED
-							self.monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Heating'
+							self.Monitor.widgetFrames[currConnection][2]['fg'] = RED
+							self.Monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Heating'
 
 					if self.c.connections[currConnection].manualSwitch == 1:
-						self.monitor.updateCheckbox(packet["S"])
+						self.Monitor.updateCheckbox(packet["S"])
 
 						if packet["X"] == 1:
-							self.monitor.widgetFrames[currConnection][2]['fg'] = RED
-							self.monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Voltage'
+							self.Monitor.widgetFrames[currConnection][2]['fg'] = RED
+							self.Monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Voltage'
 						if packet["X"] == 2:
-							self.monitor.widgetFrames[currConnection][2]['fg'] = RED
-							self.monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Current'
+							self.Monitor.widgetFrames[currConnection][2]['fg'] = RED
+							self.Monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Current'
 						if packet["X"] == 3:
-							self.monitor.widgetFrames[currConnection][2]['fg'] = RED
-							self.monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Heating'
+							self.Monitor.widgetFrames[currConnection][2]['fg'] = RED
+							self.Monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Heating'
 
 					cursor.execute("INSERT INTO voltages VALUES (:timeRecorded, :ip, :voltage_1, :voltage_2, :voltage_3, :current_1, :temperature_1, :temperature_2, :temperature_3, :temperature_4, :temperature_5, :temperature_6)", 
 					{
@@ -123,18 +123,18 @@ class Application:
 			if self.command != None:
 				if self.command == 'quit':
 					self.conn.close()
-					self.monitor.root.quit()
+					self.Monitor.root.quit()
 					for i in self.c.connections:
 						i.socket.close()
 					return					
 				if self.command == 'sync':
 					self.c.clear()
-					self.monitor.clearWidgets()
-					self.monitor.updateWidgets()
+					self.Monitor.clearWidgets()
+					self.Monitor.updateWidgets()
 					self.c.connect()
-					self.monitor.updateWidgets()
+					self.Monitor.updateWidgets()
 					for i in range(0, len(self.c.connections)):
-						self.monitor.updateCheckbox(i)
+						self.Monitor.updateCheckbox(i)
 
 				self.command = None
 
@@ -142,11 +142,11 @@ class Application:
 
 	def receiver(self):
 		self.c.connect()
-		self.monitor.updateWidgets()
+		self.Monitor.updateWidgets()
 
 		while True:
 			for i in self.c.connections:
-				if i.connected and self.command != 'sync' and self.command != 'quit':
+				if i.isConnected and self.command != 'sync' and self.command != 'quit':
 					# SEND
 					data = {}
 					data['V'] = i.voltageValue
@@ -162,7 +162,8 @@ class Application:
 						self.lastIP = i.ip
 					except:
 						print("Timed out.")
-					
+				elif not i.isConnected and self.command != 'sync' and self.command != 'quit':
+					print("No connection")
 			if self.command == 'quit':
 				return
 
@@ -182,7 +183,7 @@ class Application:
 		except:
 			pass
 
-		self.monitor.updateEntries()
+		self.Monitor.updateEntries()
 
 	def configSwitchInputting(self, connection, i):
 		if len(self.c.connections) == 0:
@@ -193,13 +194,13 @@ class Application:
 		if len(self.c.connections) == 0:
 			return
 
-		self.monitor.updateStatus()
+		self.Monitor.updateStatus()
 		if self.c.connections[i].manualSwitch == 0:
 			self.c.connections[i].manualSwitch = 1
-			self.monitor.toggleManualSwitchButton['text'] = 'OFF'	#
+			self.Monitor.toggleManualSwitchButton['text'] = 'OFF'	#
 		else:
 			self.c.connections[i].manualSwitch = 0
-			self.monitor.toggleManualSwitchButton['text'] = 'ON'	#
+			self.Monitor.toggleManualSwitchButton['text'] = 'ON'	#
 
 	def formatSelect(self, input):
 		ret = ""
@@ -209,14 +210,14 @@ class Application:
 
 	# ----------------- #
 
-	def run(self, monitor):
+	def run(self, Monitor):
 		t1 = threading.Thread(target=self.receiver, args=())
 		t2 = threading.Thread(target=self.commands, args=())
-		self.monitor = monitor
-		self.monitor.runSetup()
+		self.Monitor = Monitor
+		self.Monitor.runSetup()
 		t1.start()
 		t2.start()
-		self.monitor.run()
+		self.Monitor.run()
 		t1.join()
 		t2.join()
 
