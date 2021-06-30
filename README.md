@@ -2,7 +2,7 @@
 
 
 ## Overview
-This branch is primarily focused on the development of the onboard arduino code. This code will encompass everything from ethernet communication to sensor data reading. The majority of work done in this branch will be done under the 'arduino_data' directory, specifically in 'main.cpp' and 'DHCP_test.cpp'. Files in this directory are organized using platformio, which allows for convenient access/storage of libraries, test code, and other files. 
+This branch is primarily focused on the development of the onboard arduino code. This code will encompass everything from ethernet communication to sensor data reading. The majority of work done in this branch will be done under the 'arduino_data' directory, the 'test' files. Files in this directory are organized using platformio, which allows for convenient access/storage of libraries, test code, and other files. 
 
 ## Branches
 
