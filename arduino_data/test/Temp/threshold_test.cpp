@@ -106,6 +106,7 @@ void tempSensorSetup() {
   }
 }
 
+
 /* PRINT THE HEX ADDRESS FOR TEMPERATURE SENSORS */
 void printAddress(DeviceAddress deviceAddress) {
   for (uint8_t i = 0; i < 8; i++) {
