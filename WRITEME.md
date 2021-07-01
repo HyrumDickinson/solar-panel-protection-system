@@ -51,3 +51,11 @@ just click that pencil button in the upper right corner when you open this file 
 - [ ] **Ben Olaivar** - `arduino_dev` - Confirm JSON formatting before proceeding
 - [ ] **Ben Olaivar** - `arduino_dev` - Find way to connect without being on same network (Consider options other than TELNET?). Current system is entirely dependent on ethernet connection. No wifi yet
 - [ ] **Ben Olaivar** - `arduino_dev` - Speak to Kevin/IT about getting IP's for each arduino, as well as setting up wireless card (network name and password).
+
+### 7-01-2021
+- [X] **Ben Olaivar** - `arduino_dev` - Finished JSON setup for temperature data reading
+- [X] **Ben Olaivar** - `arduino_dev` - still not sure how I'm going to test the ADC without taking it off the board. May ask Kevin if I can rip it off the old PCB (Old PCB doesn't work anyways, right?)
+- [X] **Ben Olaivar** - `arduino_dev` - Wifi module may only be able to connect to the NETGEAR wifi. After researching for solutions to login issue, nothing has come up. Either do netgear or setup a new system if you wanna connect wirelessly. As of now I'm going to focus on ethernet because we know it works
+- [X] **Ben Olaivar** - `arduino_dev` - how is the arduino going to connect to the main board? Does the hardware team even know I'm doing this arduino thing? This arduino + ethernet shield is going to be doing 90% of the stuff the old board did. Only thing we need the old PCB for is the relays and ADC
+- [ ] **Ben Olaivar** - `arduino_dev` - in general, talk to kevin. Need IP's for all boards, need confirmation of ADC removal, need confirmation of board hookup, need information on wireless commmunication. 
+- [ ] **Ben Olaivar** - `arduino_dev` - found out the current board only connect to screw terminals A-C. D-F literally don't connect to anything and are just for show 

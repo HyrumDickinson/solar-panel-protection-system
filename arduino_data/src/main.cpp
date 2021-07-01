@@ -11,6 +11,9 @@
 #define ONE_WIRE_BUS 8
 #define NUM_TEMP_SENSORS 6      //report calls for 6 temp sensors. If you use more/less, you only need to change it here
 
+#define CH_ONE_VOLT_CONVERSION_FACTOR 57
+#define CH_TWO_VOLT_CONVERSION_FACTOR 43.2
+#define CH_THREE_VOLT_CONVERSION_FACTOR 14.3
 #define CHANNEL_ONE 1     // Panel A - B
 #define CHANNEL_TWO 2     // Panel B - C
 #define CHANNEL_THREE 3   // Panel C - D
