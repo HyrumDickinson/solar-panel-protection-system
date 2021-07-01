@@ -5,11 +5,38 @@
 #include <Ethernet.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
+#include <ArduinoJson.h>
+
 
 /* CONSTANTS */
 #define ONE_WIRE_BUS 8
 #define NUM_TEMP_SENSORS 6      //report calls for 6 temp sensors. If you use more/less, you only need to change it here
-//TODO: find realistic values for these temperatures
+
+/* ETHERNET SETUP */
+byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x04};
+IPAddress ip(128, 174, 186, 99);
+IPAddress gateway(128, 174, 186, 1);
+IPAddress subnet(255, 255, 254, 0);
+EthernetServer server(23); // default is 23
+
+/* JSON INSTANTIATION */
+StaticJsonDocument<200> jsonObject;  // 200 works for both esp8266 and arduino boards
+int T1 = jsonObject["T1"];
+int T2 = jsonObject["T2"];
+int T3 = jsonObject["T3"];
+int T4 = jsonObject["T4"];
+int T5 = jsonObject["T5"];
+int T6 = jsonObject["T6"];
+
+int V1 = jsonObject["V1"];
+int V2 = jsonObject["V2"];
+int V3 = jsonObject["V3"];
+
+int C1 = jsonObject["C1"];
+
+bool OVERHEAT = jsonObject["OVERHEAT"];
+bool OVERVOLT = jsonObject["OVERVOLT"];
+bool OVERCURR = jsonObject["OVERCURRENT"];
 
 /* TEMPERATURE SETUP */
 OneWire oneWire(ONE_WIRE_BUS);
@@ -20,14 +47,6 @@ int TEMP_THRESH = 90;   //! not making constant (#define). When in overheat, thr
 bool overheat = false;
 int tempThresholdsBroken; /* Reads how many temp sensors have detected an exceeded temp thresh (don't want a faulty sensor setting it off) 
 - Lab report displays 6 temp sensors. Shut down at 3 or 4 */
-
-/* ETHERNET SETUP */
-byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x04};
-IPAddress ip(128, 174, 186, 99);
-IPAddress gateway(128, 174, 186, 1);
-IPAddress subnet(255, 255, 254, 0);
-EthernetServer server(23); // default is 23
-boolean alreadyConnected = false;
 
 
 void setup() {
@@ -106,6 +125,7 @@ void loop() {
   if (client) { //makes sure client is connected
     readTemperatures();
 
+    //TODO: Reomove ALL print statements (or comment out) when code is finalized. Only need to send JSON 
     if (overheat) { //calls cooldown function if more than 3 sensors detect an overheat
         client.println();
         client.println("************SYSTEM OVERHEAT************");
@@ -153,4 +173,12 @@ void readTemperatures() {
         overheat = false;
         TEMP_THRESH = 90;
     }
+
+    jsonObject["T1"] = tempArray[0];
+    jsonObject["T2"] = tempArray[1];
+    jsonObject["T3"] = tempArray[2];
+    jsonObject["T4"] = tempArray[3];
+    jsonObject["T5"] = tempArray[4];
+    jsonObject["T6"] = tempArray[5];
+    jsonObject["OVERHEAT"] = overheat;
 }
