@@ -32,16 +32,41 @@
 - [ ] need to order adapters for wifi card (currently having trouble uploading);
 
 ### 6-22-2021
-- [X] **Hyrum Dickinson** - `main` - made cosmetic improvements to GUI
+- [X] **Hyrum Dickinson** - `main` - relabeled parts of the GUI, increased text size for a header, made some boxes and their text labels line up, and made other minor cosmetic GUI improvements.
 
 
 ### 6-23-2021
-- [X] **Hyrum Dickinson** - `main` - resized GUI; moved some widgets so all display correctly
-- [X] **Hyrum Dickinson** - `main` - renamed some python files to make them more self-explanatory. All files that reference the renamed files were also updated.
-- [X] **Hyrum Dickinson** - `main` - removed redundant imports. Several files were importing the same files and libraries more than once. Not any more. Since the cleanup, there is a noticable improvement in the time it takes our application to load.
+- [X] **Hyrum Dickinson** - `main` - resized GUI and moved some widgets so everything displays completely. A graph was partially cut off, beforehand.
+- [X] **Hyrum Dickinson** - `main` - renamed some python files. All files that reference the renamed files were also updated.
+- [X] **Hyrum Dickinson** - `main` - removed redundant imports of project files and python libraries. Several files were importing the same file or library more than once. Not any more. I also added comments to the import section of several files to show which libraries were already being imported from other file imports, to futureproof the program against coders unintentially adding redundant imports in the future. Since the cleanup, there is a noticable improvement in the time it takes our application to load.
+
+### 6-25-21
+- [X]  **Ben Olaivar** - `arduino_dev` - Started temperature sensor code
+- [X]  **Ben Olaivar** - `arduino_dev` - successfully implemented threshold for single temp sensor
+- [X]  **Ben Olaivar** - `arduino_dev` - got adapters for wifi card...having difficulties
+- [ ]  **Ben Olaivar** - `arduino_dev` - wifi card needs network name and password to connect to network...university wifi has name, username, and password??
+- [ ]  **Ben Olaivar** - `arduino_dev` - ask seniors/IT for help
+- [X] **Hyrum Dickinson** - `main` - added active button highlighting. Now, when an interactive element of the GUI is interacted with, the user will receive visual feedback letting them know that the GUI has received their input.
 
 ### 6-26-2021
-- [X] **Hyrum Dickinson** - `main` - rebuilt GUI color system
+- [X] **Hyrum Dickinson** - `main` - overhauled GUI color system backend to make it customizable and consistent. Now, each interactive element of the GUI has the same default background, same active background, same text color, etc. Each one can be changed for all interactive elements with a single line of code in Settings.py.
+
+### 6-28-2021
+- [X] **Ben Olaivar** - `arduino_dev` - added "temperature_ethernet.cpp" for ethernet development
+- [X] **Ben Olaivar** - `arduino_dev` - successfully implimented multiple sensor readings for temperature sensors (add as many as you want...the libarary detects everything you connect)
+- [X] **Ben Olaivar** - `arduino_dev` - connected temperature sensors to ethernet. Can now read data from TELNET server...no threshold implementation
+- [X] **Ben Olaivar** - `arduino_dev` - removed DHT temp sensor files. They were only for testing and are no longer needed
+- [X] **Ben Olaivar** - `arduino_dev` - implement temp thresholds into code
+- [ ] **Ben Olaivar** - `arduino_dev` - convert data to JSON. Current implimintation will send one at a time. We want to push everything to the server at once
+
+### 6-29-2021
+- [X] **Ben Olaivar** - `arduino_dev` - successfully implimented array-based functionality in threshold_test.cpp
+- [X] **Ben Olaivar** - `arduino_dev` - removed client dependency and print statements in "readTemperature" function
+- [X] **Ben Olaivar** - `arduino_dev` - tweaked print statements on overheat
+- [X] **Ben Olaivar** - `arduino_dev` - TEMP_THRESH can now be modified. If the system meets this value, it will change to a lower number. This allows for the system to cool down to a lower temperature before resuming functions
+- [ ] **Ben Olaivar** - `arduino_dev` - Confirm JSON formatting before proceeding
+- [ ] **Ben Olaivar** - `arduino_dev` - Find way to connect without being on same network (Consider options other than TELNET?). Current system is entirely dependent on ethernet connection. No wifi yet
+- [ ] **Ben Olaivar** - `arduino_dev` - Speak to Kevin/IT about getting IP's for each arduino, as well as setting up wireless card (network name and password).
 
 ### 6-30-2021
 - [X] **Hyrum Dickinson** - `main` - made connection status display even if no connection
