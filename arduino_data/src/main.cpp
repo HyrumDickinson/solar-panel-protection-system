@@ -61,7 +61,6 @@ int tempThresholdsBroken; /* Reads how many temp sensors have detected an exceed
 
 
 void setup() {
-  pinMode(ledPin, OUTPUT);
   Serial.begin(9600);
   while (!Serial) {}
 

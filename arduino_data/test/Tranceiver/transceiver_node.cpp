@@ -1,15 +1,38 @@
-#include <ArduinoJson.h>
+// https://github.com/RalphBacon/nRF24L01-transceiver/blob/master/nRF24L01_Test_Node_1/nRF24L01_Test_Node_1.ino
+
+#include <SPI.h>
+#include "RF24.h"
+#include "nRF24L01.h"
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
+
 /* CONSTANTS */
+#define nodeNumber 0
 #define ONE_WIRE_BUS 8
 #define NUM_TEMP_SENSORS 6      //report calls for 6 temp sensors. If you use more/less, you only need to change it here
 
-StaticJsonDocument<200> doc;  // 200 works for both esp8266 and arduino boards
+/* COMMUNICATION SETUP */
+byte pipeAddresses[][6] = {"1Node", "2Node"};  // there can only be 1 writing port at any given time, but there can be 5 reading ports
+
+/* JSON INSTANTIATION */
+StaticJsonDocument<200> mainIn;                             /*{"node": <node number>, "shutdown": <boolean>}*/
+StaticJsonDocument<200> data;                               // data received from the node
+int T1 = data["T1"];
+int T2 = data["T2"];
+int T3 = data["T3"];
+int T4 = data["T4"];
+int T5 = data["T5"];
+int T6 = data["T6"];
+int V1 = data["V1"];
+int V2 = data["V2"];
+int V3 = data["V3"];
+int C1 = data["C1"];
+bool OVERHEAT = data["OVERHEAT"];
+bool OVERVOLT = data["OVERVOLT"];
+bool OVERCURR = data["OVERCURRENT"];
 
 /* TEMPERATURE SETUP */
-//TODO: find realistic values for these temperatures
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 DeviceAddress tempDeviceAddress;
@@ -18,41 +41,6 @@ int TEMP_THRESH = 90;   //! not making constant (#define). When in overheat, thr
 bool overheat = false;
 int tempThresholdsBroken; /* Reads how many temp sensors have detected an exceeded temp thresh (don't want a faulty sensor setting it off) 
 - Lab report displays 6 temp sensors. Shut down at 3 or 4 */
-
-void setup() {
-  // Initialize Serial port
-  Serial.begin(9600);
-  tempSensorSetup();
-}
-
-void loop() {
-  readTemperatures();
-
-  doc["T1"] = tempArray[0];
-  doc["T2"] = tempArray[1];
-  doc["T3"] = tempArray[2];
-  doc["T4"] = tempArray[3];
-  doc["T5"] = tempArray[4];
-  doc["T6"] = tempArray[5];
-
-  float temp1 = doc["T1"];
-  float temp2 = doc["T2"];
-  float temp3 = doc["T3"];
-  float temp4 = doc["T4"];
-  float temp5 = doc["T5"];
-  float temp6 = doc["T6"];
-
-  Serial.println(temp1);
-  Serial.println(temp2);
-  Serial.println(temp3);
-  Serial.println(temp4);
-  Serial.println(temp5);
-  Serial.println(temp6);
-
-  Serial.println("---------------------------------------");
-
-}
-
 
 /* SETUP TEMP SENSOR(s) */
 void tempSensorSetup() {
@@ -75,22 +63,48 @@ void tempSensorSetup() {
   }
 }
 
-/* PRINT THE HEX ADDRESS FOR TEMPERATURE SENSORS */
-void printAddress(DeviceAddress deviceAddress) {
-  for (uint8_t i = 0; i < 8; i++) {
-    if (deviceAddress[i] < 16) 
-      Serial.print("0");
-      Serial.print(deviceAddress[i], HEX);   
+void setup() {
+    Serial.begin(9600);
+    while(!Serial) {}
+    Serial.println("This is the Node Tranceiver code");
+
+    radio.begin();
+    radio.setPALevel(RF24_PA_MIN);  // power level of the tranceiver...set to min to work with power from arduino
+    radio.setDataRate(RF24_2MBPS);  // transfer data rate. 2 is fastest
+    radio.setChannel(124);          // 0-127...124 is least likely frequency to be used by wifi/other stuff
+
+    radio.openWritingPipe(pipeAddresses[0]);      // pipe/port 0 is always used by the writing pipe (only one) so we don't specify with a number
+    radio.openReadingPipe(1, pipeAddresses[1]);   // the pipe number and the address of that pipe
+
+}
+
+void loop() {
+    // start listening for the next command again
+    radio.startListening();
+    //TODO: remove this loop if we want autonomy w/o connection
+    
+    while (!radio.available()) {}
+
+    radio.read(&mainIn, 200);
+    radio.stopListening();
+    if (mainIn["node"] == nodeNumber) {
+        if (mainIn["shutdown"] == true) {
+            //shutdown
+        }
+
+        if (!radio.write( &data, sizeof(unsigned char) )) {
+            Serial.println("No acknowledgement of transmission - receiving radio device connected?");    
+        }
+
     }
 }
 
-
-
+/* READS TEMPERATURE */
 void readTemperatures() {
     //TODO: Convert to JSON (possibly continue as is, just write array values into JSON in loop)
     sensors.requestTemperatures(); // reads temps from all sensors
     tempThresholdsBroken = 0;   //! Resets to 0 to allow for overheat setting to change. May modify later
-
+        
     // loop through each device & assign temperature value to "tempArray" array
     for (int i = 0; i < NUM_TEMP_SENSORS; i++) {
         if (sensors.getAddress(tempDeviceAddress, i)) {
@@ -108,4 +122,12 @@ void readTemperatures() {
         overheat = false;
         TEMP_THRESH = 90;
     }
+
+    jsonObject["T1"] = tempArray[0];
+    jsonObject["T2"] = tempArray[1];
+    jsonObject["T3"] = tempArray[2];
+    jsonObject["T4"] = tempArray[3];
+    jsonObject["T5"] = tempArray[4];
+    jsonObject["T6"] = tempArray[5];
+    jsonObject["OVERHEAT"] = overheat;
 }
