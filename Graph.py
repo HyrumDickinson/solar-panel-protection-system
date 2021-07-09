@@ -25,7 +25,7 @@ class Graph:
 		self.f = Figure(figsize=(5,5), dpi=100)
 		self.f.patch.set_facecolor(DATA_WIDGET_COLOR)
 		self.a = self.f.add_subplot(111)
-		self.a.set_facecolor(DARK_GRAY)
+		self.a.set_facecolor(FIFTY_SHADES_OF_GRAY)
 		self.a.tick_params(axis='x', colors=TEXT_COLOR)
 		self.a.tick_params(axis='y', colors=TEXT_COLOR)
 		self.field = 'voltage_1'

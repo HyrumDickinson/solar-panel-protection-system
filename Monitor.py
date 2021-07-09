@@ -47,7 +47,7 @@ class Monitor():
 		spacingFrame.pack(side="left")
 
 		# Connection frame
-		self.connFrame = tk.Frame(self.root, bg=DARK_GRAY, highlightbackground=TEXT_COLOR, highlightcolor=TEXT_COLOR, highlightthickness=2)
+		self.connFrame = tk.Frame(self.root, bg=FIFTY_SHADES_OF_GRAY, highlightbackground=TEXT_COLOR, highlightcolor=TEXT_COLOR, highlightthickness=2)
 		self.connFrame.pack(side="left", fill="y", pady="25")
 
 		# Data frame
@@ -197,7 +197,7 @@ class Monitor():
 		connLength = len(self.application.c.connections)
 
 		if connLength == 0:
-			BACKGROUND = DARK_GRAY
+			BACKGROUND = FIFTY_SHADES_OF_GRAY
 
 			# Frame for Widget
 			widgetFrame = tk.Frame(self.connFrame, bg=BACKGROUND)
@@ -210,7 +210,7 @@ class Monitor():
 
 		else :
 			for i in range(0, connLength):
-				BACKGROUND = CONNECTOR_WIDGET_COLOR if i == 0 else DARK_GRAY
+				BACKGROUND = CONNECTOR_WIDGET_COLOR if i == 0 else FIFTY_SHADES_OF_GRAY
 
 				# Frame for Widget
 				widgetFrame = tk.Frame(self.connFrame, bg=BACKGROUND)
@@ -283,17 +283,17 @@ class Monitor():
 			self.graph.a.clear()
 
 		if event.type == 7 :	# Entered
-			color = CONNECTOR_WIDGET_COLOR if self.selected == index else DARK_GRAY
+			color = CONNECTOR_WIDGET_COLOR if self.selected == index else FIFTY_SHADES_OF_GRAY
 
 		if event.type == 8 :	# Exited
-			color = CONNECTOR_WIDGET_COLOR if self.selected == index else DARK_GRAY
+			color = CONNECTOR_WIDGET_COLOR if self.selected == index else FIFTY_SHADES_OF_GRAY
 
 		for i in self.widgetFrames[index]: i.configure(bg=color)
 
 	def clearWidgetColors(self):
 		for i in self.widgetFrames:
 			for j in i:
-				j.configure(bg=DARK_GRAY)
+				j.configure(bg=FIFTY_SHADES_OF_GRAY)
 
 	# ------------- #
 
