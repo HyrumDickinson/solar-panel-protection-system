@@ -1,4 +1,3 @@
-# import Tkinter as tk # this line is redundant; Graph has already imported Tkinter as tk
 # from Tkinter import tkk
 from PIL import Image, ImageTk 
 from Graph import * # this line imports the following:
@@ -17,11 +16,7 @@ from Graph import * # this line imports the following:
      # import datetime
      # import time
 
-# from Settings import * # this line is redundant; Graph has already imported everything from Settings
-
-# import matplotlib.animation as animation # this line is redundant; Graph already imported matplotlib.animation as animation
-
-HEIGHT = 600 #540
+HEIGHT = 600
 WIDTH = 750
 
 class Monitor():

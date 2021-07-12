@@ -1,5 +1,4 @@
 # This file contains the default trip point settings and color settings for the solar panel monitor.
-# The original project owners called this file "Globs.py", but it was renamed to better reflect the file's purpose.
 
     # -------- Trip Points -------- #
 

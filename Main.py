@@ -1,8 +1,5 @@
-# import threading # this line is redundant; Connector has already imported threading
 import json
-# import sqlite3 # this line is redundant; Monitor has already imported sqlite3
-# import time # this line is redundant; Monitor has already imported time
-from Connector import * # this line imports the following: # this is redundant because Monitor imports Connector
+from Connector import * # this line imports the following: 
 	 # import socket
      # import threading
      # from Connection import * # imports Settings
@@ -23,7 +20,6 @@ from Monitor import * # this line imports the following:
       # import numpy as np
       # import datetime
       # import time
-# from Connection import * # this line is redundant; Connector has already imported everything from Connection
 
 BUFFER_SIZE = 1024
 
