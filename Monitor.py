@@ -42,7 +42,7 @@ class Monitor():
 		spacingFrame.pack(side="left")
 
 		# Connection frame
-		self.connFrame = tk.Frame(self.root, bg=FIFTY_SHADES_OF_GRAY, highlightbackground=TEXT_COLOR, highlightcolor=TEXT_COLOR, highlightthickness=2)
+		self.connFrame = tk.Frame(self.root, bg=DATA_WIDGET_COLOR, highlightbackground=TEXT_COLOR, highlightcolor=TEXT_COLOR, highlightthickness=2)
 		self.connFrame.pack(side="left", fill="y", pady="25")
 
 		# Data frame
@@ -56,13 +56,13 @@ class Monitor():
 		# TripPoint Title
 		TripPointFrame_1 = tk.Frame(TripPointFrame, bg=DATA_WIDGET_COLOR)
 		TripPointFrame_1.pack(side="top", padx=40, pady=2.5, fill="x")
-		TripPointTitle = tk.Label(TripPointFrame_1, text="Trip points:", bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 15 bold')
+		TripPointTitle = tk.Label(TripPointFrame_1, text="Trip points:", bg=DATA_WIDGET_COLOR, fg=TEXT_COLOR, font='Helvetica_Neue 15 bold')
 		TripPointTitle.pack(side="left")
 
 		# Voltage Trip Point Label and Entry
 		TripPointFrame_2 = tk.Frame(TripPointFrame, bg=DATA_WIDGET_COLOR)
 		TripPointFrame_2.pack(side="top", pady=2.5, fill="x")
-		voltageEntryTripPoint = tk.Label(TripPointFrame_2, text="Max voltage: ", padx=43, bg=DATA_WIDGET_COLOR)
+		voltageEntryTripPoint = tk.Label(TripPointFrame_2, text="Max voltage: ", padx=43, fg=TEXT_COLOR, bg=DATA_WIDGET_COLOR)
 		voltageEntryTripPoint.pack(side="left")
 		self.voltageEntry = tk.Entry(TripPointFrame_2, font=40, width=5)
 		self.voltageEntry.insert(0, DEFAULT_VOLTAGE_TRIP_POINT)
@@ -70,13 +70,13 @@ class Monitor():
 		self.voltageEntry.bind('<FocusOut>', lambda event, i=0: self.on_focusout(event, i))
 		self.voltageEntry.config(fg=TEXT_COLOR)
 		self.voltageEntry.pack(side="left")
-		voltageUnit = tk.Label(TripPointFrame_2, text="V", bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 12 bold italic')
+		voltageUnit = tk.Label(TripPointFrame_2, text="V", bg=DATA_WIDGET_COLOR, fg=TEXT_COLOR, font='Helvetica_Neue 12 bold italic')
 		voltageUnit.pack(side="left", padx=15)
 
 		# Current Trip Point Label and Entry
 		self.TripPointFrame_3 = tk.Frame(TripPointFrame, bg=DATA_WIDGET_COLOR)
 		self.TripPointFrame_3.pack(side="top", pady=2.5, fill="x")
-		currentEntryTripPoint = tk.Label(self.TripPointFrame_3, text="Max current: ", padx=43, bg=DATA_WIDGET_COLOR)
+		currentEntryTripPoint = tk.Label(self.TripPointFrame_3, text="Max current: ", padx=43, fg=TEXT_COLOR, bg=DATA_WIDGET_COLOR)
 		currentEntryTripPoint.pack(side="left")
 		self.currentEntry = tk.Entry(self.TripPointFrame_3, font=40, width=5)
 		self.currentEntry.insert(0, DEFAULT_CURRENT_TRIP_POINT)
@@ -84,13 +84,13 @@ class Monitor():
 		self.currentEntry.bind('<FocusOut>', lambda event, i=1: self.on_focusout(event, i))
 		self.currentEntry.config(fg=TEXT_COLOR)
 		self.currentEntry.pack(side="left", padx=1)
-		currentUnit = tk.Label(self.TripPointFrame_3, text="A", bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 12 bold italic')
+		currentUnit = tk.Label(self.TripPointFrame_3, text="A", fg=TEXT_COLOR, bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 12 bold italic')
 		currentUnit.pack(side="left", padx=15)
 
 		# Temperature Trip Point Label and Entry
 		TripPointFrame_4 = tk.Frame(TripPointFrame, bg=DATA_WIDGET_COLOR)
 		TripPointFrame_4.pack(side="top", padx=43, pady=2.5, fill="both")
-		temperatureEntryTripPoint = tk.Label(TripPointFrame_4, text="Max temperature: ", bg=DATA_WIDGET_COLOR)
+		temperatureEntryTripPoint = tk.Label(TripPointFrame_4, text="Max temperature: ", fg=TEXT_COLOR, bg=DATA_WIDGET_COLOR)
 		temperatureEntryTripPoint.pack(side="left")
 		self.temperatureEntry = tk.Entry(TripPointFrame_4, font=40, width=5)
 		self.temperatureEntry.insert(0, DEFAULT_TEMPERATURE_TRIP_POINT)
@@ -98,7 +98,7 @@ class Monitor():
 		self.temperatureEntry.bind('<FocusOut>', lambda event, i=2: self.on_focusout(event, i))
 		self.temperatureEntry.config(fg=TEXT_COLOR)
 		self.temperatureEntry.pack(side="left", padx=15)
-		temperatureUnit = tk.Label(TripPointFrame_4, text="C", bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 12 bold italic')
+		temperatureUnit = tk.Label(TripPointFrame_4, text="C", fg=TEXT_COLOR, bg=DATA_WIDGET_COLOR, font='Helvetica_Neue 12 bold italic')
 		temperatureUnit.pack(side="left")
 
 	def setupCheckboxes(self):
@@ -115,24 +115,24 @@ class Monitor():
 
 		# Output Configuration
 		var4 = tk.IntVar()
-		checkboxD = tk.Checkbutton(configFrame2, text="AD", background=DATA_WIDGET_COLOR, activebackground=DATA_WIDGET_COLOR, variable=var4, command=lambda: self.updateCheckbox(3))
+		checkboxD = tk.Checkbutton(configFrame2, text="AD", fg=TEXT_COLOR, background=DATA_WIDGET_COLOR, activebackground=DATA_WIDGET_COLOR, variable=var4, command=lambda: self.updateCheckbox(3))
 		checkboxD.pack(side="bottom", pady=2.5)
 		var3 = tk.IntVar()
-		checkboxC = tk.Checkbutton(configFrame2, text="BC", background=DATA_WIDGET_COLOR, activebackground=DATA_WIDGET_COLOR, variable=var3, command=lambda: self.updateCheckbox(2))
+		checkboxC = tk.Checkbutton(configFrame2, text="BC", fg=TEXT_COLOR, background=DATA_WIDGET_COLOR, activebackground=DATA_WIDGET_COLOR, variable=var3, command=lambda: self.updateCheckbox(2))
 		checkboxC.pack(side="bottom", pady=2.5)
 		var2 = tk.IntVar()
-		checkboxB = tk.Checkbutton(configFrame2, text="CD", background=DATA_WIDGET_COLOR, activebackground=DATA_WIDGET_COLOR, variable=var2, command=lambda: self.updateCheckbox(1))
+		checkboxB = tk.Checkbutton(configFrame2, text="CD", fg=TEXT_COLOR, background=DATA_WIDGET_COLOR, activebackground=DATA_WIDGET_COLOR, variable=var2, command=lambda: self.updateCheckbox(1))
 		checkboxB.pack(side="bottom", pady=2.5)
 		var1 = tk.IntVar()
-		checkboxA = tk.Checkbutton(configFrame2, text="XX", background=DATA_WIDGET_COLOR, activebackground=DATA_WIDGET_COLOR, variable=var1, command=lambda: self.updateCheckbox(0))
+		checkboxA = tk.Checkbutton(configFrame2, text="XX", fg=TEXT_COLOR, background=DATA_WIDGET_COLOR, activebackground=DATA_WIDGET_COLOR, variable=var1, command=lambda: self.updateCheckbox(0))
 		checkboxA.pack(side="bottom", pady=2.5)
-		configLabel = tk.Label(configFrame1, text="Config Switch: ", bg=DATA_WIDGET_COLOR)
+		configLabel = tk.Label(configFrame1, text="Config Switch: ", fg=TEXT_COLOR, bg=DATA_WIDGET_COLOR)
 		configLabel.pack(side="bottom")
 		self.vars = [var1, var2, var3, var4]
 
 	def setupSyncButton(self):
 		# SYNC Label
-		self.syncFrame = tk.Frame(self.connFrame, bg=CONNECTOR_WIDGET_COLOR)
+		self.syncFrame = tk.Frame(self.connFrame, bg=DATA_WIDGET_COLOR)
 		self.syncFrame.pack(side="bottom", fill="x")		
 
 	def setupButtons(self):
@@ -140,41 +140,41 @@ class Monitor():
 		# the two lines below add a sync button. However, it's an ugly one, and furthurmore there's already
 		# a sync button in the form of sync.png
 
-		# self.syncButton = tk.Button(self.syncFrame, text='sync', highlightbackground=CONNECTOR_WIDGET_COLOR, font=20, command=lambda: self.application.inputting('sync'))
+		# self.syncButton = tk.Button(self.syncFrame, text='sync', highlightbackground=DATA_WIDGET_COLOR, font=20, command=lambda: self.application.inputting('sync'))
 		# self.syncButton.pack(side="bottom", padx=40)
 
-		TripPointEntryButton = tk.Button(self.TripPointFrame_3, text="OK", background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=40, command=lambda: self.application.TripPointInputting(self.voltageEntry.get(), self.currentEntry.get(), self.temperatureEntry.get(), self.selected))
+		TripPointEntryButton = tk.Button(self.TripPointFrame_3, text="OK", fg=TEXT_COLOR, bg=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=40, command=lambda: self.application.TripPointInputting(self.voltageEntry.get(), self.currentEntry.get(), self.temperatureEntry.get(), self.selected))
 		TripPointEntryButton.pack(side="left", padx=30)
 
 		manualConfigFrame = tk.Frame(self.configFrame, bg=DATA_WIDGET_COLOR)
 		manualConfigFrame.pack(side="top", pady=2.5)
-		self.toggleManualSwitchButton = tk.Button(manualConfigFrame, text="ON", background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=40, command=lambda: self.application.manualSwitchInputting(self.selected))
+		self.toggleManualSwitchButton = tk.Button(manualConfigFrame, text="ON", fg=TEXT_COLOR, bg=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=40, command=lambda: self.application.manualSwitchInputting(self.selected))
 		self.toggleManualSwitchButton.pack(side="right", pady=5, padx=5)
-		manualConfigLabel = tk.Label(manualConfigFrame, text="Manual Switch: ", bg=DATA_WIDGET_COLOR)
+		manualConfigLabel = tk.Label(manualConfigFrame, text="Manual Switch: ", fg=TEXT_COLOR, bg=DATA_WIDGET_COLOR)
 		manualConfigLabel.pack(side="right")
 
 	def setupQueryButtons(self):
 		queryButtonFrame = tk.Frame(self.dataFrame, bg=DATA_WIDGET_COLOR)
 		queryButtonFrame.pack(side="bottom")
-		v1Button = tk.Button(queryButtonFrame, text="V1", background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('voltage_1'))
+		v1Button = tk.Button(queryButtonFrame, text="V1", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('voltage_1'))
 		v1Button.pack(side="left")
-		v2Button = tk.Button(queryButtonFrame, text="V2", background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('voltage_2'))
+		v2Button = tk.Button(queryButtonFrame, text="V2", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('voltage_2'))
 		v2Button.pack(side="left")
-		v3Button = tk.Button(queryButtonFrame, text="V3", background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('voltage_3'))
+		v3Button = tk.Button(queryButtonFrame, text="V3", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('voltage_3'))
 		v3Button.pack(side="left")
-		c1Button = tk.Button(queryButtonFrame, text="C1", background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('current_1'))
+		c1Button = tk.Button(queryButtonFrame, text="C1", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('current_1'))
 		c1Button.pack(side="left")
-		t1Button = tk.Button(queryButtonFrame, text="T1", background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('temperature_1'))
+		t1Button = tk.Button(queryButtonFrame, text="T1", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('temperature_1'))
 		t1Button.pack(side="left")
-		t2Button = tk.Button(queryButtonFrame, text="T2", background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('temperature_2'))
+		t2Button = tk.Button(queryButtonFrame, text="T2", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('temperature_2'))
 		t2Button.pack(side="left")
-		t3Button = tk.Button(queryButtonFrame, text="T3", background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('temperature_3'))
+		t3Button = tk.Button(queryButtonFrame, text="T3", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('temperature_3'))
 		t3Button.pack(side="left")
-		t4Button = tk.Button(queryButtonFrame, text="T4", background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('temperature_4'))
+		t4Button = tk.Button(queryButtonFrame, text="T4", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('temperature_4'))
 		t4Button.pack(side="left")
-		t5Button = tk.Button(queryButtonFrame, text="T5", background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('temperature_5'))
+		t5Button = tk.Button(queryButtonFrame, text="T5", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('temperature_5'))
 		t5Button.pack(side="left")
-		t6Button = tk.Button(queryButtonFrame, text="T6", background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('temperature_6'))
+		t6Button = tk.Button(queryButtonFrame, text="T6", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, command=lambda: self.graph.setField('temperature_6'))
 		t6Button.pack(side="left")
 
 	def setup(self):			
@@ -192,34 +192,31 @@ class Monitor():
 		connLength = len(self.application.c.connections)
 
 		if connLength == 0:
-			BACKGROUND = FIFTY_SHADES_OF_GRAY
+			BACKGROUND = DATA_WIDGET_COLOR
 
 			# Frame for Widget
 			widgetFrame = tk.Frame(self.connFrame, bg=BACKGROUND)
 			widgetFrame.pack(side="top", fill="x")
 
 			# IP Status
-			ipStatus = tk.Label(widgetFrame, text="Status: Not Connected", bg=BACKGROUND, font='TkDefaultFont 8')
+			ipStatus = tk.Label(widgetFrame, text="Status: Not Connected", fg=RED, bg=BACKGROUND, font='TkDefaultFont 8')
 			ipStatus.pack(side="bottom", fill="x", padx=5, pady=5)
-			ipStatus.config(fg=RED)
 
 		else :
 			for i in range(0, connLength):
-				BACKGROUND = CONNECTOR_WIDGET_COLOR if i == 0 else FIFTY_SHADES_OF_GRAY
+				BACKGROUND = GRAPH_BACKGROUND_COLOR if i == 0 else DATA_WIDGET_COLOR
 
 				# Frame for Widget
 				widgetFrame = tk.Frame(self.connFrame, bg=BACKGROUND)
 				widgetFrame.pack(side="top", fill="x")
 
 				# IP Label
-				ipLabel = tk.Label(widgetFrame, text='IP: ' + self.application.c.connections[i].ip, bg=BACKGROUND, font='TkDefaultFont 10')
+				ipLabel = tk.Label(widgetFrame, text='IP: ' + self.application.c.connections[i].ip, fg=GREEN, bg=BACKGROUND, font='TkDefaultFont 10')
 				ipLabel.pack(side="top", fill="x", padx=10, pady=5)
-				ipLabel.config(fg=GREEN)
 			
 				# IP Status
-				ipStatus = tk.Label(widgetFrame, text="Status: Connected", bg=BACKGROUND, font='TkDefaultFont 10')
+				ipStatus = tk.Label(widgetFrame, text="Status: Connected", fg=GREEN, bg=BACKGROUND, font='TkDefaultFont 10')
 				ipStatus.pack(side="bottom", fill="x", padx=10, pady=5)
-				ipStatus.config(fg=ACTIVE_BUTTON_COLOR)
 
 				self.widgetFrames.append([widgetFrame, ipLabel, ipStatus])
 				index = len(self.widgetFrames) - 1
@@ -278,17 +275,17 @@ class Monitor():
 			self.graph.a.clear()
 
 		if event.type == 7 :	# Entered
-			color = CONNECTOR_WIDGET_COLOR if self.selected == index else FIFTY_SHADES_OF_GRAY
+			color = CONNECTOR_WIDGET_COLOR if self.selected == index else GRAPH_BACKGROUND_COLOR
 
 		if event.type == 8 :	# Exited
-			color = CONNECTOR_WIDGET_COLOR if self.selected == index else FIFTY_SHADES_OF_GRAY
+			color = CONNECTOR_WIDGET_COLOR if self.selected == index else GRAPH_BACKGROUND_COLOR
 
 		for i in self.widgetFrames[index]: i.configure(bg=color)
 
 	def clearWidgetColors(self):
 		for i in self.widgetFrames:
 			for j in i:
-				j.configure(bg=FIFTY_SHADES_OF_GRAY)
+				j.configure(bg=GRAPH_BACKGROUND_COLOR)
 
 	# ------------- #
 
@@ -351,7 +348,7 @@ class Monitor():
 		if len(self.application.c.connections) == 0:
 			return
 
-		self.widgetFrames[self.selected][2]['fg'] = ACTIVE_BUTTON_COLOR
+		self.widgetFrames[self.selected][2]['fg'] = GREEN
 		self.widgetFrames[self.selected][2]['text'] = 'Status: Connected'
 		self.application.c.connections[self.selected].currentAck = 0
 

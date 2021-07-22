@@ -22,7 +22,7 @@ MAIN_BACKGROUND_COLOR = '#1a5276' # '#383735' # MID_GRAY_2
 CONNECTOR_WIDGET_COLOR = '#464646' # MID_GRAY_1 
 # I don't have a clue what this highlights. Changing the color doesn't seem to change anything on the GUI
 
-DATA_WIDGET_COLOR = '#ababab' #LIGHT_GRAY
+DATA_WIDGET_COLOR = '#d5e5f0' #LIGHT_GRAY
 # this color fills the background of the data widget
 
 INACTIVE_BUTTON_COLOR = '#ffffff' # WHITE
@@ -31,10 +31,10 @@ INACTIVE_BUTTON_COLOR = '#ffffff' # WHITE
 ACTIVE_BUTTON_COLOR = '#d9d9d9' # '#cccccc' # GREEN
 # this color highlights interactive components when they are interacted with
 
-FIFTY_SHADES_OF_GRAY = '#262523' # DARK_GRAY
-# this color fills the background of the connector widget and is the background of the graph
+GRAPH_BACKGROUND_COLOR = '#262523' # DARK_GRAY
+# this color is the background of the graph
 
-TEXT_COLOR = '#000000' # BLACK
+TEXT_COLOR = '#0c7d1f' # '#000000' # BLACK
 # this color highlights text and the borders of the widgets
 
 RED = '#ff6262'
