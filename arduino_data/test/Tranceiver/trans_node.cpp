@@ -1,9 +1,3 @@
-// IMPORTANT: this code works best with the MEGA as the transmitter and the UNO as the receiver
-//https://howtomechatronics.com/projects/diy-arduino-rc-transmitter/
-/* Testng has shown that sending data as a struct is the best method of transferring data.
-    Sending a Char array or json string has proven to be too big, and adding more than 4 
-    variables results in a garbled mess in said variables*/
-
 /* LIBRARIES */
 #include <SPI.h>
 #include <nRF24L01.h>
@@ -11,7 +5,12 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-/* TEMPERATURE SETUP */
+/* CONSTANTS */
+#define ONE_WIRE_BUS 9
+#define NUM_TEMP_SENSORS 3
+#define NODENUMBER 1
+
+/* TEMP SENSOR VARIABLES */
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 DeviceAddress tempDeviceAddress;
@@ -21,36 +20,39 @@ bool overheat = false;
 int tempThresholdsBroken; /* Reads how many temp sensors have detected an exceeded temp thresh (don't want a faulty sensor setting it off) 
 - Lab report displays 6 temp sensors. Shut down at 3 or 4 */
 
-/* TRANSCEIVER SETUP */
+/* TRANSCEIVER VARIABLES */
 RF24 radio(7, 8); // CE, CSN
 const byte address[6] = "00001";
+
 struct Data_Package {
-  float temp1 = 12.7;
-  float temp2 = 95.5;
-  float temp3 = 112.2;
-  float temp4 = 123.4;
-  float temp5 = 115.3;
-  float temp6 = 15.4;
-  bool ok = true;
+  int module = 1;
+  float T1 = 0.0;
+  float T2 = 0.0;
+  float T3 = 0.0;
+  float T4 = 0.0;
+  float T5 = 0.0;
+  float T6 = 0.0;
+  bool overTemp = false;
 };
 Data_Package data;
 
+struct sendMessage {
+    int node;
+};
+sendMessage message;
+
+
+/*----------------SETUP----------------*/
 void setup() {
     Serial.begin(9600);
 
-    radioSetup();
     tempSensorSetup();
+    radioSetup();
 }
 
 
-void loop() {
-    radio.write(&data, sizeof(data));
-    delay(500);
-}
-
-
-/* SETUP TRANSCEIVER */
-radioSetup() {
+/*----------------TRANSCEIVER SETUP----------------*/
+void radioSetup() {
     radio.begin();
     radio.openWritingPipe(address);
     radio.setDataRate(RF24_250KBPS);
@@ -58,7 +60,8 @@ radioSetup() {
     radio.stopListening();
 }
 
-/* SETUP TEMP SENSOR(s) */
+
+/*----------------TEMP SENSOR SETUP----------------*/
 void tempSensorSetup() {
   sensors.begin();
 
@@ -79,7 +82,6 @@ void tempSensorSetup() {
   }
 }
 
-
 /* PRINT THE HEX ADDRESS FOR TEMPERATURE SENSORS */
 void printAddress(DeviceAddress deviceAddress) {
   for (uint8_t i = 0; i < 8; i++) {
@@ -91,7 +93,6 @@ void printAddress(DeviceAddress deviceAddress) {
 
 /* READS TEMPERATURE */
 void readTemperatures() {
-    //TODO: Convert to JSON (possibly continue as is, just write array values into JSON in loop)
     sensors.requestTemperatures(); // reads temps from all sensors
     tempThresholdsBroken = 0;   //! Resets to 0 to allow for overheat setting to change. May modify later
         
@@ -113,11 +114,41 @@ void readTemperatures() {
         TEMP_THRESH = 90;
     }
 
-    data.temp1 = tempArray[0];
-    data.temp2 = tempArray[1];
-    data.temp3 = tempArray[2];
-    data.temp4 = tempArray[3];
-    data.temp5 = tempArray[4];
-    data.temp6 = tempArray[5];
-    data.ok = false;
+    data.T1 = tempArray[0];
+    data.T2 = tempArray[1];
+    data.T3 = tempArray[2];
+    data.T4 = tempArray[3];
+    data.T5 = tempArray[4];
+    data.T6 = tempArray[5];
+    data.overTemp = overheat;
+}
+
+
+/*----------------LOOP----------------*/
+void loop() {
+    readTemperatures();
+
+    if (overheat) { //calls cooldown function if more than 3 sensors detect an overheat
+        Serial.println();
+        Serial.println("************SYSTEM OVERHEAT************");
+        Serial.println("3 or more temp sensors have exceeded the temperature threshold...waiting for cooldown");
+        Serial.println("***************************************");
+        //TODO: add some function to shut things down when in overheat
+    }
+    for (int i = 0; i < NUM_TEMP_SENSORS; i++) {
+        if (tempArray[i] > TEMP_THRESH) {
+            Serial.print("TEMP THRESH EXCEEDED AT SENSOR: ");
+        } else {
+            Serial.print("Temperature at sensor: ");
+        }
+        Serial.println(i);
+        Serial.print("Farenheit: ");
+        Serial.println(tempArray[i]);
+    }
+
+    Serial.println("-----------------------");
+    
+    radio.stopListening();
+    radio.write(&data, sizeof(data));
+    delay(500);
 }
