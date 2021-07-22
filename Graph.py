@@ -164,7 +164,7 @@ class Graph:
 
 	def setField(self, field):
 		self.field = field
-		self.f.suptitle(title[self.getFieldIndex()], fontsize=10)
+		self.f.suptitle(title[self.getFieldIndex()], fontsize=10, fg=TEXT_COLOR)
 
 	def getFieldIndex(self):
 		if self.field == 'voltage_1':
