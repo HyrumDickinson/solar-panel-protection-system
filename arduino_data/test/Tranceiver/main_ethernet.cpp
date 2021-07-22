@@ -16,10 +16,14 @@
 #include <RF24.h> 
 #include <SPI.h> 
 #include <nRF24L01.h>
+#include <Ethernet.h>
 
 /* CONSTANTS */
 #define CE_PIN 7    // set Chip-Enable (CE) and Chip-Select-Not (CSN) pins (for UNO)
 #define CSN_PIN 8
+
+/* GENERAL VARIABLES */
+bool confirmSent = false;
 
 /* RADIO VARIABLES */
 RF24 radio(CE_PIN,CSN_PIN);     // create RF24 radio object using selected CE and CSN pins
@@ -32,14 +36,22 @@ const byte nodeAddress2[5] = {'N','O','D','E','2'};
 struct Command_Package {
     bool SHUTDOWN = false;
 };
-Command_Package sendCommand;    //TODO:  add commands
-
 struct Data_Package {
   float T1 = 0.0;
   float T2 = 0.0;
   float T3 = 0.0;
 };
+
+Command_Package sendCommand;    //TODO: add commands
 Data_Package data;
+
+/* ETHERNET VARIABLES */
+byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x04};
+IPAddress ip(128, 174, 186, 99);
+IPAddress gateway(128, 174, 186, 1);
+IPAddress subnet(255, 255, 254, 0);
+EthernetServer server(23); // default is 23
+boolean alreadyConnected = false;
 
 
 /* Function: radioSetup
@@ -60,6 +72,36 @@ void radioSetup() {
 }
 
 
+/* Function: ethernetSetup 
+*  By calling ethernet.begin(mac), it first tries to make a unique ip address. If that fails, it uses the fallback ip address (made above).
+*  begin(mac) keeps failing. fallback is always used for some reason
+*/
+void ethernetSetup() {
+  Serial.println("Trying to get an IP address using DHCP");
+  //! This way for sake of testing... delete next line and uncomment 'if' statement
+  Ethernet.begin(mac, ip, gateway, subnet);
+//  if (Ethernet.begin(mac) == 0) {
+//    Serial.println("Failed to configure Ethernet using DHCP");
+////    initialize the ethernet device not using DHCP:
+//    Ethernet.begin(mac, ip, gateway, subnet);
+//  }
+
+  ip = Ethernet.localIP();
+  //checking valid ip (not 0.0.0.0)
+  if (ip[0] == 0 && ip[1] == 0 && ip[2] == 0 && ip[3] == 0) {
+    Serial.print(Ethernet.localIP());
+    Serial.println(" is not a valid IP Address. No connection made.");
+    Serial.println("Stopping Program................");
+    while (true) {}
+  }
+  // print your local IP address:
+  Serial.print("My IP address: ");
+  Serial.print(Ethernet.localIP());
+  Serial.println();
+  server.begin();
+}
+
+
 /* Function: readRadio
 *   Communicates to whichever node is currently being read from, and collects data through an acknowledgement response.
 *   the acknowledgement response automatically switches between listening and writing modes, which proved better than manually doing so
@@ -73,6 +115,8 @@ void readRadio() {
     // if tx success - receive and read smart-post ack reply
     if (tx_sent) {
         if (radio.isAckPayloadAvailable()) {
+            //! remove
+            confirmSent = true;
             // read ack payload and copy message to remoteNodeData 
             radio.read(&data, sizeof(data));
             Serial.print("[+] Successfully received data from node.");
@@ -82,6 +126,8 @@ void readRadio() {
     } 
     else {
         Serial.println("[-] The transmission to the node failed.  ***********************************");
+        //! remove
+        confirmSent = false;
     }
     Serial.println("------------------------------------------");
 }
@@ -92,7 +138,7 @@ void readRadio() {
 */
 void setup() {
   Serial.begin(9600);
-  
+
   ethernetSetup();
   radioSetup();
 }
@@ -102,17 +148,27 @@ void setup() {
  *    main loop program for the slave node - opens a new reading pipe when switching to a new node
  */
 void loop() {
+    EthernetClient client = server.available();
 
-    if (node == 1) {
-        Serial.println("Node 1: ");
-        radio.openWritingPipe(nodeAddress);
-        node = 2;
-    } else {
-        Serial.println("Node 2: ");
-        radio.openWritingPipe(nodeAddress2);
-        node = 1;
+    if (client) {
+        if (node == 1) {
+            Serial.println("Node 1: ");
+            client.print("Node 1: ");
+            radio.openWritingPipe(nodeAddress);
+            node = 2;
+        } else {
+            Serial.println("Node 2: ");
+            client.print("Node 2: ");
+            radio.openWritingPipe(nodeAddress2);
+            node = 1;
+        }
+        readRadio();
+        if (confirmSent == true) {
+            client.println(data.T1);
+        } else {
+            client.println("failed");
+        }
+        delay(1000);
     }
 
-    readRadio();
-    delay(1000);
 }
