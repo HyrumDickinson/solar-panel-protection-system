@@ -1,13 +1,11 @@
 /*************************************************************************
  * Remote node - nRF24L01+ radio communications                          *
- *      A program to operate a remote-node slave device that sends       *
- *      data to a command unit on a given request message. The radio     *            
- *      transceiver used is the nRF24L01+, and it operates using the     *
- *      TMRh20 RF24 library.                                             *
+ *      Program acts as slave and waits for master node to send          *
+ *      data request command.                                            *
  *                                                                       *
- *      Author: B.D. Fraser                                              *
+ *      Author: Benjamin Olaivar                                         *
  *                                                                       *
- *        Last modified: 27/06/2017                                      *
+ *        Last modified: 07/22/2021                                      *
  *                                                                       *
  *************************************************************************/
 
@@ -146,8 +144,8 @@ void readTemperatures() {
 void setup() {
   Serial.begin(9600);
 
-  radioSetup();
   tempSensorSetup();
+  radioSetup();
 }
 
 

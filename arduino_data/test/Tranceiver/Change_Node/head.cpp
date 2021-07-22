@@ -1,3 +1,15 @@
+/*************************************************************************
+ * Remote node - nRF24L01+ radio communications                          *
+ *      Program acts as master and cycles through each node to           *
+ *      send a data request command.                                     *
+ *                                                                       *
+ *      Author: Benjamin Olaivar                                         *
+ *                                                                       *
+ *        Last modified: 07/22/2021                                      *
+ *                                                                       *
+ *************************************************************************/
+
+
 //https://medium.com/@benjamindavidfraser/arduino-nrf24l01-communications-947e1acb33fb
 
 /* LIBRARIES */
@@ -8,9 +20,6 @@
 /* CONSTANTS */
 #define CE_PIN 7    // set Chip-Enable (CE) and Chip-Select-Not (CSN) pins (for UNO)
 #define CSN_PIN 8
-
-#define buttonOut 4
-#define buttonIn 3
 
 /* RADIO VARIABLES */
 RF24 radio(CE_PIN,CSN_PIN);     // create RF24 radio object using selected CE and CSN pins
@@ -96,10 +105,7 @@ void setup() {
  *    main loop program for the slave node - opens a new reading pipe when switching to a new node
  */
 void loop() {
-    if (digitalRead(buttonIn) == HIGH) {
-        Serial.println("button pressed");
-    }
-  
+
     if (node == 1) {
         Serial.println("Node 1: ");
         radio.openWritingPipe(nodeAddress);
