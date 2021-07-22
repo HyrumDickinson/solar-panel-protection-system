@@ -13,7 +13,7 @@
 #include <SPI.h>
 #include <RF24.h>
 #include <nRF24L01.h>
-#include <printf.h>
+#include <printf.h>   //TODO: remove library
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
@@ -63,7 +63,7 @@ void radioSetup() {
   radio.enableAckPayload();                                           // enable ack payload - slave replies with data using this feature
   radio.writeAckPayload(1, &remoteNodeData, sizeof(remoteNodeData));  // preload the payload with initial data - sent after an incoming message is read
   
-  // print radio config details to console
+  //TODO: remove following 2 lines print radio config details to console
   printf_begin();
   radio.printDetails();
 
@@ -163,8 +163,7 @@ void loop() {
  *    updates the temperature and voltage (later) variables for the node and stores it in the nRF24L01+ radio
  *    preloaded ack payload ready for sending on next received message
  */
-void updateNodeData(void) 
-{
+void updateNodeData(void) {
   readTemperatures();
 
   // set the ack payload ready for next request from the master device
@@ -176,8 +175,7 @@ void updateNodeData(void)
  *    sends the preloaded node data over the nrf24l01 radio when
  *    a message is received by the master
  */
-void radioCheckAndReply(void)
-{
+void radioCheckAndReply(void) {
     // check for radio message and send sensor data using auto-ack
     if ( radio.available() ) {
           radio.read( &dataFromMaster, sizeof(dataFromMaster) );
