@@ -31,7 +31,7 @@ INACTIVE_BUTTON_COLOR = '#ffffff' # WHITE
 ACTIVE_BUTTON_COLOR = '#d9d9d9' # '#cccccc' # GREEN
 # this color highlights interactive components when they are interacted with
 
-GRAPH_BACKGROUND_COLOR = '#262523' # DARK_GRAY
+GRAPH_BACKGROUND_COLOR = '#c470c0' # '#262523' # DARK_GRAY
 # this color is the background of the graph
 
 TEXT_COLOR = '#0c7d1f' # '#000000' # BLACK
