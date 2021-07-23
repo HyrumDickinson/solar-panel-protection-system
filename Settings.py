@@ -16,8 +16,12 @@ MIN_TEMPERATURE_TRIP_POINT = -40.0
 
     # ---------- Colors ---------- #
 
-MAIN_BACKGROUND_COLOR = '#1a5276' # '#383735' # MID_GRAY_2
+MAIN_BACKGROUND_COLOR = '#86a3bf' # '#383735' # MID_GRAY_2
 # this color highlights the space between and around the main widgets
+# '#1a5276' - dark blue background
+# '#86a3bf' - light blue background
+# '#d9d9d9' - gray background
+# '#797b8f' - blue-gray background
 
 WIDGET_BACKGROUND_COLOR = '#d5e5f0' #LIGHT_GRAY
 # this color fills the background of all widgets
