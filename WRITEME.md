@@ -72,3 +72,17 @@
 - [X] **Hyrum Dickinson** - `main` - made connection status display even if no connection
 - [ ] need to figure out how to delete old statuses instead of having them pile on top of each other
 - [ ] need to figure out why two "disconnected" statuses pop up instead of one, starting with the second `sync` button click. It would make more sense to just display one per click.
+
+### 7-23-2021
+- [X] **Hyrum Dickinson** - `main` - Made all text, including active text, colored by same local variable
+- [X] **Hyrum Dickinson** - `main` - Isolated graph background color from other local color variables
+- [X] **Hyrum Dickinson** - `main` - Made all entire widget backgrounds colored by same local variable
+- [X] **Hyrum Dickinson** - `main` - Updated color names to reflect their new functions
+- [X] **Hyrum Dickinson** - `main` - Created space between bottom buttons and bottom of data widget
+- [X] **Hyrum Dickinson** - `main` - Made space between buttons and edge of widget the same for all edge buttons
+- [X] **Hyrum Dickinson** - `main` - Increased width of sync button so that main background is the same thickness between widgets as it is around widgets
+- [X] **Hyrum Dickinson** - `main` - Thinned the outline around widgets
+- [X] **Hyrum Dickinson** - `main` - Made all widget backgrounds light blue
+- [X] **Hyrum Dickinson** - `main` - Made all widget outlines and text black
+- [X] **Hyrum Dickinson** - `main` - Made main background color dark blue
+- [X] **Hyrum Dickinson** - `main` - Reformatted connection status messages to compliment new light blue background
