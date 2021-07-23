@@ -94,3 +94,6 @@
 - [X] **Hyrum Dickinson** - `main` - Made all widget outlines and text black.
 - [X] **Hyrum Dickinson** - `main` - Made main background color dark blue.
 - [X] **Hyrum Dickinson** - `main` - Reformatted connection status messages to compliment new light blue background.
+- [X] **Hyrum Dickinson** - `main` - Set checkboxes to highlight larger area when pressed.
+- [X] **Hyrum Dickinson** - `main` - Made graph fit with new aesthetic.
+- [ ] **Hyrum Dickinson** - `main` - Need Kevin to choose main background color from four ready-to-go options. Once the color scheme is decided, the GUI look and feel overhaul will be complete. I still have some functionality quicks to fix, but the user interface of the GUI should stay the same from here on out - once Kevin's picked the color scheme.
