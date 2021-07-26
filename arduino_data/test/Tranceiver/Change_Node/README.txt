@@ -7,3 +7,5 @@ PROS:
 
 CONS: 
 - (In current state 7/19/2021) it's difficult to add new nodes if code is already running. Can be fixed by resetting head node
+- There is a breif moment where the node may not receive the message, and both the node and head are waiting for a message.
+This could happen literally at any time

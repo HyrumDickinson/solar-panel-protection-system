@@ -1,11 +1,13 @@
 /*************************************************************************
  * Remote node - nRF24L01+ radio communications                          *
- *      Program acts as slave and waits for master node to send          *
- *      data request command.                                            *
+ *      A program to operate a remote-node slave device that sends       *
+ *      data to a command unit on a given request message. The radio     *            
+ *      transceiver used is the nRF24L01+, and it operates using the     *
+ *      TMRh20 RF24 library.                                             *
  *                                                                       *
- *      Author: Benjamin Olaivar                                         *
+ *      Author: B.D. Fraser                                              *
  *                                                                       *
- *        Last modified: 07/22/2021                                      *
+ *        Last modified: 27/06/2017                                      *
  *                                                                       *
  *************************************************************************/
 
@@ -13,7 +15,7 @@
 #include <SPI.h>
 #include <RF24.h>
 #include <nRF24L01.h>
-#include <printf.h>   //TODO: remove library
+#include <printf.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
@@ -26,8 +28,8 @@
 /* RADIO VARIABLES */
 RF24 radio(CE_PIN,CSN_PIN);
 const byte nodeAddress[5] = {'N','O','D','E','1'};  // setup radio pipe addresses for each sensor node
+//TODO: check if below line does anything
 int remoteNodeData[2] = {1, 1,};                    // simple integer array for remote node data, in the form [node_id, returned_count]
-int dataFromMaster = 0;                             // integer to store count of successful transmissions
 
 /* TEMP SENSOR VARIABLES */
 OneWire oneWire(ONE_WIRE_BUS);
@@ -38,12 +40,16 @@ int TEMP_THRESH = 90;   //! not making constant (#define). When in overheat, thr
 bool overheat = false;
 int tempThresholdsBroken; // Reads how many temp sensors have detected an exceeded temp thresh (don't want a faulty sensor setting it off)
 
+struct Data_From_Master {
+  bool shutdown;
+};
 struct Data_Package {
   float T1 = 0.0;
   float T2 = 0.0;
   float T3 = 0.0;
 };
 Data_Package data;
+Data_From_Master dataFromMaster;
 
 
 /* Function: radioSetup()
@@ -61,9 +67,10 @@ void radioSetup() {
   radio.openReadingPipe(1, nodeAddress);  // open a reading pipe on the chosen address - matches the master tx
 
   radio.enableAckPayload();                                           // enable ack payload - slave replies with data using this feature
+  //TODO: check if below line does anything
   radio.writeAckPayload(1, &remoteNodeData, sizeof(remoteNodeData));  // preload the payload with initial data - sent after an incoming message is read
   
-  //TODO: remove following 2 lines print radio config details to console
+  // print radio config details to console
   printf_begin();
   radio.printDetails();
 
@@ -144,8 +151,8 @@ void readTemperatures() {
 void setup() {
   Serial.begin(9600);
 
-  tempSensorSetup();
   radioSetup();
+  tempSensorSetup();
 }
 
 

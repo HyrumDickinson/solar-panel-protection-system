@@ -17,10 +17,15 @@
 #include <SPI.h> 
 #include <nRF24L01.h>
 #include <Ethernet.h>
+#include <ArduinoJson.h>
+
 
 /* CONSTANTS */
 #define CE_PIN 7    // set Chip-Enable (CE) and Chip-Select-Not (CSN) pins (for UNO)
 #define CSN_PIN 8
+
+/* JSON VARIABLES */
+StaticJsonDocument<200> doc;
 
 /* GENERAL VARIABLES */
 bool confirmSent = false;
@@ -78,13 +83,8 @@ void radioSetup() {
 */
 void ethernetSetup() {
   Serial.println("Trying to get an IP address using DHCP");
-  //! This way for sake of testing... delete next line and uncomment 'if' statement
+
   Ethernet.begin(mac, ip, gateway, subnet);
-//  if (Ethernet.begin(mac) == 0) {
-//    Serial.println("Failed to configure Ethernet using DHCP");
-////    initialize the ethernet device not using DHCP:
-//    Ethernet.begin(mac, ip, gateway, subnet);
-//  }
 
   ip = Ethernet.localIP();
   //checking valid ip (not 0.0.0.0)
@@ -111,7 +111,7 @@ void readRadio() {
     
     // boolean to indicate if radio.write() tx was successful
     bool tx_sent;
-    tx_sent = radio.write( &sendCommand, sizeof(sendCommand));
+    tx_sent = radio.write(&sendCommand, sizeof(sendCommand));
     // if tx success - receive and read smart-post ack reply
     if (tx_sent) {
         if (radio.isAckPayloadAvailable()) {
@@ -122,6 +122,9 @@ void readRadio() {
             Serial.print("[+] Successfully received data from node.");
             Serial.print("  ---- Temp was: ");
             Serial.println(data.T1);
+            if (data.T1 > 80) {
+                sendCommand.SHUTDOWN = true;
+            }
         }
     } 
     else {
