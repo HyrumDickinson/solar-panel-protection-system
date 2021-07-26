@@ -69,3 +69,11 @@ https://github.com/gmag11/painlessMesh/tree/master/examples
 ### 7-08-2021
 - [X] **Ben Olaivar** - `arduino_dev` - DECIDED: no mesh system. Direct tranceiver communication between main box and nodes. The main box reads each node one at a time and sends the data to a desktop through TELNET. There are only research boxes, so this shouldn't be too demanding on the system. More reliable than the mesh system
 - [X] **Ben Olaivar** - `arduino_dev` - added transceiver_node.cpp and transceiver_main.cpp. Still needs to be tested
+
+### 7-26-2021
+- [X] **Ben Olaivar** - `arduino_dev` - forgot to update WRITEME. What has been done so far is listed below
+- [X] **Ben Olaivar** - `arduino_dev` - nrf24L01 transceiver has been chosen as best mode of communication. A main node by the door will send a data request each second to a new node, then receive and acknowledgement response containing all the data from the node.
+- [X] **Ben Olaivar** - `arduino_dev` - The node end only has temperature sensor readings at this point. I still don't have acces to the voltage/current sensor, so reliably testing the code is difficult, although original code looks promising. This also goes for the relay control
+- [X] **Ben Olaivar** - `arduino_dev` - The main node successfully works with ethernet sending data. It needs to be updated to receive commands and send them to their respective panel. Additionally, it needs to be updated to automatically send shutdown commands.
+- [ ] **Ben Olaivar** - `arduino_dev` - Encorporate relay control and voltage/current sensor code on node size
+- [ ] **Ben Olaivar** - `arduino_dev` - Encorporate commands on both node and main boxes. (node may only need shutdown command)

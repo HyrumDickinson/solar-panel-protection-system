@@ -11,7 +11,7 @@
  *                                                                       *
  *************************************************************************/
 
-// nRF24L01 radio transceiver external libraries
+/* LIBRARIES */
 #include <SPI.h>
 #include <RF24.h>
 #include <nRF24L01.h>
@@ -19,16 +19,20 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
+/* CONSTANTS */
 #define ONE_WIRE_BUS 9
 #define NUM_TEMP_SENSORS 3
 #define CE_PIN 7
 #define CSN_PIN 8
 
+/* GENERAL VARIABLES */
+int TEMP_THRESH = 90;       // When in overheat, thresh is lower number. Allows for autonomous restart. Val is arbitrary
+int tempThresholdsBroken;   // Reads how many temp sensors have detected an exceeded temp thresh
+bool overheat = false;
 
 /* RADIO VARIABLES */
 RF24 radio(CE_PIN,CSN_PIN);
-const byte nodeAddress[5] = {'N','O','D','E','1'};  // setup radio pipe addresses for each sensor node
-//TODO: check if below line does anything
+const byte nodeAddress[5] = {'N','O','D', 0, 1};  // setup radio pipe addresses for each sensor node
 int remoteNodeData[2] = {1, 1,};                    // simple integer array for remote node data, in the form [node_id, returned_count]
 
 /* TEMP SENSOR VARIABLES */
@@ -36,20 +40,36 @@ OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 DeviceAddress tempDeviceAddress;
 float tempArray[NUM_TEMP_SENSORS];
-int TEMP_THRESH = 90;   //! not making constant (#define). When in overheat, thresh is lower number. Allows for autonomous restart. Consult Kevin about this. number is arbitrary rn
-bool overheat = false;
-int tempThresholdsBroken; // Reads how many temp sensors have detected an exceeded temp thresh (don't want a faulty sensor setting it off)
 
 struct Data_From_Master {
   bool shutdown;
 };
 struct Data_Package {
+  bool overheat = false;
+  bool overVolt = false;
+  bool overCurr = false;
   float T1 = 0.0;
   float T2 = 0.0;
   float T3 = 0.0;
+  float T4 = 0.0;
+  float T5 = 0.0;
+  float T6 = 0.0;
 };
 Data_Package data;
 Data_From_Master dataFromMaster;
+
+
+
+/* Function: setup
+ *    Initialises the system wide configuration and settings prior to start
+*/
+void setup() {
+  Serial.begin(9600);
+  while(!Serial) {}
+
+  radioSetup();
+  tempSensorSetup();
+}
 
 
 /* Function: radioSetup()
@@ -58,7 +78,6 @@ Data_From_Master dataFromMaster;
 */
 void radioSetup() {
   radio.begin();
-  
   
   radio.setPALevel(RF24_PA_LOW);    // set power level of the radio
   radio.setDataRate(RF24_250KBPS);  // set RF datarate for max range
@@ -112,6 +131,28 @@ void printTempSensorAddresses(DeviceAddress deviceAddress) {
     }
 }
 
+
+/* Function: loop
+ *    main loop program for the slave node - repeats continuously during system operation
+ */
+void loop() {
+
+  radioCheckAndReply();   // transmit current preloaded data to master device if message request received
+}
+
+
+/* Function: updateNodeData
+ *    updates the temperature and voltage (later) variables for the node and stores it in the nRF24L01+ radio
+ *    preloaded ack payload ready for sending on next received message
+*/
+void updateNodeData(void) {
+  readTemperatures();
+
+  // set the ack payload ready for next request from the master device
+  radio.writeAckPayload(1, &data, sizeof(Data_Package));
+}
+
+
 /* Function: readTemperatures
 * Cycles through each temp sensor and saves the readings to the 'data' struct. Also takes note of 
 * an overheat (currently waits for 2 sensors to overheat. This number is arbitrary)
@@ -139,49 +180,17 @@ void readTemperatures() {
         TEMP_THRESH = 90;
     }
 
-    data.T1 = tempArray[0];
+    data.T1 = tempArray[0];   // updating readings in our data struct
     data.T2 = tempArray[1];
     data.T3 = tempArray[2];
     // data.overTemp = overheat;
-}
-
-/* Function: setup
- *    Initialises the system wide configuration and settings prior to start
- */
-void setup() {
-  Serial.begin(9600);
-
-  radioSetup();
-  tempSensorSetup();
-}
-
-
-/* Function: loop
- *    main loop program for the slave node - repeats continuously during system operation
- */
-void loop() {
-  
-  // transmit current preloaded data to master device if message request received
-  radioCheckAndReply();
-}
-
-
-/* Function: updateNodeData
- *    updates the temperature and voltage (later) variables for the node and stores it in the nRF24L01+ radio
- *    preloaded ack payload ready for sending on next received message
- */
-void updateNodeData(void) {
-  readTemperatures();
-
-  // set the ack payload ready for next request from the master device
-  radio.writeAckPayload(1, &data, sizeof(Data_Package));
 }
 
 
 /* Function: radioCheckAndReply
  *    sends the preloaded node data over the nrf24l01 radio when
  *    a message is received by the master
- */
+*/
 void radioCheckAndReply(void) {
     // check for radio message and send sensor data using auto-ack
     if ( radio.available() ) {
