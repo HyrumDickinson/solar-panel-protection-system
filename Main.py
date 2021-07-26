@@ -35,7 +35,7 @@ class Application:
 	# ----------------- #
 
 	def commands(self):
-		self.conn = sqlite3.connect('solarPanel.db')
+		self.conn = sqlite3.connect('solarPanel.db') # opens connection to SQLite database
 		cursor = self.conn.cursor()	
 		
 		# Check if table exists.
@@ -56,7 +56,7 @@ class Application:
 			temperature_6 real
 			)""")	
 
-		while True:
+		while True: # this always evaluates to true and loops forever
 			if self.lastData and self.command != 'sync' and self.command != 'quit':
 				try:
 					packet = json.loads(self.lastData)
@@ -204,17 +204,31 @@ class Application:
 	# ----------------- #
 
 	def run(self, Monitor):
+		print("Main.run() about to run")
 		t1 = threading.Thread(target=self.receiver, args=())
+		print("t1 = threading.Thread(target=self.receiver, args=()) ran")
 		t2 = threading.Thread(target=self.commands, args=())
+		print("t2 = threading.Thread(target=self.commands, args=()) ran")
 		self.Monitor = Monitor
+		print("self.Monitor = Monitor ran")
 		self.Monitor.runSetup()
+		print("self.Monitor.runSetup() ran")
 		t1.start()
+		print("t1.start() ran")
 		t2.start()
+		print("t2.start() ran")
 		self.Monitor.run()
+		print("self.Monitor.run()")
 		t1.join()
+		print("t1.join() ran")
 		t2.join()
+		print("t2.join() ran")
 
 if __name__ == "__main__":
+	print("application about to run")
 	a = Application()
+	print("a = Application() ran")
 	m = Monitor(a)
+	print("m = Monitor(a) ran")
 	a.run(m)
+	print("application ran")

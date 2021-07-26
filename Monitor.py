@@ -242,6 +242,16 @@ class Monitor():
 				widgetFrame.bind("<Enter>", lambda event, i=index: self.frameInteraction(event, i, BACKGROUND))
 				widgetFrame.bind("<Leave>", lambda event, i=index: self.frameInteraction(event, i, BACKGROUND))
 
+				# '<Button-1>' references a right click of the mouse
+				# '<Enter>' means the mouse pointer entered the widget
+				# '<Leave>' means the mouse pointer left the widget
+				# Why does widgetFrame have the same action bound to it when the mouse enters and when the mouse leaves?
+				# What the fuck does that whole block of code above me even do? It only seems to interact with the connection status displays... and I only want one of those to show at a time anyway.
+				# Why are we making an array of connection status displays lmao like wtf
+
+				# Nevermind, I think I figured out what this does - it looks like it displays each connection (maybe an individual one for each solar panel?) and 
+				# allows you to show individual data for any one of them simply by clicking on it. I won't know for sure until I've had a chance to hook this up to the actual solar panels though.
+
 	# ------------- #
 
 	def switchConnections(self, i):
@@ -271,9 +281,8 @@ class Monitor():
 	def labelInteraction(self, event, index):
 		color = CONNECTOR_WIDGET_COLOR
 
-		if event.type == 4 :	# Clicked
+		if event.type == 4 :	# if a button is clicked
 			self.clearWidgetColors()
-			color = CONNECTOR_WIDGET_COLOR	
 			self.selected = index
 			self.switchConnections(self.selected)
 			self.graph.a.clear()
@@ -283,25 +292,24 @@ class Monitor():
 	def frameInteraction(self, event, index, bg):
 		color = CONNECTOR_WIDGET_COLOR
 
-		if event.type == 4 :	# Clicked
+		if event.type == 4 :	# if a button is clicked
 			self.clearWidgetColors()
-			color = CONNECTOR_WIDGET_COLOR	
 			self.selected = index
-			self.switchConnections(self.selected)
-			self.graph.a.clear()
+	 		self.switchConnections(self.selected)
+	 		self.graph.a.clear()
 
-		if event.type == 7 :	# Entered
-			color = CONNECTOR_WIDGET_COLOR if self.selected == index else GRAPH_BACKGROUND_COLOR
+	 	if event.type == 7 :	# if the mouse enters the widget
+	 		color = CONNECTOR_WIDGET_COLOR if self.selected == index else GRAPH_BACKGROUND_COLOR
 
-		if event.type == 8 :	# Exited
-			color = CONNECTOR_WIDGET_COLOR if self.selected == index else GRAPH_BACKGROUND_COLOR
+	 	if event.type == 8 :	# if the mouse exits the widget
+	 		color = CONNECTOR_WIDGET_COLOR if self.selected == index else GRAPH_BACKGROUND_COLOR
 
-		for i in self.widgetFrames[index]: i.configure(bg=color)
+	 	for i in self.widgetFrames[index]: i.configure(bg=color)
 
 	def clearWidgetColors(self):
-		for i in self.widgetFrames:
-			for j in i:
-				j.configure(bg=GRAPH_BACKGROUND_COLOR)
+	 	for i in self.widgetFrames:
+	 		for j in i:
+	 			j.configure(bg=GRAPH_BACKGROUND_COLOR)
 
 	# ------------- #
 
@@ -388,6 +396,7 @@ class Monitor():
 	# ------------- #
 
 	def run(self):
+		print("self.Monitor.run() about to run")
 		self.setupButtons()
 
 		# Button Images
@@ -398,9 +407,14 @@ class Monitor():
 		self.syncButton.config(width="150", height="20")
 		self.syncButton.pack(side="bottom")
 		self.syncButton.config(image=sync_image_for_button) 
-
+		
+		print("self.graph = Graph(self) about to run")
 		self.graph = Graph(self)
+		print("self.graph = Graph(self) ran")
 		self.graph.run()
+		print("self.graph.run() ran")
 		ani = animation.FuncAnimation(self.graph.f, self.graph.animate, interval=1000)
+		print("self.root.mainloop() about to run")
 		self.root.mainloop()
+		print("self.root.mainloop() ran")
 
