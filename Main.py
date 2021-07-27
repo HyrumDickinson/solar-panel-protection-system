@@ -237,19 +237,4 @@ if __name__ == "__main__":
 	print("m = Monitor(a) ran")
 	a.run(m)
 	print("application ran")
-	a.run(m)
 
-		t1 = threading.Thread(target=self.receiver, args=())
-		t2 = threading.Thread(target=self.commands, args=())
-		self.Monitor = Monitor
-		self.Monitor.runSetup()
-		t1.start()
-		t2.start()
-		self.Monitor.run()
-		t1.join()
-		t2.join()
-
-if __name__ == "__main__":
-	a = Application()
-	m = Monitor(a)
-	a.run(m)
