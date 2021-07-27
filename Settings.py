@@ -1,6 +1,6 @@
 # This file contains the default trip point settings and color settings for the solar panel monitor.
 
-    # -------- Trip Points -------- #
+    # ---------- Trip Points ---------- #
 
 DEFAULT_VOLTAGE_TRIP_POINT = 100.0
 DEFAULT_CURRENT_TRIP_POINT = 10.0

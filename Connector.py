@@ -75,7 +75,7 @@ print("Connector file read")
 if __name__ == "__main__":
    print("Connector about to run")
    c = Connector()
-   print(c.get_ip_address().rpartition('.')[0] + ".")
+   print c.get_ip_address().rpartition('.')[0] + "."
    c.connect()
 
    print(len(c.connections))

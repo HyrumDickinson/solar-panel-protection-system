@@ -154,9 +154,17 @@ class Application:
 						self.lastData = i.socket.recv(BUFFER_SIZE)
 						self.lastIP = i.ip
 					except:
+
 						print("Timed out.")
 				elif not i.isConnected and self.command != 'sync' and self.command != 'quit':
 					print("No connection")
+
+						print "Timed out."
+
+						print("Timed out.")
+				elif not i.isConnected and self.command != 'sync' and self.command != 'quit':
+					print("No connection")
+
 			if self.command == 'quit':
 				return
 
@@ -232,3 +240,19 @@ if __name__ == "__main__":
 	print("m = Monitor(a) ran")
 	a.run(m)
 	print("application ran")
+	a.run(m)
+
+		t1 = threading.Thread(target=self.receiver, args=())
+		t2 = threading.Thread(target=self.commands, args=())
+		self.Monitor = Monitor
+		self.Monitor.runSetup()
+		t1.start()
+		t2.start()
+		self.Monitor.run()
+		t1.join()
+		t2.join()
+
+if __name__ == "__main__":
+	a = Application()
+	m = Monitor(a)
+	a.run(m)

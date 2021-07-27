@@ -283,7 +283,7 @@ float getChannel(int channel){
 }
 
 // ----------------------------------------- //
-
+//!Work on this
 void checkVoltageCurrent(){
 
   for(int channel = 1; channel<=NUM_CHANNELS; channel++){

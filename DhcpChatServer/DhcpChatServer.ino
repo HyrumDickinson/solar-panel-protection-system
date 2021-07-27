@@ -1,6 +1,6 @@
 #include <SPI.h>
 #include <Ethernet.h>
-#include <ArduinoJson.h>
+//#include <ArduinoJson.h>
 
 byte mac[] = {
 //  0x00, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE
@@ -26,6 +26,8 @@ void loop() {
   EthernetClient client = server.available();
 
   if (client) {
+    Server.println("connected");
+    
     // Create JSON Object
     StaticJsonDocument<CAPACITY> sendObj;
     sendObj["V1"] = 1.0;
@@ -70,11 +72,11 @@ void loop() {
       manualSwitch = receiveObj["M"];
 
       // Printing values individually
-      Serial.print("Voltage TripPoint: ");
+      Serial.print("Voltage Threshold: ");
       Serial.println(voltageVal);
-      Serial.print("Current TripPoint: ");
+      Serial.print("Current Threshold: ");
       Serial.println(currentVal);
-      Serial.print("Temperature TripPoint: ");
+      Serial.print("Temperature Threshold: ");
       Serial.println(temperatureVal);
       Serial.print("Switch Configuration: ");
       Serial.println(relayConfig);
