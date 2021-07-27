@@ -417,4 +417,5 @@ class Monitor():
 		print("self.root.mainloop() about to run")
 		self.root.mainloop()
 		print("self.root.mainloop() ran")
+		print("yeet")
 
