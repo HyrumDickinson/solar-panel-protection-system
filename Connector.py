@@ -1,6 +1,6 @@
 import socket
 import threading
-from Connection import *
+from Connection import * # imports Settings
 
 TCP_PORT = 23
 INIT_CONNECTION = 0
@@ -13,17 +13,20 @@ class Connector:
       self.threads = []
       self.connections = []
       # Default IP address
-      self.ip = "192.168.1."
+      self.ip = "128.174.168.99" # change this to the PC's local ip address
+      self.isConnected = False
 
    def scan(self, i):
-      address = self.ip + str(i) 
-      s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+      print("scan about to run")
+      address = self.ip # + str(i) 
+      s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       s.settimeout(TIMEOUT)
       try:
          s.connect((address, TCP_PORT))
          self.connections.append(Connection(s, address, TCP_PORT, True)) 
       except:
          pass
+      print("scan ran")
 
    # ------------- #
 
@@ -36,7 +39,7 @@ class Connector:
       except:
          pass
 
-      for i in range(INIT_CONNECTION, INIT_CONNECTION + NUM_CONNECTIONS): 
+      for i in range(INIT_CONNECTION, INIT_CONNECTION + NUM_CONNECTIONS):
          self.threads.append(threading.Thread(target=self.scan, args=(i,)))
       for t in self.threads:
          t.start()
@@ -66,13 +69,22 @@ class Connector:
       s.connect(("8.8.8.8", 80))
       return s.getsockname()[0]
 
+print("Connector file read")
+
+
 if __name__ == "__main__":
+   print("Connector about to run")
    c = Connector()
    print c.get_ip_address().rpartition('.')[0] + "."
    c.connect()
 
-   print (len(c.connections))
+   print(len(c.connections))
    for i in c.connections:
       print (i.ip)
-      print (i.connected)
+      print (i.isConnected)
       i.socket.close()
+
+   if len(c.connections) == 0:
+      c.isConnected == False
+
+   print("Connector ran")

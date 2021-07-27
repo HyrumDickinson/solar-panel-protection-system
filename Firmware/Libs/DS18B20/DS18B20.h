@@ -20,7 +20,7 @@
 class DS18B20{
   public:
     DS18B20();
-    bool setConfig(float temperature_threshold);
+    bool setConfig(float temperature_TripPoint);
     bool test();
     float * getTempC();
     int getNumberOfDevices();

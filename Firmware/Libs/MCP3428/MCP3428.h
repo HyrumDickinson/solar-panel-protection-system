@@ -22,10 +22,10 @@ class MCP3428{
     MCP3428();
     bool test();
     double readADC(uint8_t channel);
-    bool setVoltage(float voltageThreshold);
-    bool setCurrent(float currentThreshold);
-    float getVoltThreshold();
-    float getCurrentThreshold();
+    bool setVoltage(float voltageTripPoint);
+    bool setCurrent(float currentTripPoint);
+    float getVoltTripPoint();
+    float getCurrentTripPoint();
 
   private:
     double convertRaw(long raw_adc);
@@ -37,8 +37,8 @@ class MCP3428{
     uint8_t config;
     uint8_t numBytes;
     uint8_t data[3];
-    float voltThreshold;
-    float currentThreshold;
+    float voltTripPoint;
+    float currentTripPoint;
 };
 
 #endif

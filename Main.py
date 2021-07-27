@@ -1,8 +1,5 @@
-# import threading # this line is redundant; Connector has already imported threading
 import json
-# import sqlite3 # this line is redundant; Monitor has already imported sqlite3
-# import time # this line is redundant; Monitor has already imported time
-from Connector import * # this line imports the following: # this is redundant because Monitor imports Connector
+from Connector import * # this line imports the following: 
 	 # import socket
      # import threading
      # from Connection import * # imports Settings
@@ -23,12 +20,8 @@ from Monitor import * # this line imports the following:
       # import numpy as np
       # import datetime
       # import time
-# from Connection import * # this line is redundant; Connector has already imported everything from Connection
 
 BUFFER_SIZE = 1024
-
-TEXT_COLOR = '#000000' # BLACK
-# this color highlights text
 
 class Application:
 	def __init__ (self):
@@ -42,7 +35,7 @@ class Application:
 	# ----------------- #
 
 	def commands(self):
-		self.conn = sqlite3.connect('solarPanel.db')
+		self.conn = sqlite3.connect('solarPanel.db') # opens connection to SQLite database
 		cursor = self.conn.cursor()	
 		
 		# Check if table exists.
@@ -63,7 +56,7 @@ class Application:
 			temperature_6 real
 			)""")	
 
-		while True:
+		while True: # this always evaluates to true and loops forever
 			if self.lastData and self.command != 'sync' and self.command != 'quit':
 				try:
 					packet = json.loads(self.lastData)
@@ -161,9 +154,17 @@ class Application:
 						self.lastData = i.socket.recv(BUFFER_SIZE)
 						self.lastIP = i.ip
 					except:
+
 						print("Timed out.")
 				elif not i.isConnected and self.command != 'sync' and self.command != 'quit':
 					print("No connection")
+
+						print "Timed out."
+
+						print("Timed out.")
+				elif not i.isConnected and self.command != 'sync' and self.command != 'quit':
+					print("No connection")
+
 			if self.command == 'quit':
 				return
 
@@ -211,6 +212,36 @@ class Application:
 	# ----------------- #
 
 	def run(self, Monitor):
+		print("Main.run() about to run")
+		t1 = threading.Thread(target=self.receiver, args=())
+		print("t1 = threading.Thread(target=self.receiver, args=()) ran")
+		t2 = threading.Thread(target=self.commands, args=())
+		print("t2 = threading.Thread(target=self.commands, args=()) ran")
+		self.Monitor = Monitor
+		print("self.Monitor = Monitor ran")
+		self.Monitor.runSetup()
+		print("self.Monitor.runSetup() ran")
+		t1.start()
+		print("t1.start() ran")
+		t2.start()
+		print("t2.start() ran")
+		self.Monitor.run()
+		print("self.Monitor.run()")
+		t1.join()
+		print("t1.join() ran")
+		t2.join()
+		print("t2.join() ran")
+
+if __name__ == "__main__":
+	print("application about to run")
+	a = Application()
+	print("a = Application() ran")
+	m = Monitor(a)
+	print("m = Monitor(a) ran")
+	a.run(m)
+	print("application ran")
+	a.run(m)
+
 		t1 = threading.Thread(target=self.receiver, args=())
 		t2 = threading.Thread(target=self.commands, args=())
 		self.Monitor = Monitor

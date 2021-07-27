@@ -24,11 +24,11 @@
 #define NUM_TEMP_SENSORS 6
 
 /*Helper Functions*/
-void setTempThreshold();                //All set Threshold functions have to either be removed or modified for ethernet communication. 
+void setTempTripPoint();                //All set TripPoint functions have to either be removed or modified for ethernet communication. 
 void checkTemp();
 bool setRelays(int relayZero, int relayOne);
-void setVoltThreshold();
-void setCurrentThreshold();
+void setVoltTripPoint();
+void setCurrentTripPoint();
 void flushRecieve();                    // Clears the incoming serial buffer. Possibly remove later since this is only for serial. 
 float checkChannel(int channel);                    // channels: 1 = Panel A, 2 = Panel B, 3 = Panel C, 4 = Current.
 void checkVoltageCurrent();                    
@@ -49,15 +49,15 @@ const int relay_1 = 8;                  // Relay 1 connected to pin 8.
 /*Temperature Sensor Variables*/
 DS18B20 ds18b20;                        // Temp Sensor Object.
 float *tempPtr = NULL;                  // Pointer to array of current temperature values.        
-float tempThreshold = 27.0;             // Temperature Threshold.
+float tempTripPoint = 27.0;             // Temperature TripPoint.
 float userInput = 0.0;                  // User defined input.
 float tempArray[NUM_TEMP_SENSORS] = {0.0,0.0,0.0,0.0,0.0,0.0};
 
 /*Voltage and Current Sensor Variables*/
 MCP3428 mcp3428;
 float channelArray[NUM_CHANNELS] = {0.0,0.0,0.0,0.0};
-float voltThreshold = 36.0;              // Voltage Threshold.
-float currentThreshold = 0.75;           // Current Threshold.
+float voltTripPoint = 36.0;              // Voltage TripPoint.
+float currentTripPoint = 0.75;           // Current TripPoint.
 
 /*LED Variables*/
 const int ledOutputEnable_pin = 6;
@@ -91,10 +91,10 @@ void setup() {
   pinMode(ledOutputEnable_pin, OUTPUT);
 
   /*Initialize sensor parameters*/
-//  setTempThreshold();
-//  setVoltThreshold();
-//  setCurrentThreshold();
-//  Serial.println("All Thresholds Set.");
+//  setTempTripPoint();
+//  setVoltTripPoint();
+//  setCurrentTripPoint();
+//  Serial.println("All TripPoints Set.");
   Serial.println("Beginning System Operations");
   delay(1000);
 }
@@ -158,9 +158,9 @@ void loop() {
      //Parser:
      StaticJsonDocument<CAPACITY> receiveObj;
      deserializeJson(receiveObj, buffer);
-     voltThreshold = receiveObj["V"];
-     currentThreshold = receiveObj["C"];
-     tempThreshold = receiveObj["T"];
+     voltTripPoint = receiveObj["V"];
+     currentTripPoint = receiveObj["C"];
+     tempTripPoint = receiveObj["T"];
      if (relayConfig != receiveObj["S"]){
       if (userSetRelays(receiveObj["S"])) {
         relayConfig = receiveObj["S"];
@@ -185,15 +185,15 @@ void setEthernet(){
 
 // ----------------------------------------- //
 
-//void setTempThreshold(){
-//  Serial.print("Enter MAX temperature threshold (-45.0 to 85.0): \n");
+//void setTempTripPoint(){
+//  Serial.print("Enter MAX temperature TripPoint (-45.0 to 85.0): \n");
 //  while(!Serial.available());
 //  if(Serial.available() > 0){
 //    userInput = Serial.parseFloat();
 //    flushRecieve(); 
 //    while(!ds18b20.setConfig(userInput)){
-//      Serial.println("Invalid Temperature Threshold");
-//      Serial.println("Enter MAX temperature threshold (-45.0 to 85.0): ");
+//      Serial.println("Invalid Temperature TripPoint");
+//      Serial.println("Enter MAX temperature TripPoint (-45.0 to 85.0): ");
 //      while(!Serial.available());
 //      if(Serial.available() > 0){
 //        userInput = Serial.parseFloat();
@@ -201,21 +201,21 @@ void setEthernet(){
 //      }
 //    }
 //  }
-//  tempThreshold = ds18b20.getTempLimit();
+//  tempTripPoint = ds18b20.getTempLimit();
 //  Serial.print("Set MAX Temperature for Temperature Sensors to: ");
-//  Serial.println(tempThreshold, DEC);
+//  Serial.println(tempTripPoint, DEC);
 //  delay(1000);
 //}
 
-//void setVoltThreshold(){
-//  Serial.print("Enter MAX Voltage threshold (0 to 72.9): ");
+//void setVoltTripPoint(){
+//  Serial.print("Enter MAX Voltage TripPoint (0 to 72.9): ");
 //  while(!Serial.available());
 //  if(Serial.available() > 0){
 //    userInput = Serial.parseFloat();
 //    flushRecieve(); 
 //    while(!mcp3428.setVoltage(userInput)){
-//      Serial.println("Invalid Voltage Threshold");
-//      Serial.println("Enter MAX Voltage threshold (0 to 72.9): ");
+//      Serial.println("Invalid Voltage TripPoint");
+//      Serial.println("Enter MAX Voltage TripPoint (0 to 72.9): ");
 //      while(!Serial.available());
 //      if(Serial.available() > 0){
 //        userInput = Serial.parseFloat();
@@ -223,21 +223,21 @@ void setEthernet(){
 //      }
 //    }
 //  }
-//  voltThreshold = mcp3428.getVoltThreshold();
-//  Serial.print("Set Voltage Threshold to: ");
-//  Serial.println(voltThreshold, DEC);
+//  voltTripPoint = mcp3428.getVoltTripPoint();
+//  Serial.print("Set Voltage TripPoint to: ");
+//  Serial.println(voltTripPoint, DEC);
 //  delay(1000);
 //}
 
-//void setCurrentThreshold(){
-//  Serial.print("Enter MAX Current threshold (0 to 5.83): ");
+//void setCurrentTripPoint(){
+//  Serial.print("Enter MAX Current TripPoint (0 to 5.83): ");
 //  while(!Serial.available());
 //  if(Serial.available() > 0){
 //    userInput = Serial.parseFloat();
 //    flushRecieve(); 
 //    while(!mcp3428.setCurrent(userInput)){
-//      Serial.println("Invalid Current Threshold");
-//      Serial.println("Enter MAX Current threshold (0 to 5.83): ");
+//      Serial.println("Invalid Current TripPoint");
+//      Serial.println("Enter MAX Current TripPoint (0 to 5.83): ");
 //      while(!Serial.available());
 //      if(Serial.available() > 0){
 //        userInput = Serial.parseFloat();
@@ -245,9 +245,9 @@ void setEthernet(){
 //      }
 //    }
 //  }
-//  currentThreshold = mcp3428.getCurrentThreshold();
-//  Serial.print("Set Current Threshold to: ");
-//  Serial.println(currentThreshold, DEC);
+//  currentTripPoint = mcp3428.getCurrentTripPoint();
+//  Serial.print("Set Current TripPoint to: ");
+//  Serial.println(currentTripPoint, DEC);
 //  delay(1000);
 //}
 
@@ -293,17 +293,17 @@ void checkVoltageCurrent(){
     }
     channelArray[channel-1] = getChannel(channel);
     if(channel<4){
-      if(channelArray[channel-1] > voltThreshold){
+      if(channelArray[channel-1] > voltTripPoint){
         setRelays(LOW,LOW);
-        Serial.println(mcp3428.getVoltThreshold());
+        Serial.println(mcp3428.getVoltTripPoint());
         Serial.println(channelArray[channel-1]);
         Serial.println("Warning: Overvoltage");
       }
     }
     else{
-      if(channelArray[channel-1] > currentThreshold){
+      if(channelArray[channel-1] > currentTripPoint){
         setRelays(LOW,LOW);
-        Serial.println(mcp3428.getCurrentThreshold());
+        Serial.println(mcp3428.getCurrentTripPoint());
         Serial.println(channelArray[channel-1]);
         Serial.println("Warning: Overcurrent");
       }
@@ -348,7 +348,7 @@ void checkTemp(){
   tempPtr = ds18b20.getTempC();
   for(int i = 0; i<ds18b20.getNumberOfDevices();i++){
     tempArray[i] = *(tempPtr+i);
-    if(*(tempPtr+i) <= TEMP_READ_FAIL || *(tempPtr+i) >= tempThreshold){
+    if(*(tempPtr+i) <= TEMP_READ_FAIL || *(tempPtr+i) >= tempTripPoint){
       setRelays(LOW, LOW);
       if(*(tempPtr+i) <= TEMP_READ_FAIL){
         setRelays(LOW,LOW);
