@@ -158,10 +158,7 @@ class Application:
 						print("Timed out.")
 				elif not i.isConnected and self.command != 'sync' and self.command != 'quit':
 					print("No connection")
-
-						print "Timed out."
-
-						print("Timed out.")
+					print("Timed out.")
 				elif not i.isConnected and self.command != 'sync' and self.command != 'quit':
 					print("No connection")
 
