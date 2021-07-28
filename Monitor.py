@@ -278,6 +278,10 @@ class Monitor():
 			if j == i:
 				self.vars[j].set(1)
 		self.application.configSwitchInputting(self.selected, i)
+		try:
+			self.statusWidget.destroy()
+		except:
+			pass
 		self.updateStatus()
 
 	# def labelInteraction(self, event):
