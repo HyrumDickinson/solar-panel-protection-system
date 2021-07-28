@@ -13,17 +13,24 @@ class Connector:
       self.threads = []
       self.connections = []
       # Default IP address
-      self.ip = "128.174.168.99" # change this to the PC's local ip address
+      self.ip = "128.174.168.99" # change this to your device's local ip address
       self.isConnected = False
 
-   def scan(self, i):
+   # originally, this function had an extra argument i that added the last digits to a common default router ip address. 
+   # the connect() function tried scanning 100 times for ip addresses with the hardcoded beginning,
+   # ending anywhere between 1 and 100. However, this had the limitation of only searching for ip addresses
+   # that began in "192.168.1". Since searching for all possible ip addresses is impractical, and portability
+   # is not a priority for this application, I chose to hardcode the ip address of the physical device
+   # this program will be connecting to. Now, the scan will only run once per connect attempt, and search
+   # specifically for the hardcoded ip address. 
+
+   def scan(self):
       print("scan about to run")
-      address = self.ip # + str(i) 
       s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       s.settimeout(TIMEOUT)
       try:
-         s.connect((address, TCP_PORT))
-         self.connections.append(Connection(s, address, TCP_PORT, True)) 
+         s.connect((self.ip, TCP_PORT))
+         self.connections.append(Connection(s, self.ip, TCP_PORT, True)) 
       except:
          pass
       print("scan ran")
@@ -39,8 +46,7 @@ class Connector:
       except:
          pass
 
-      for i in range(INIT_CONNECTION, INIT_CONNECTION + NUM_CONNECTIONS):
-         self.threads.append(threading.Thread(target=self.scan, args=(i,)))
+      self.threads.append(threading.Thread(target=self.scan))
       for t in self.threads:
          t.start()
       for t in self.threads:
@@ -75,7 +81,7 @@ print("Connector file read")
 if __name__ == "__main__":
    print("Connector about to run")
    c = Connector()
-   print c.get_ip_address().rpartition('.')[0] + "."
+   print(c.get_ip_address().rpartition('.')[0] + ".")
    c.connect()
 
    print(len(c.connections))

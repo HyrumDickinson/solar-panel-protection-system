@@ -123,10 +123,12 @@ class Application:
 					return					
 				if self.command == 'sync':
 					self.c.clear()
-					self.Monitor.clearWidgets()
-					# self.Monitor.updateWidgets()
 					self.c.connect()
-					self.Monitor.updateWidgets()
+
+					self.Monitor.statusWidget.destroy() 
+					
+					self.Monitor.updateStatus()
+					# self.Monitor.clearStatus() 
 					for i in range(0, len(self.c.connections)):
 						self.Monitor.updateCheckbox(i)
 
@@ -137,7 +139,7 @@ class Application:
 	def receiver(self):
 		print("Main.receiver (thread t1) began running")
 		self.c.connect() # this command is definately running. therefore the connection problem must be with the command itself, not the way it is executed
-		self.Monitor.updateWidgets()
+		# self.Monitor.updateStatus()
 		# counter = 0 # * debugger line
 		while True: # ! this function attempts to send and receive data from its connections as fast as possible. perhaps we should implement a delay?
 			# counter+=1 # * debugger line
@@ -199,10 +201,10 @@ class Application:
 		self.Monitor.updateStatus()
 		if self.c.connections[i].manualSwitch == 0:
 			self.c.connections[i].manualSwitch = 1
-			self.Monitor.toggleManualSwitchButton['text'] = 'OFF'	#
+			self.Monitor.toggleManualSwitchButton['text'] = 'OFF'
 		else:
 			self.c.connections[i].manualSwitch = 0
-			self.Monitor.toggleManualSwitchButton['text'] = 'ON'	#
+			self.Monitor.toggleManualSwitchButton['text'] = 'ON'
 
 	def formatSelect(self, input):
 		ret = ""

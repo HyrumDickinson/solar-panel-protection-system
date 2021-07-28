@@ -29,8 +29,7 @@ class Monitor():
 		self.root.resizable(0,0)
 
 		self.application = application
-		self.graph = None
-		self.widgetFrames = []
+		self.graph = None 
 		self.selected = 0
 		self.vars = []
 
@@ -38,18 +37,22 @@ class Monitor():
 
 	def setupFrames(self):
 		# Spacing
+		print("Monitor.spacingFrame created") # * debugger line
 		spacingFrame = tk.Frame(self.root, bg=MAIN_BACKGROUND_COLOR, width=25)
 		spacingFrame.pack(side="left")
 
 		# Connection frame
+		print("Monitor.connFrame created") # * debugger line
 		self.connFrame = tk.Frame(self.root, bg=WIDGET_BACKGROUND_COLOR, highlightbackground=TEXT_COLOR, highlightcolor=TEXT_COLOR, highlightthickness=1)
 		self.connFrame.pack(side="left", fill="y", pady="25")
 
 		# Data frame
+		print("Monitor.dataFrame created") # * debugger line
 		self.dataFrame = tk.Frame(self.root, bg=WIDGET_BACKGROUND_COLOR, highlightbackground=TEXT_COLOR, highlightcolor=TEXT_COLOR, highlightthickness=1)
 		self.dataFrame.pack(side="right", fill="both", padx="25", pady="25")
 
 	def setupTripPoints(self):
+		print("Monitor.TripPointFrame created") # * debugger line
 		TripPointFrame = tk.Frame(self.topFrame, bg=WIDGET_BACKGROUND_COLOR)
 		TripPointFrame.pack(side="left")
 
@@ -60,6 +63,7 @@ class Monitor():
 		TripPointTitle.pack(side="left")
 
 		# Voltage Trip Point Label and Entry
+		print("Monitor.TripPointFrame_2 created") # * debugger line
 		TripPointFrame_2 = tk.Frame(TripPointFrame, bg=WIDGET_BACKGROUND_COLOR)
 		TripPointFrame_2.pack(side="top", pady=2.5, fill="x")
 		voltageEntryTripPoint = tk.Label(TripPointFrame_2, text="Max voltage: ", padx=43, fg=TEXT_COLOR, bg=WIDGET_BACKGROUND_COLOR)
@@ -160,6 +164,7 @@ class Monitor():
 		manualConfigLabel.pack(side="right")
 
 	def setupQueryButtons(self):
+		print("Monitor.queryButtonFrame created") # * debugger line
 		queryButtonFrame = tk.Frame(self.dataFrame, bg=WIDGET_BACKGROUND_COLOR)
 		queryButtonFrame.pack(side="bottom")
 		v1Button = tk.Button(queryButtonFrame, text="V1", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, 
@@ -204,18 +209,19 @@ class Monitor():
 		self.setupSyncButton()
 		self.setupQueryButtons()
 
-	def updateWidgets(self):
+	def updateStatus(self):
 		connLength = len(self.application.c.connections)
 
 		if connLength == 0:
 			BACKGROUND = WIDGET_BACKGROUND_COLOR
 
 			# Frame for Widget
-			widgetFrame = tk.Frame(self.connFrame, bg=BACKGROUND)
-			widgetFrame.pack(side="top", fill="x")
+			self.statusWidget = tk.Frame(self.connFrame, bg=BACKGROUND)
+			self.statusWidget.pack(side="top", fill="x")
+			print("a new status widget was created") # * debugger line
 
 			# IP Status
-			ipStatus = tk.Label(widgetFrame, text="Status: Not Connected", fg=RED, bg=BACKGROUND, font='TkDefaultFont 8 bold')
+			ipStatus = tk.Label(self.statusWidget, text="Status: Not Connected", fg=RED, bg=BACKGROUND, font='TkDefaultFont 8 bold')
 			ipStatus.pack(side="bottom", fill="x", padx=5, pady=5)
 
 		else :
@@ -223,29 +229,30 @@ class Monitor():
 				BACKGROUND = GRAPH_BACKGROUND_COLOR if i == 0 else WIDGET_BACKGROUND_COLOR
 
 				# Frame for Widget
-				widgetFrame = tk.Frame(self.connFrame, bg=BACKGROUND)
-				widgetFrame.pack(side="top", fill="x")
+				self.statusWidget = tk.Frame(self.connFrame, bg=BACKGROUND)
+				self.statusWidget.pack(side="top", fill="x")
+				print("a new status widget was created") # * debugger line
 
 				# IP Label
-				ipLabel = tk.Label(widgetFrame, text='IP: ' + self.application.c.connections[i].ip, fg=GREEN, bg=BACKGROUND, font='TkDefaultFont 8')
+				ipLabel = tk.Label(self.statusWidget, text='IP: ' + self.application.c.connections[i].ip, fg=GREEN, bg=BACKGROUND, font='TkDefaultFont 8')
 				ipLabel.pack(side="top", fill="x", padx=10, pady=5)
 			
 				# IP Status
-				ipStatus = tk.Label(widgetFrame, text="Status: Connected", fg=GREEN, bg=BACKGROUND, font='TkDefaultFont 8 bold')
+				ipStatus = tk.Label(self.statusWidget, text="Status: Connected", fg=GREEN, bg=BACKGROUND, font='TkDefaultFont 8 bold')
 				ipStatus.pack(side="bottom", fill="x", padx=10, pady=5)
 
-				self.widgetFrames.append([widgetFrame, ipLabel, ipStatus])
-				index = len(self.widgetFrames) - 1
-				widgetFrame.bind('<Button-1>', lambda event, i=index: self.frameInteraction(event, i, BACKGROUND))
-				ipLabel.bind('<Button-1>', lambda event, i=index: self.labelInteraction(event, i))
-				ipStatus.bind('<Button-1>', lambda event, i=index: self.labelInteraction(event, i))
-				widgetFrame.bind("<Enter>", lambda event, i=index: self.frameInteraction(event, i, BACKGROUND))
-				widgetFrame.bind("<Leave>", lambda event, i=index: self.frameInteraction(event, i, BACKGROUND))
+				# self.widgetFrames.append([self.statusWidget, ipLabel, ipStatus]) # * delete this line if widgetFrames[] --> statusWidget rewrite works
+				# index = len(self.widgetFrames) - 1 # * and this one
+				# self.statusWidget.bind('<Button-1>', lambda event, statusWidget.frameInteraction(event, BACKGROUND))
+				# ipLabel.bind('<Button-1>', lambda event, self.labelInteraction(event))
+				# ipStatus.bind('<Button-1>', lambda event, self.labelInteraction(event))
+				# self.statusWidget.bind("<Enter>", lambda event, self.frameInteraction(event, BACKGROUND))
+				# self.statusWidget.bind("<Leave>", lambda event, self.frameInteraction(event, BACKGROUND))
 
 				# '<Button-1>' references a right click of the mouse
 				# '<Enter>' means the mouse pointer entered the widget
 				# '<Leave>' means the mouse pointer left the widget
-				# Why does widgetFrame have the same action bound to it when the mouse enters and when the mouse leaves?
+				# Why does self.statusWidget have the same action bound to it when the mouse enters and when the mouse leaves?
 				# What the fuck does that whole block of code above me even do? It only seems to interact with the connection status displays... and I only want one of those to show at a time anyway.
 				# Why are we making an array of connection status displays lmao like wtf
 
@@ -278,38 +285,34 @@ class Monitor():
 		self.application.configSwitchInputting(self.selected, i)
 		self.updateStatus()
 
-	def labelInteraction(self, event, index):
-		color = CONNECTOR_WIDGET_COLOR
+	# def labelInteraction(self, event):
+	# 	color = CONNECTOR_WIDGET_COLOR
+	# 
+	# 	if event.type == 4 :	# if a button is clicked
+	# 		self.clearWidgetColors()
+	# 		self.switchConnections(self.selected)
+	# 		self.graph.a.clear()
+	# 
+	# 	self.statusWidget.configure(bg=color)
 
-		if event.type == 4 :	# if a button is clicked
-			self.clearWidgetColors()
-			self.selected = index
-			self.switchConnections(self.selected)
-			self.graph.a.clear()
+	# def frameInteraction(self, event, bg):
+	# 	color = CONNECTOR_WIDGET_COLOR
+	# 
+	# 	if event.type == 4 :	# if a button is clicked
+	# 		self.clearWidgetColors()
+	# 		self.switchConnections(self.selected)
+	#  		self.graph.a.clear()
+	# 
+	#  	if event.type == 7 :	# if the mouse enters the widget
+	#  		color = CONNECTOR_WIDGET_COLOR if self.selected == index else GRAPH_BACKGROUND_COLOR
+	# 
+	# 	if event.type == 8 :	# if the mouse exits the widget
+	#  		color = CONNECTOR_WIDGET_COLOR if self.selected == index else GRAPH_BACKGROUND_COLOR
+	# 
+	# 	self.statusWidget.configure(bg=color)
 
-		for i in self.widgetFrames[index]: i.configure(bg=color)
-
-	def frameInteraction(self, event, index, bg):
-		color = CONNECTOR_WIDGET_COLOR
-
-		if event.type == 4 :	# if a button is clicked
-			self.clearWidgetColors()
-			self.selected = index
-	 		self.switchConnections(self.selected)
-	 		self.graph.a.clear()
-
-	 	if event.type == 7 :	# if the mouse enters the widget
-	 		color = CONNECTOR_WIDGET_COLOR if self.selected == index else GRAPH_BACKGROUND_COLOR
-
-	 	if event.type == 8 :	# if the mouse exits the widget
-	 		color = CONNECTOR_WIDGET_COLOR if self.selected == index else GRAPH_BACKGROUND_COLOR
-
-	 	for i in self.widgetFrames[index]: i.configure(bg=color)
-
-	def clearWidgetColors(self):
-	 	for i in self.widgetFrames:
-	 		for j in i:
-	 			j.configure(bg=GRAPH_BACKGROUND_COLOR)
+	# def clearWidgetColors(self):
+	#  	self.statusWidget.configure(bg=MAIN_BACKGROUND_COLOR)
 
 	# ------------- #
 
@@ -368,23 +371,18 @@ class Monitor():
 		self.temperatureEntry.insert(0, self.application.c.connections[self.selected].temperatureValue)
 		self.temperatureEntry.config(fg=TEXT_COLOR)
 
-	def updateStatus(self):
-		if len(self.application.c.connections) == 0:
-			return
-
-		self.widgetFrames[self.selected][2]['fg'] = GREEN
-		self.widgetFrames[self.selected][2]['text'] = 'Status: Connected'
-		self.application.c.connections[self.selected].currentAck = 0
+	# def updateStatus(self):
+	# 	if len(self.application.c.connections) == 0:
+	# 		return
+	# 
+	# 	self.statusWidget[2]['fg'] = GREEN
+	# 	self.statusWidget[2]['text'] = 'Status: Connected'
+	# 	self.application.c.connections[self.selected].currentAck = 0
 
 	# ------------- #
 
-	def clearWidgets(self):
-		for i in self.widgetFrames:
-			for j in i:
-				j.destroy()
-
-		self.widgetFrames = []
-		self.selected = 0
+	# def clearStatus(self):
+	#  	self.statusWidget.destroy()
 
 	def runSetup(self):
 		self.setup()
@@ -396,7 +394,7 @@ class Monitor():
 	# ------------- #
 
 	def run(self):
-		print("self.Monitor.run() about to run")
+		print("Monitor.run() about to run")
 		self.setupButtons()
 
 		# Button Images
@@ -408,14 +406,13 @@ class Monitor():
 		self.syncButton.pack(side="bottom")
 		self.syncButton.config(image=sync_image_for_button) 
 		
-		print("self.graph = Graph(self) about to run")
+		print("Monitor.graph = Graph(self) about to run")
 		self.graph = Graph(self)
-		print("self.graph = Graph(self) ran")
+		print("Monitor.graph = Graph(self) ran")
 		self.graph.run()
-		print("self.graph.run() ran")
+		print("Monitor.graph.run() ran")
 		ani = animation.FuncAnimation(self.graph.f, self.graph.animate, interval=1000)
-		print("self.root.mainloop() about to run")
+		print("Monitor.root.mainloop() about to run")
 		self.root.mainloop()
-		print("self.root.mainloop() ran")
-		print("yeet")
+		print("Monitor.root.mainloop() ran")
 
