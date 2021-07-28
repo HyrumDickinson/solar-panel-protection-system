@@ -35,6 +35,7 @@ class Application:
 	# ----------------- #
 
 	def commands(self):
+		print("Main.commands (thread t2) began running")
 		self.conn = sqlite3.connect('solarPanel.db') # opens connection to SQLite database
 		cursor = self.conn.cursor()	
 		
@@ -123,7 +124,7 @@ class Application:
 				if self.command == 'sync':
 					self.c.clear()
 					self.Monitor.clearWidgets()
-					self.Monitor.updateWidgets()
+					# self.Monitor.updateWidgets()
 					self.c.connect()
 					self.Monitor.updateWidgets()
 					for i in range(0, len(self.c.connections)):
@@ -134,10 +135,13 @@ class Application:
 	# ----------------- #
 
 	def receiver(self):
-		self.c.connect()
+		print("Main.receiver (thread t1) began running")
+		self.c.connect() # this command is definately running. therefore the connection problem must be with the command itself, not the way it is executed
 		self.Monitor.updateWidgets()
-
-		while True:
+		# counter = 0 # * debugger line
+		while True: # ! this function attempts to send and receive data from its connections as fast as possible. perhaps we should implement a delay?
+			# counter+=1 # * debugger line
+			# print("there are " + str(self.c.connections) + " connections (send/receive #" + str(counter) + ")") # * debugger line
 			for i in self.c.connections:
 				if i.isConnected and self.command != 'sync' and self.command != 'quit':
 					# SEND
@@ -209,21 +213,21 @@ class Application:
 	# ----------------- #
 
 	def run(self, Monitor):
-		print("Main.run() about to run")
-		t1 = threading.Thread(target=self.receiver, args=())
-		print("t1 = threading.Thread(target=self.receiver, args=()) ran")
-		t2 = threading.Thread(target=self.commands, args=())
-		print("t2 = threading.Thread(target=self.commands, args=()) ran")
+		print("Application.run() about to run")
+		t1 = threading.Thread(target=self.receiver)
+		print("t1 = threading.Thread(target=self.receiver) ran")
+		t2 = threading.Thread(target=self.commands)
+		print("t2 = threading.Thread(target=self.commands) ran")
 		self.Monitor = Monitor
-		print("self.Monitor = Monitor ran")
+		print("Application.Monitor = Monitor ran")
 		self.Monitor.runSetup()
-		print("self.Monitor.runSetup() ran")
+		print("Application.Monitor.runSetup() ran")
 		t1.start()
 		print("t1.start() ran")
 		t2.start()
 		print("t2.start() ran")
 		self.Monitor.run()
-		print("self.Monitor.run()")
+		print("Application.Monitor.run()")
 		t1.join()
 		print("t1.join() ran")
 		t2.join()
@@ -235,6 +239,7 @@ if __name__ == "__main__":
 	print("a = Application() ran")
 	m = Monitor(a)
 	print("m = Monitor(a) ran")
+	print("a.run(m) about to run")
 	a.run(m)
-	print("application ran")
+	print("a.run(m) ran")
 
