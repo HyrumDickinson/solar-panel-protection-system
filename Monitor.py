@@ -118,23 +118,23 @@ class Monitor():
 		configFrame2.pack(side="left", pady=2.5)
 
 		# Output Configuration
+		A = TEXT_COLOR
+		B = WIDGET_BACKGROUND_COLOR
+		C = ACTIVE_BUTTON_COLOR
+
 		var4 = tk.IntVar()
-		checkboxD = tk.Checkbutton(configFrame2, text="AD", fg=TEXT_COLOR, bg=WIDGET_BACKGROUND_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, 
-								   variable=var4, command=lambda: self.updateCheckbox(3))
+		checkboxD = tk.Checkbutton(configFrame2, text="AD", fg=A, bg=B, activeforeground=A, activebackground=C, variable=var4, command=lambda: self.updateCheckbox(3))
 		checkboxD.pack(side="bottom", pady=2.5)
 		var3 = tk.IntVar()
-		checkboxC = tk.Checkbutton(configFrame2, text="BC", fg=TEXT_COLOR, bg=WIDGET_BACKGROUND_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, 
-								   variable=var3, command=lambda: self.updateCheckbox(2))
+		checkboxC = tk.Checkbutton(configFrame2, text="BC", fg=A, bg=B, activeforeground=A, activebackground=C, variable=var3, command=lambda: self.updateCheckbox(2))
 		checkboxC.pack(side="bottom", pady=2.5)
 		var2 = tk.IntVar()
-		checkboxB = tk.Checkbutton(configFrame2, text="CD", fg=TEXT_COLOR, bg=WIDGET_BACKGROUND_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, 
-								   variable=var2, command=lambda: self.updateCheckbox(1))
+		checkboxB = tk.Checkbutton(configFrame2, text="CD", fg=A, bg=B, activeforeground=A, activebackground=C, variable=var2, command=lambda: self.updateCheckbox(1))
 		checkboxB.pack(side="bottom", pady=2.5)
 		var1 = tk.IntVar()
-		checkboxA = tk.Checkbutton(configFrame2, text="XX", fg=TEXT_COLOR, bg=WIDGET_BACKGROUND_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, 
-								   variable=var1, command=lambda: self.updateCheckbox(0))
+		checkboxA = tk.Checkbutton(configFrame2, text="XX", fg=A, bg=B, activeforeground=A, activebackground=C, variable=var1, command=lambda: self.updateCheckbox(0))
 		checkboxA.pack(side="bottom", pady=2.5)
-		configLabel = tk.Label(configFrame1, text="Config Switch: ", fg=TEXT_COLOR, bg=WIDGET_BACKGROUND_COLOR)
+		configLabel = tk.Label(configFrame1, text="Config Switch: ", fg=A, bg=B)
 		configLabel.pack(side="bottom")
 		self.vars = [var1, var2, var3, var4]
 
@@ -145,57 +145,50 @@ class Monitor():
 
 	def setupButtons(self):
 
-		# the two lines below add a sync button. However, it's an ugly one, and furthurmore there's already
-		# a sync button in the form of sync.png
+		A = TEXT_COLOR
+		B = WIDGET_BACKGROUND_COLOR
+		C = ACTIVE_BUTTON_COLOR
+		D = INACTIVE_BUTTON_COLOR
 
-		# self.syncButton = tk.Button(self.syncFrame, text='sync', highlightbackground=WIDGET_BACKGROUND_COLOR, font=20, command=lambda: self.application.inputting('sync'))
-		# self.syncButton.pack(side="bottom", padx=40)
-
-		TripPointEntryButton = tk.Button(self.TripPointFrame_3, text="OK", fg=TEXT_COLOR, bg=INACTIVE_BUTTON_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=40, 
-										 command=lambda: self.application.TripPointInputting(self.voltageEntry.get(), self.currentEntry.get(), self.temperatureEntry.get(), self.selected))
+		TripPointEntryButton = tk.Button(self.TripPointFrame_3, text="OK", fg=A, bg=D, activeforeground=A, activebackground=C, font=40, command=lambda: self.application.TripPointInputting(self.voltageEntry.get(), self.currentEntry.get(), self.temperatureEntry.get(), self.selected))
 		TripPointEntryButton.pack(side="left", padx=30)
 
-		manualConfigFrame = tk.Frame(self.configFrame, bg=WIDGET_BACKGROUND_COLOR)
+		manualConfigFrame = tk.Frame(self.configFrame, bg=B)
 		manualConfigFrame.pack(side="top", pady=2.5)
-		self.toggleManualSwitchButton = tk.Button(manualConfigFrame, text="ON", fg=TEXT_COLOR, bg=INACTIVE_BUTTON_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=40, 
-												  command=lambda: self.application.manualSwitchInputting(self.selected))
+		self.toggleManualSwitchButton = tk.Button(manualConfigFrame, text="ON", fg=A, bg=D, activeforeground=A, activebackground=C, font=40, command=lambda: self.application.manualSwitchInputting(self.selected))
 		self.toggleManualSwitchButton.pack(side="right", pady=5, padx=5)
-		manualConfigLabel = tk.Label(manualConfigFrame, text="Manual Switch: ", fg=TEXT_COLOR, bg=WIDGET_BACKGROUND_COLOR)
+		manualConfigLabel = tk.Label(manualConfigFrame, text="Manual Switch: ", fg=A, bg=WIDGET_BACKGROUND_COLOR)
 		manualConfigLabel.pack(side="right")
 
 	def setupQueryButtons(self):
 		print("Monitor.queryButtonFrame created") # * debugger line
+
+		A = TEXT_COLOR
+		B = WIDGET_BACKGROUND_COLOR
+		C = ACTIVE_BUTTON_COLOR
+		D = INACTIVE_BUTTON_COLOR
+
 		queryButtonFrame = tk.Frame(self.dataFrame, bg=WIDGET_BACKGROUND_COLOR)
 		queryButtonFrame.pack(side="bottom")
-		v1Button = tk.Button(queryButtonFrame, text="V1", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, 
-							 command=lambda: self.graph.setField('voltage_1'))
+		v1Button = tk.Button(queryButtonFrame, text="V1", fg=A, background=D, activeforeground=A, activebackground=C, font=30, command=lambda: self.graph.setField('voltage_1'))
 		v1Button.pack(side="left", pady=15)
-		v2Button = tk.Button(queryButtonFrame, text="V2", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, 
-							 command=lambda: self.graph.setField('voltage_2'))
+		v2Button = tk.Button(queryButtonFrame, text="V2", fg=A, background=D, activeforeground=A, activebackground=C, font=30, command=lambda: self.graph.setField('voltage_2'))
 		v2Button.pack(side="left")
-		v3Button = tk.Button(queryButtonFrame, text="V3", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, 
-							 command=lambda: self.graph.setField('voltage_3'))
+		v3Button = tk.Button(queryButtonFrame, text="V3", fg=A, background=D, activeforeground=A, activebackground=C, font=30, command=lambda: self.graph.setField('voltage_3'))
 		v3Button.pack(side="left")
-		c1Button = tk.Button(queryButtonFrame, text="C1", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, 
-							 command=lambda: self.graph.setField('current_1'))
+		c1Button = tk.Button(queryButtonFrame, text="C1", fg=A, background=D, activeforeground=A, activebackground=C, font=30, command=lambda: self.graph.setField('current_1'))
 		c1Button.pack(side="left")
-		t1Button = tk.Button(queryButtonFrame, text="T1", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, 
-							 command=lambda: self.graph.setField('temperature_1'))
+		t1Button = tk.Button(queryButtonFrame, text="T1", fg=A, background=D, activeforeground=A, activebackground=C, font=30, command=lambda: self.graph.setField('temperature_1'))
 		t1Button.pack(side="left")
-		t2Button = tk.Button(queryButtonFrame, text="T2", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, 
-							 command=lambda: self.graph.setField('temperature_2'))
+		t2Button = tk.Button(queryButtonFrame, text="T2", fg=A, background=D, activeforeground=A, activebackground=C, font=30, command=lambda: self.graph.setField('temperature_2'))
 		t2Button.pack(side="left")
-		t3Button = tk.Button(queryButtonFrame, text="T3", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, 
-							 command=lambda: self.graph.setField('temperature_3'))
+		t3Button = tk.Button(queryButtonFrame, text="T3", fg=A, background=D, activeforeground=A, activebackground=C, font=30, command=lambda: self.graph.setField('temperature_3'))
 		t3Button.pack(side="left")
-		t4Button = tk.Button(queryButtonFrame, text="T4", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, 
-							 command=lambda: self.graph.setField('temperature_4'))
+		t4Button = tk.Button(queryButtonFrame, text="T4", fg=A, background=D, activeforeground=A, activebackground=C, font=30, command=lambda: self.graph.setField('temperature_4'))
 		t4Button.pack(side="left")
-		t5Button = tk.Button(queryButtonFrame, text="T5", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, 
-							 command=lambda: self.graph.setField('temperature_5'))
+		t5Button = tk.Button(queryButtonFrame, text="T5", fg=A, background=D, activeforeground=A, activebackground=C, font=30, command=lambda: self.graph.setField('temperature_5'))
 		t5Button.pack(side="left")
-		t6Button = tk.Button(queryButtonFrame, text="T6", fg=TEXT_COLOR, background=INACTIVE_BUTTON_COLOR, activeforeground=TEXT_COLOR, activebackground=ACTIVE_BUTTON_COLOR, font=30, 
-							 command=lambda: self.graph.setField('temperature_6'))
+		t6Button = tk.Button(queryButtonFrame, text="T6", fg=A, background=D, activeforeground=A, activebackground=C, font=30, command=lambda: self.graph.setField('temperature_6'))
 		t6Button.pack(side="left")
 
 	def setup(self):			
@@ -253,11 +246,13 @@ class Monitor():
 				# '<Enter>' means the mouse pointer entered the widget
 				# '<Leave>' means the mouse pointer left the widget
 				# Why does self.statusWidget have the same action bound to it when the mouse enters and when the mouse leaves?
-				# What the fuck does that whole block of code above me even do? It only seems to interact with the connection status displays... and I only want one of those to show at a time anyway.
+				# What the fuck does that whole block of code above me even do? It only seems to interact with the connection status displays... 
+				# and I only want one of those to show at a time anyway.
 				# Why are we making an array of connection status displays lmao like wtf
 
 				# Nevermind, I think I figured out what this does - it looks like it displays each connection (maybe an individual one for each solar panel?) and 
-				# allows you to show individual data for any one of them simply by clicking on it. I won't know for sure until I've had a chance to hook this up to the actual solar panels though.
+				# allows you to show individual data for any one of them simply by clicking on it. I won't know for sure until I've had a chance to hook this up 
+				# to the actual solar panels though.
 
 	# ------------- #
 
