@@ -203,10 +203,11 @@ class Monitor():
 		self.setupQueryButtons()
 
 	def updateStatus(self):
-		connLength = len(self.application.c.connections)
+		# connLength = len(self.application.c.connections)
 
-		if connLength == 0:
-			BACKGROUND = WIDGET_BACKGROUND_COLOR
+		BACKGROUND = WIDGET_BACKGROUND_COLOR
+
+		if self.application.c.isConnected == False:
 
 			# Frame for Widget
 			self.statusWidget = tk.Frame(self.connFrame, bg=BACKGROUND)
@@ -217,58 +218,56 @@ class Monitor():
 			ipStatus = tk.Label(self.statusWidget, text="Status: Not Connected", fg=RED, bg=BACKGROUND, font='TkDefaultFont 8 bold')
 			ipStatus.pack(side="bottom", fill="x", padx=5, pady=5)
 
-		else :
-			for i in range(0, connLength):
-				BACKGROUND = GRAPH_BACKGROUND_COLOR if i == 0 else WIDGET_BACKGROUND_COLOR
+		else:
 
-				# Frame for Widget
-				self.statusWidget = tk.Frame(self.connFrame, bg=BACKGROUND)
-				self.statusWidget.pack(side="top", fill="x")
-				print("a new status widget was created") # * debugger line
+			# Frame for Widget
+			self.statusWidget = tk.Frame(self.connFrame, bg=BACKGROUND)
+			self.statusWidget.pack(side="top", fill="x")
+			print("a new status widget was created") # * debugger line
 
-				# IP Label
-				ipLabel = tk.Label(self.statusWidget, text='IP: ' + self.application.c.connections[i].ip, fg=GREEN, bg=BACKGROUND, font='TkDefaultFont 8')
-				ipLabel.pack(side="top", fill="x", padx=10, pady=5)
-			
-				# IP Status
-				ipStatus = tk.Label(self.statusWidget, text="Status: Connected", fg=GREEN, bg=BACKGROUND, font='TkDefaultFont 8 bold')
-				ipStatus.pack(side="bottom", fill="x", padx=10, pady=5)
+			# IP Label
+			ipLabel = tk.Label(self.statusWidget, text='IP: ' + self.application.c.connection.ip, fg=GREEN, bg=BACKGROUND, font='TkDefaultFont 8')
+			ipLabel.pack(side="top", fill="x", padx=10, pady=5)
+		
+			# IP Status
+			ipStatus = tk.Label(self.statusWidget, text="Status: Connected", fg=GREEN, bg=BACKGROUND, font='TkDefaultFont 8 bold')
+			ipStatus.pack(side="bottom", fill="x", padx=10, pady=5)
 
-				# self.widgetFrames.append([self.statusWidget, ipLabel, ipStatus]) # * delete this line if widgetFrames[] --> statusWidget rewrite works
-				# index = len(self.widgetFrames) - 1 # * and this one
-				# self.statusWidget.bind('<Button-1>', lambda event, statusWidget.frameInteraction(event, BACKGROUND))
-				# ipLabel.bind('<Button-1>', lambda event, self.labelInteraction(event))
-				# ipStatus.bind('<Button-1>', lambda event, self.labelInteraction(event))
-				# self.statusWidget.bind("<Enter>", lambda event, self.frameInteraction(event, BACKGROUND))
-				# self.statusWidget.bind("<Leave>", lambda event, self.frameInteraction(event, BACKGROUND))
+			# self.widgetFrames.append([self.statusWidget, ipLabel, ipStatus]) # * delete this line if widgetFrames[] --> statusWidget rewrite works
+			# index = len(self.widgetFrames) - 1 # * and this one
+			# self.statusWidget.bind('<Button-1>', lambda event, statusWidget.frameInteraction(event, BACKGROUND))
+			# ipLabel.bind('<Button-1>', lambda event, self.labelInteraction(event))
+			# ipStatus.bind('<Button-1>', lambda event, self.labelInteraction(event))
+			# self.statusWidget.bind("<Enter>", lambda event, self.frameInteraction(event, BACKGROUND))
+			# self.statusWidget.bind("<Leave>", lambda event, self.frameInteraction(event, BACKGROUND))
 
-				# '<Button-1>' references a right click of the mouse
-				# '<Enter>' means the mouse pointer entered the widget
-				# '<Leave>' means the mouse pointer left the widget
-				# Why does self.statusWidget have the same action bound to it when the mouse enters and when the mouse leaves?
-				# What the fuck does that whole block of code above me even do? It only seems to interact with the connection status displays... 
-				# and I only want one of those to show at a time anyway.
-				# Why are we making an array of connection status displays lmao like wtf
+			# '<Button-1>' references a right click of the mouse
+			# '<Enter>' means the mouse pointer entered the widget
+			# '<Leave>' means the mouse pointer left the widget
+			# Why does self.statusWidget have the same action bound to it when the mouse enters and when the mouse leaves?
+			# What the fuck does that whole block of code above me even do? It only seems to interact with the connection status displays... 
+			# and I only want one of those to show at a time anyway.
+			# Why are we making an array of connection status displays lmao like wtf
 
-				# Nevermind, I think I figured out what this does - it looks like it displays each connection (maybe an individual one for each solar panel?) and 
-				# allows you to show individual data for any one of them simply by clicking on it. I won't know for sure until I've had a chance to hook this up 
-				# to the actual solar panels though.
+			# Nevermind, I think I figured out what this does - it looks like it displays each connection (maybe an individual one for each solar panel?) and 
+			# allows you to show individual data for any one of them simply by clicking on it. I won't know for sure until I've had a chance to hook this up 
+			# to the actual solar panels though.
 
 	# ------------- #
 
-	def switchConnections(self, i):
+	def switchConnections(self):
 		# Change checkbox
-		self.updateCheckbox(self.application.c.connections[i].configSwitch)
+		self.updateCheckbox(self.application.c.connection.configSwitch)
 
 		# Change Trip Point values
 		self.voltageEntry.delete(0, "end")
-		self.voltageEntry.insert(0, self.application.c.connections[i].voltageValue)
+		self.voltageEntry.insert(0, self.application.c.connection.voltageValue)
 		self.voltageEntry.config(fg=TEXT_COLOR)
 		self.currentEntry.delete(0, "end")
-		self.currentEntry.insert(0, self.application.c.connections[i].currentValue)
+		self.currentEntry.insert(0, self.application.c.connection.currentValue)
 		self.currentEntry.config(fg=TEXT_COLOR)
 		self.temperatureEntry.delete(0, "end")
-		self.temperatureEntry.insert(0, self.application.c.connections[i].temperatureValue)
+		self.temperatureEntry.insert(0, self.application.c.connection.temperatureValue)
 		self.temperatureEntry.config(fg=TEXT_COLOR)
 
 	def updateCheckbox(self, i):
@@ -330,7 +329,7 @@ class Monitor():
 			self.temperatureEntry.config(bg=INACTIVE_BUTTON_COLOR, fg=TEXT_COLOR)
 
 	def on_focusout(self, event, i):
-		if len(self.application.c.connections) == 0:
+		if self.application.c.isconnected == False:
 			if i == 0:
 				if self.voltageEntry.get() == '':
 					self.voltageEntry.insert(0, DEFAULT_VOLTAGE_TRIP_POINT)
@@ -346,24 +345,24 @@ class Monitor():
 		else:
 			if i == 0:
 				if self.voltageEntry.get() == '':
-					self.voltageEntry.insert(0, self.application.c.connections[self.selected].voltageValue)
+					self.voltageEntry.insert(0, self.application.c.connection.voltageValue)
 					self.voltageEntry.config(fg=TEXT_COLOR)
 			if i == 1:
 				if self.currentEntry.get() == '':
-					self.currentEntry.insert(0, self.application.c.connections[self.selected].currentValue)
+					self.currentEntry.insert(0, self.application.c.connection.currentValue)
 					self.currentEntry.config(fg=TEXT_COLOR)
 			if i == 2:
 				if self.temperatureEntry.get() == '':
-					self.temperatureEntry.insert(0, self.application.c.connections[self.selected].temperatureValue)
+					self.temperatureEntry.insert(0, self.application.c.connection.temperatureValue)
 					self.temperatureEntry.config(fg=TEXT_COLOR)
 
 	def updateEntries(self):
 		self.voltageEntry.delete(0, "end")
-		self.voltageEntry.insert(0, self.application.c.connections[self.selected].voltageValue)
+		self.voltageEntry.insert(0, self.application.c.connection.voltageValue)
 		self.voltageEntry.config(fg=TEXT_COLOR)
 
 		self.currentEntry.delete(0, "end")
-		self.currentEntry.insert(0, self.application.c.connections[self.selected].currentValue)
+		self.currentEntry.insert(0, self.application.c.connection.currentValue)
 		self.currentEntry.config(fg=TEXT_COLOR)
 
 		self.temperatureEntry.delete(0, "end")

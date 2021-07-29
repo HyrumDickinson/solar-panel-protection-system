@@ -47,8 +47,8 @@ class Graph:
 
 
 	def animate(self, i):
-		if len(self.Monitor.application.c.connections) > 0:
-			dataList = self.getData(self.Monitor.application.c.connections[self.Monitor.selected].ip)
+		if self.Monitor.application.c.connection.isConnected == True:
+			dataList = self.getData(self.Monitor.application.c.connection.ip)
 			xList = []
 			yList = []
 			for i in dataList:
@@ -61,7 +61,7 @@ class Graph:
 			self.a.plot_date(xList, yList, color=TEXT_COLOR, fmt='-r')
 			self.a.xaxis.set_major_formatter(mdates.DateFormatter('%M:%S'))
 			# self.a.tick_params(axis='both', which='major', labelsize=8, color=GREEN)
-			self.getLastData(self.Monitor.application.c.connections[self.Monitor.selected].ip)
+			self.getLastData(self.Monitor.application.c.connection.ip)
 
 	def getData(self, ip):
 		conn = sqlite3.connect('solarPanel.db')
@@ -124,7 +124,7 @@ class Graph:
 			conn.commit()
 			c += 1
 
-		currentConfig = self.Monitor.application.c.connections[self.Monitor.selected].configSwitch
+		currentConfig = self.Monitor.application.c.connection.configSwitch
 		cursor.execute('SELECT current_1 FROM voltages WHERE (:ip) ORDER BY timeRecorded DESC LIMIT 1',
 		{
 			'ip': ip,

@@ -64,34 +64,34 @@ class Application:
 
 					# Switch relay configuration if trip point reached
 					currConnection = self.c.findConnection(self.lastIP)
-					if currConnection != -1 and self.c.connections[currConnection].configSwitch != packet["S"] and packet["X"] != 0:
+					if currConnection != -1 and self.c.connection.configSwitch != packet["S"] and packet["X"] != 0:
 						self.Monitor.updateCheckbox(packet["S"])
 
-					if packet["X"] != 0 and self.c.connections[currConnection].manualSwitch == 0:
-						self.c.connections[currConnection].currentAck = 1
+					if packet["X"] != 0 and self.c.connection.manualSwitch == 0:
+						self.c.connection.currentAck = 1
 						
 						if packet["X"] == 1:
-							self.Monitor.widgetFrames[currConnection][2]['fg'] = RED
-							self.Monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Voltage'
+							self.Monitor.updateStatus[2]['fg'] = RED
+							self.Monitor.updateStatus[2]['text'] = 'Status: Over-Voltage'
 						if packet["X"] == 2:
-							self.Monitor.widgetFrames[currConnection][2]['fg'] = RED
-							self.Monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Current'
+							self.Monitor.updateStatus[2]['fg'] = RED
+							self.Monitor.updateStatus[2]['text'] = 'Status: Over-Current'
 						if packet["X"] == 3:
-							self.Monitor.widgetFrames[currConnection][2]['fg'] = RED
-							self.Monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Heating'
+							self.Monitor.updateStatus[2]['fg'] = RED
+							self.Monitor.updateStatus[2]['text'] = 'Status: Over-Heating'
 
-					if self.c.connections[currConnection].manualSwitch == 1:
+					if self.c.connection.manualSwitch == 1:
 						self.Monitor.updateCheckbox(packet["S"])
 
 						if packet["X"] == 1:
-							self.Monitor.widgetFrames[currConnection][2]['fg'] = RED
-							self.Monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Voltage'
+							self.Monitor.updateStatus[2]['fg'] = RED
+							self.Monitor.updateStatus[2]['text'] = 'Status: Over-Voltage'
 						if packet["X"] == 2:
-							self.Monitor.widgetFrames[currConnection][2]['fg'] = RED
-							self.Monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Current'
+							self.Monitor.updateStatus[2]['fg'] = RED
+							self.Monitor.updateStatus[2]['text'] = 'Status: Over-Current'
 						if packet["X"] == 3:
-							self.Monitor.widgetFrames[currConnection][2]['fg'] = RED
-							self.Monitor.widgetFrames[currConnection][2]['text'] = 'Status: Over-Heating'
+							self.Monitor.updateStatus[2]['fg'] = RED
+							self.Monitor.updateStatus[2]['text'] = 'Status: Over-Heating'
 
 					cursor.execute("INSERT INTO voltages VALUES (:timeRecorded, :ip, :voltage_1, :voltage_2, :voltage_3, :current_1, :temperature_1, :temperature_2, :temperature_3, :temperature_4, :temperature_5, :temperature_6)", 
 					{
@@ -118,8 +118,7 @@ class Application:
 				if self.command == 'quit':
 					self.conn.close()
 					self.Monitor.root.quit()
-					for i in self.c.connections:
-						i.socket.close()
+					self.c.connection.socket.close()
 					return					
 				if self.command == 'sync':
 					self.c.clear()
@@ -129,7 +128,7 @@ class Application:
 					
 					self.Monitor.updateStatus()
 					# self.Monitor.clearStatus() 
-					for i in range(0, len(self.c.connections)):
+					for i in range(0, 4):
 						self.Monitor.updateCheckbox(i)
 
 				self.command = None
@@ -141,32 +140,33 @@ class Application:
 		self.c.connect() # this command is definately running. therefore the connection problem must be with the command itself, not the way it is executed
 		# self.Monitor.updateStatus()
 		# counter = 0 # * debugger line
-		while True: # ! this function attempts to send and receive data from its connections as fast as possible. perhaps we should implement a delay?
+		while True: # ! this function attempts to send and receive data from the arduino as fast as possible. perhaps we should implement a delay?
 			# counter+=1 # * debugger line
-			# print("there are " + str(self.c.connections) + " connections (send/receive #" + str(counter) + ")") # * debugger line
-			for i in self.c.connections:
-				if i.isConnected and self.command != 'sync' and self.command != 'quit':
-					# SEND
-					data = {}
-					data['V'] = i.voltageValue
-					data['C'] = i.currentValue
-					data['T'] = i.temperatureValue
-					data['S'] = i.configSwitch
-					data['M'] = i.manualSwitch
-					data['ACK'] = i.currentAck
-					i.socket.send(json.dumps(data))
-					# RECEIVE
-					try:
-						self.lastData = i.socket.recv(BUFFER_SIZE)
-						self.lastIP = i.ip
-					except:
+			# print("there is " + str(self.c.connection.isConnection) + " a connection (send/receive #" + str(counter) + ")") # * debugger line
+			
+			if self.c.connection.isConnected and self.command != 'sync' and self.command != 'quit':
+				# SEND
+				data = {}
+				data['V'] = self.c.connection.voltageValue
+				data['C'] = self.c.connection.currentValue
+				data['T'] = self.c.connection.temperatureValue
+				data['S'] = self.c.connection.configSwitch
+				data['M'] = self.c.connection.manualSwitch
+				data['ACK'] = self.c.connection.currentAck
+				self.c.connection.socket.send(json.dumps(data))
+				# RECEIVE
+				try:
+					self.lastData = self.c.connection.socket.recv(BUFFER_SIZE)
+					self.lastIP = self.c.connection.ip
+				except:
 
-						print("Timed out.")
-				elif not i.isConnected and self.command != 'sync' and self.command != 'quit':
-					print("No connection")
 					print("Timed out.")
-				elif not i.isConnected and self.command != 'sync' and self.command != 'quit':
-					print("No connection")
+				print("THERE IS A CONNECTION")
+			elif not self.c.connection.isConnected and self.command != 'sync' and self.command != 'quit':
+				# print("No connection")
+				# print("Timed out.")
+				print("THERE IS NO CONNECTION")
+				return
 
 			if self.command == 'quit':
 				return
@@ -177,33 +177,33 @@ class Application:
 		self.command = command
 
 	def TripPointInputting(self, voltageValue, currentValue, temperatureValue, i):
-		if len(self.c.connections) == 0:
+		if self.c.connection.isConnected == False:
 			return
 
 		try:
-			self.c.connections[i].voltageValue = max(min(float(voltageValue), MAX_VOLTAGE_TRIP_POINT), MIN_VOLTAGE_TRIP_POINT)
-			self.c.connections[i].currentValue = max(min(float(currentValue), MAX_CURRENT_TRIP_POINT), MIN_CURRENT_TRIP_POINT)
-			self.c.connections[i].temperatureValue = max(min(float(temperatureValue), MAX_TEMPERATURE_TRIP_POINT), MIN_TEMPERATURE_TRIP_POINT)
+			self.c.connection.voltageValue = max(min(float(voltageValue), MAX_VOLTAGE_TRIP_POINT), MIN_VOLTAGE_TRIP_POINT)
+			self.c.connection.currentValue = max(min(float(currentValue), MAX_CURRENT_TRIP_POINT), MIN_CURRENT_TRIP_POINT)
+			self.c.connection.temperatureValue = max(min(float(temperatureValue), MAX_TEMPERATURE_TRIP_POINT), MIN_TEMPERATURE_TRIP_POINT)
 		except:
 			pass
 
 		self.Monitor.updateEntries()
 
 	def configSwitchInputting(self, connection, i):
-		if len(self.c.connections) == 0:
+		if self.c.connection.isConnected == False:
 			return
-		self.c.connections[connection].configSwitch = i
+		self.c.connection.configSwitch = i
 
 	def manualSwitchInputting(self, i):
-		if len(self.c.connections) == 0:
+		if self.c.connection.isConnected == False:
 			return
 
 		self.Monitor.updateStatus()
-		if self.c.connections[i].manualSwitch == 0:
-			self.c.connections[i].manualSwitch = 1
+		if self.c.connection.manualSwitch == 0:
+			self.c.connection.manualSwitch = 1
 			self.Monitor.toggleManualSwitchButton['text'] = 'OFF'
 		else:
-			self.c.connections[i].manualSwitch = 0
+			self.c.connection.manualSwitch = 0
 			self.Monitor.toggleManualSwitchButton['text'] = 'ON'
 
 	def formatSelect(self, input):

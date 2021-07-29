@@ -6,7 +6,7 @@ class Connection:
 		# Connection values
 		self.socket = socket
 		self.ip = ip
-		self.port = port
+		self.port = port 
 		self.isConnected = isConnected
 
 		# Values to configure
