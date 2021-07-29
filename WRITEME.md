@@ -115,7 +115,7 @@ https://github.com/gmag11/painlessMesh/tree/master/examples
 - [X] **Hyrum Dickinson** - `main` - Reformatted connection status messages to compliment new light blue background.
 - [X] **Hyrum Dickinson** - `main` - Set checkboxes to highlight larger area when pressed.
 - [X] **Hyrum Dickinson** - `main` - Made graph fit with new aesthetic.
-- [ ] **Hyrum Dickinson** - `main` - Need Kevin to choose main background color from four ready-to-go options. Once the color scheme is decided, the GUI look and feel overhaul will be complete. I still have some functionality quicks to fix, but the user interface of the GUI should stay the same from here on out - once Kevin's picked the color scheme.
+- [X] **Hyrum Dickinson** - `main` - GUI look and feel complete
 
 ### 7-26-2021
 - [X] **Ben Olaivar** - `arduino_dev` - forgot to update WRITEME. What has been done so far is listed below
@@ -124,4 +124,8 @@ https://github.com/gmag11/painlessMesh/tree/master/examples
 - [X] **Ben Olaivar** - `arduino_dev` - The main node successfully works with ethernet sending data. It needs to be updated to receive commands and send them to their respective panel. Additionally, it needs to be updated to automatically send shutdown commands.
 - [ ] **Ben Olaivar** - `arduino_dev` - Encorporate relay control and voltage/current sensor code on node size
 - [ ] **Ben Olaivar** - `arduino_dev` - Encorporate commands on both node and main boxes. (node may only need shutdown command)
+
+### 7-26-2021
+- [X] **Hyrum Dickinson** - `main` - Python program now searches for and connects to one hardcoded ip address rather than supporting an array of multiple simultaneous connections. 
+- [ ] **Hyrum Dickinson** - `main` - After going over the design with Ben, I still have a few more changes to make before the program will be ready for connection to an Arduino. I've got to clear out some more bullshit.
 
