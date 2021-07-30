@@ -33,23 +33,25 @@ int node = 1;               // identifier for which node to read from
 StaticJsonDocument<200> sendJson;       // initializing all the variables (as floats)
 bool sent = true;          // indicates if a message has been sent
 
+int NODE = sendJson("NODE");
 float T1 = sendJson["T1"];
 float T2 = sendJson["T2"];
 float T3 = sendJson["T3"];
-float T4 = sendJson["T4"];
-float T5 = sendJson["T5"];
-float T6 = sendJson["T6"];
+// float T4 = sendJson["T4"];
+// float T5 = sendJson["T5"];
+// float T6 = sendJson["T6"];
 
-float V1 = sendJson["V1"];
-float V2 = sendJson["V2"];
-float V3 = sendJson["V3"];
+// float V1 = sendJson["V1"];
+// float V2 = sendJson["V2"];
+// float V3 = sendJson["V3"];
 
-float C1 = sendJson["C1"];
+// float C1 = sendJson["C1"];
 
 /* RADIO VARIABLES */
 RF24 radio(CE_PIN,CSN_PIN);     // create RF24 radio object using selected CE and CSN pins
 
 byte nodeAddress[5] = {'N','O','D', 0, 1};      // setup radio pipe address for remote sensor node
+sendJson["NODE"] = node;
 
 struct Command_Package {
     bool SHUTDOWN = false;
@@ -58,12 +60,19 @@ struct Data_Package {
   bool overheat = false;
   bool overVolt = false;
   bool overCurr = false;
+
+  float V1 = 0.0;
+  float V2 = 0.0;
+  float V3 = 0.0;
+
+  float C = 0.0;
+
   float T1 = 0.0;
   float T2 = 0.0;
   float T3 = 0.0;
-  float T4 = 0.0;
-  float T5 = 0.0;
-  float T6 = 0.0;
+//   float T4 = 0.0;
+//   float T5 = 0.0;
+//   float T6 = 0.0;
 };
 Command_Package sendCommand;    //TODO: add commands
 Data_Package data;
@@ -71,6 +80,7 @@ Data_Package data;
 /* ETHERNET VARIABLES */
 byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x04};
 IPAddress ip(128, 174, 186, 99);
+//IPAddress ip(192, 162, 1, 6);
 IPAddress gateway(128, 174, 186, 1);
 IPAddress subnet(255, 255, 254, 0);
 EthernetServer server(23); // default is 23
@@ -101,7 +111,7 @@ void radioSetup() {
     radio.setDataRate(RF24_250KBPS);    // set RF datarate - lowest rate for longest range capability
    
     radio.setChannel(0x66);     // set radio channel to use - ensure all slaves match this
-    radio.setRetries(5, 10);    // set time between retries and max no. of retries (time )
+    radio.setRetries(5, 50);    // set time between retries and max no. of retries (time )
     
     radio.enableAckPayload();               // enable ackpayload - enables each slave to reply with data 
     radio.openWritingPipe(nodeAddress);     // setup write pipe to remote node - must match node listen address
@@ -146,10 +156,19 @@ void loop() {
     readRadio();
     
     if (client) {
+        //TODO: Test this with Hyrum
+        // int len - client.available();
+        // if (len > 0) {
+        //     byte buffer[80];
+        //     client.read(buffer, len);
+        // }
+
+        //TODO: end of test section
 
         char sendValue[CAPACITY];               // Serialize JSON Object to char array
         serializeJson(sendJson, sendValue);
-        server.write(sendValue);
+        client.println(sendValue);
+        // server.write(sendValue);
         Serial.println(sendValue);
 
     }
@@ -213,4 +232,5 @@ void changeNode() {
     }
     nodeAddress[3] = node / 10;
     nodeAddress[4] = node % 10;
+    sendJson["NODE"] = node;
 }
