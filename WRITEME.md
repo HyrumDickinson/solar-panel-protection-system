@@ -132,3 +132,8 @@ https://github.com/gmag11/painlessMesh/tree/master/examples
 ### 7-30-2021
 - [X] - We decided to abandon the existing Python GUI and write an original one in Processing
 
+### 8-02-2021
+- [X] **Ben Olaivar** - `main` - added space for processing development in arduino_data test functions 
+- [X] **Ben Olaivar** - `main` - converted main_ethernet to run focused on serial printing for processing
+- [X] **Ben Olaivar** - `main` - updated JSON to only include node number and failed 'sent' status if it fails to connect to a node
+- [ ] **Ben Olaivar** - `main` - frontend having issues overlapping old prints onto the screen
