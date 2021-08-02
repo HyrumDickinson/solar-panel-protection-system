@@ -32,19 +32,20 @@ int node = 1;
 /* JSON VARIABLES */
 StaticJsonDocument<200> sendJson;       // initializing all the variables (as floats)
 bool sent = true;          // indicates if a message has been sent
-// sendJson["NODE"];
-// sendJson["T1"];
-// sendJson["T2"];
-// sendJson["T3"];
-// sendJson["T4"];
-// sendJson["T5"];
-// sendJson["T6"];
 
-// sendJson["V1"];
-// sendJson["V2"];
-// sendJson["V3"];
+int NODE = sendJson["NODE"];
+// float T1 = sendJson["T1"];
+// float T2 = sendJson["T2"];
+// float T3 = sendJson["T3"];
+// float T4 = sendJson["T4"];
+// float T5 = sendJson["T5"];
+// float T6 = sendJson["T6"];
 
-// sendJson["C1"];
+// float V1 = sendJson["V1"];
+// float V2 = sendJson["V2"];
+// float V3 = sendJson["V3"];
+
+// float C1 = sendJson["C1"];
 
 /* RADIO VARIABLES */
 RF24 radio(CE_PIN,CSN_PIN);     // create RF24 radio object using selected CE and CSN pins
@@ -208,14 +209,12 @@ void readRadio() {
                 sendCommand.shutdown = false;
             }
         }
-        sent = true;
         sendJson["sent"] = true;
     } 
     else {
         Serial.println("[-] The transmission to the node failed.  ***********************************");
 
         //TODO: update json accordingly. May not want to change temperature variables though
-        sent = false;
         sendJson["sent"] = false;
     }
     Serial.println("------------------------------------------");
