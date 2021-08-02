@@ -195,13 +195,16 @@ void readTemperatures() {
 
 
 /* Function: radioCheckAndReply
-      sends the preloaded node data over the nrf24l01 radio when
-      a message is received by the master
+  sends the preloaded node data over the nrf24l01 radio when
+  a message is received by the master
 */
 void radioCheckAndReply(void) {
   // check for radio message and send sensor data using auto-ack
   if ( radio.available() ) {
     radio.read( &dataFromMaster, sizeof(dataFromMaster) );
+    if (dataFromMaster.shutdown == true) {
+      Serial.println("SHUTDOWN SHUTDOWN SHUTDOWN");
+    }
     Serial.println("Received request from master - sending preloaded data.");
 
     // update the node count after sending ack payload - provides continually changing data
