@@ -27,34 +27,32 @@
 #define CAPACITY 200    // the number of bytes required for our JSON (we use roughly 200)
 
 /* GENERAL VARIABLES */
-int node = 1;               // identifier for which node to read from
+int node = 1;
 
 /* JSON VARIABLES */
 StaticJsonDocument<200> sendJson;       // initializing all the variables (as floats)
 bool sent = true;          // indicates if a message has been sent
+// sendJson["NODE"];
+// sendJson["T1"];
+// sendJson["T2"];
+// sendJson["T3"];
+// sendJson["T4"];
+// sendJson["T5"];
+// sendJson["T6"];
 
-int NODE = sendJson("NODE");
-float T1 = sendJson["T1"];
-float T2 = sendJson["T2"];
-float T3 = sendJson["T3"];
-// float T4 = sendJson["T4"];
-// float T5 = sendJson["T5"];
-// float T6 = sendJson["T6"];
+// sendJson["V1"];
+// sendJson["V2"];
+// sendJson["V3"];
 
-// float V1 = sendJson["V1"];
-// float V2 = sendJson["V2"];
-// float V3 = sendJson["V3"];
-
-// float C1 = sendJson["C1"];
+// sendJson["C1"];
 
 /* RADIO VARIABLES */
 RF24 radio(CE_PIN,CSN_PIN);     // create RF24 radio object using selected CE and CSN pins
 
 byte nodeAddress[5] = {'N','O','D', 0, 1};      // setup radio pipe address for remote sensor node
-sendJson["NODE"] = node;
 
 struct Command_Package {
-    bool SHUTDOWN = false;
+    bool shutdown = false;
 };
 struct Data_Package {
   bool overheat = false;
@@ -204,16 +202,20 @@ void readRadio() {
             Serial.print("[+] Successfully received data from node.");
             Serial.print("  ---- Temp was: ");
             Serial.println(data.T1);
-            // if (data.T1 > 80) {
-            //     sendCommand.SHUTDOWN = true;
-            // }
+            if (data.T1 > 80) {
+                sendCommand.shutdown = true;
+            } else {
+                sendCommand.shutdown = false;
+            }
         }
+        sent = true;
         sendJson["sent"] = true;
     } 
     else {
         Serial.println("[-] The transmission to the node failed.  ***********************************");
 
         //TODO: update json accordingly. May not want to change temperature variables though
+        sent = false;
         sendJson["sent"] = false;
     }
     Serial.println("------------------------------------------");
