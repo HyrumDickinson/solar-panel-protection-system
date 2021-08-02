@@ -1,11 +1,15 @@
 import processing.serial.*;  // including the serial object libarary
 Button nodeOne;
 Button nodeTwo;
-JSONObject json;
+String tempOne;
+String tempTwo;
+String tempThree;
+String jsonMidParsed;
+JSONObject jsonParsed;
 
 /* SERIAL VARIABLES */
 Serial mySerial;  // creating new serial object
-String jsonPackage = null;    // string that stores serialized incoming json
+String jsonPreParsed = null;    // string that stores serialized incoming json
 int newLine = 10;        // 10 is binary for 'return' or 'new line'.
 float temperature;  // test variable
 
@@ -30,7 +34,7 @@ void draw() {
   fill(0, 102, 153);
   text("Temp 3: ", 400, 150); 
 
-
+  // these functions cause buttons to highlight when clicked
   if (nodeOne.isClicked() == true) {
     nodeOne.Color = color(213, 216, 220);
     delay(50);
@@ -45,8 +49,22 @@ void draw() {
   }
   
   while (mySerial.available() > 0) {
-    jsonPackage = mySerial.readStringUntil(newLine);    // reads until it receives the 'new line' (10) signal
-    String data = "{ \"id\": 0, \"species\": \"Panthera leo\", \"name\": \"Lion\"}";
+    jsonPreParsed = mySerial.readStringUntil(newLine);    // reads until it receives the 'new line' (10) signal
+    if (jsonPreParsed != null) {
+      println("preparsed: " + jsonPreParsed);
+      jsonMidParsed = jsonPreParsed.substring(0, jsonPreParsed.length() - 2);
+      println("midparsed: " + jsonMidParsed);
+      jsonParsed = parseJSONObject(jsonPreParsed);
+      println ("parsed: " + jsonParsed);
+      tempOne = jsonParsed.T1;
+      tempTwo = jsonParsed.T2;
+      tempThree = jsonParsed.T3;
+      println("tempOne: " + tempOne);
+      println("tempTwo: " + tempTwo);
+      println("tempThree: " + tempThree);
+    }
+    
+    // String data = "{ \"id\": 0, \"species\": \"Panthera leo\", \"name\": \"Lion\"}";
     //try {
     //  json = parseJSONObject(data);
     //  String species = json.getString("species");
@@ -55,8 +73,19 @@ void draw() {
     //  print("failed");
     //}
     //JSONObject json = parseJSONObject(jsonPackage);
-    if (jsonPackage != null) {
-      print(jsonPackage);
-    }
+    // print(jsonPackage);
+    //if (jsonPackage != null) {
+    //  String newData = jsonPackage.substring(0, jsonPackage.length() - 2);
+    //  println(newData);
+    //  try {
+    //    json = parseJSONObject(newData);
+    //    float NODE = json.getFloat("NODE");
+    //    print("NODE: ");
+    //    println(NODE);
+    //      text(NODE, 600, 150);
+    //  } catch (Exception e) {
+    //    println("failed");
+    //  }
+    //}
   }
 }
