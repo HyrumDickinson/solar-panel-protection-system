@@ -129,3 +129,6 @@ https://github.com/gmag11/painlessMesh/tree/master/examples
 - [X] **Hyrum Dickinson** - `main` - Python program now searches for and connects to one hardcoded ip address rather than supporting an array of multiple simultaneous connections. 
 - [ ] **Hyrum Dickinson** - `main` - After going over the design with Ben, I still have a few more changes to make before the program will be ready for connection to an Arduino. I've got to clear out some more bullshit.
 
+### 7-30-2021
+- [X] - We decided to abandon the existing Python GUI and write an original one in Processing
+
