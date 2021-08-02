@@ -12,7 +12,7 @@ float temperature;  // test variable
 
 void setup() {
   size(1200, 600);  // siza deez app windows (x and y dimensions of application window)
-  mySerial = new Serial(this, "COM6", 9600);
+  mySerial = new Serial(this, "COM3", 9600);
   newButton = new Button(100, 100, 100, 50, "Node 1", 0, 200, 200);
 }
 
