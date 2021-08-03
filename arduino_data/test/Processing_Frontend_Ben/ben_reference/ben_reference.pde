@@ -15,6 +15,7 @@ float temp1 = 0.0;  // test variable
 float temp2 = 0.0;  // test variable
 float temp3 = 0.0;  // test variable
 boolean sent;
+boolean confirmUpdate;
 
 int newLine = 10;        // 10 is binary for 'return' or 'new line'.
 
@@ -56,28 +57,43 @@ void draw() {
     String newJsonString = jsonPackage.substring(0, jsonPackage.length() - 2);
     println(newJsonString);
     try {
+      background(255, 255, 255);
+      fill(0, 0, 0);
       parsedJson = parseJSONObject(newJsonString);
       println(parsedJson);
       nodeUpdated = parsedJson.getInt("NODE");
+      sent = parsedJson.getBoolean("SENT");
       print("NODE: ");
       println(nodeUpdated);
-      background(255, 255, 255);
-      fill(0, 102, 153);
-      text("Temp 1: ", 400, 90); 
-      text(temp1, 500, 90);
-      text("Temp 2: ", 400, 120);
-      text(temp2, 500, 120);
-      text("Temp 3: ", 400, 150); 
-      text(temp3, 500, 150);
-      text(nodeUpdated, 600, 150);
+      text(nodeDisplayed, 600, 150);
+    } 
+    catch (Exception e) {
+      println("failed parsing JSON");
+    }
+    try {
+      confirmUpdate = true;
       temp1 = parsedJson.getFloat("T1");
       temp2 = parsedJson.getFloat("T2");
       temp3 = parsedJson.getFloat("T3");
-    } 
-    catch (Exception e) {
-      println("failed... womp womp :(");
+    } catch (Exception e) {
+      confirmUpdate = false;
+      println("failed updating data");
     }
+    
+    if (sent == true && nodeUpdated == nodeDisplayed) {
+        background(255, 255, 255);
+        fill(0, 0, 0);
+        text("Temp 1: ", 400, 90); 
+        text(temp1, 500, 90);
+        text("Temp 2: ", 400, 120);
+        text(temp2, 500, 120);
+        text("Temp 3: ", 400, 150); 
+        text(temp3, 500, 150);
+        text(nodeDisplayed, 600, 150);
+      }
+    
     println("---------------------------------------------");
+    
   }
 }
 
@@ -89,4 +105,14 @@ void on() {
 void off() {
   println("off");
   mySerial.write('f');
+}
+
+void node1() {
+  nodeDisplayed = 1;
+  println("switched to node 1");
+}
+
+void node2() {
+  nodeDisplayed = 2;
+  println("switched to node 2");
 }
