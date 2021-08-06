@@ -17,7 +17,6 @@
 #include <RF24.h> 
 #include <SPI.h> 
 #include <nRF24L01.h>
-#include <Ethernet.h>
 #include <ArduinoJson.h>
 
 /* CONSTANTS */
@@ -28,28 +27,15 @@
 
 /* GENERAL VARIABLES */
 int node = 1;
+bool shutdownArray[60];
 
 /* JSON VARIABLES */
-StaticJsonDocument<200> sendJson;       // initializing all the variables (as floats)
 bool sent = true;          // indicates if a message has been sent
-
-int NODE = sendJson["NODE"];
-// float T1 = sendJson["T1"];
-// float T2 = sendJson["T2"];
-// float T3 = sendJson["T3"];
-// float T4 = sendJson["T4"];
-// float T5 = sendJson["T5"];
-// float T6 = sendJson["T6"];
-
-// float V1 = sendJson["V1"];
-// float V2 = sendJson["V2"];
-// float V3 = sendJson["V3"];
-
-// float C1 = sendJson["C1"];
 
 /* RADIO VARIABLES */
 RF24 radio(CE_PIN,CSN_PIN);     // create RF24 radio object using selected CE and CSN pins
 
+// each node has its own node address ranging from 1-NUM_NODES. node address must be manually set on the node's end
 byte nodeAddress[5] = {'N','O','D', 0, 1};      // setup radio pipe address for remote sensor node
 
 struct Command_Package {
@@ -69,21 +55,9 @@ struct Data_Package {
   float T1 = 0.0;
   float T2 = 0.0;
   float T3 = 0.0;
-//   float T4 = 0.0;
-//   float T5 = 0.0;
-//   float T6 = 0.0;
 };
-Command_Package sendCommand;    //TODO: add commands
-Data_Package data;
-
-/* ETHERNET VARIABLES */
-byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x04};
-IPAddress ip(128, 174, 186, 99);
-//IPAddress ip(192, 162, 1, 6);
-IPAddress gateway(128, 174, 186, 1);
-IPAddress subnet(255, 255, 254, 0);
-EthernetServer server(23); // default is 23
-boolean alreadyConnected = false;
+Command_Package commandToNode;    //TODO: add commands
+Data_Package dataFromNode;
 
 
 /* Function: setup
@@ -92,11 +66,9 @@ boolean alreadyConnected = false;
 void setup() {
   Serial.begin(9600);
   while(!Serial) {}
-
-  ethernetSetup();
+  pinMode(3, OUTPUT);
   radioSetup();
 }
-
 
 /* Function: radioSetup
 *   sets up transceiver settings. Allows for 5 retries before moving on to the next node.
@@ -117,62 +89,43 @@ void radioSetup() {
 }
 
 
-/* Function: ethernetSetup 
-*   By calling ethernet.begin(mac), it first tries to make a unique ip address. If that fails, it uses the fallback ip address (made above).
-*   begin(mac) keeps failing. fallback is always used for some reason
-*/
-void ethernetSetup() {
-  Serial.println("Trying to get an IP address using DHCP");
-
-  Ethernet.begin(mac, ip, gateway, subnet);
-
-  ip = Ethernet.localIP();
-  //checking valid ip (not 0.0.0.0)
-  if (ip[0] == 0 && ip[1] == 0 && ip[2] == 0 && ip[3] == 0) {
-    Serial.print(Ethernet.localIP());
-    Serial.println(" is not a valid IP Address. No connection made.");
-    Serial.println("Stopping Program................");
-    while (true) {}
-  }
-  // print your local IP address:
-  Serial.print("My IP address: ");
-  Serial.print(Ethernet.localIP());
-  Serial.println();
-  server.begin();
-}
-
-
 /* Function: loop
  *    main loop program for the slave node - opens a new reading pipe when switching to a new node
  */
 void loop() {
-    EthernetClient client = server.available();
-
-    Serial.print("Node ");
-    Serial.print(node);
-    Serial.println(":");
-    radio.openWritingPipe(nodeAddress);
-    readRadio();
-    
-    if (client) {
-        //TODO: Test this with Hyrum
-        // int len - client.available();
-        // if (len > 0) {
-        //     byte buffer[80];
-        //     client.read(buffer, len);
-        // }
-
-        //TODO: end of test section
-
-        char sendValue[CAPACITY];               // Serialize JSON Object to char array
-        serializeJson(sendJson, sendValue);
-        client.println(sendValue);
-        // server.write(sendValue);
-        Serial.println(sendValue);
-
+    if (Serial.available()) {
+//    {"NODE":2,"SHUTDOWN":false}
+      String val = Serial.readString();
+      StaticJsonDocument<200> jsonFromFrontend;
+      deserializeJson(jsonFromFrontend, val);
+      changeNode(jsonFromFrontend["NODE"]);
+      shutdownArray[node] = jsonFromFrontend["SHUTDOWN"];
     }
-    changeNode();
-    Ethernet.maintain();
+
+
+    /*  Creating JSON doc to store data from nodes. 
+        successful data retreival:       {"NODE":#,"SENT":true,"T1":#.##,"T2":#.##, ...}
+        unsuccessful data retreival:    {"NODE":#,"SENT":false}*/
+    StaticJsonDocument<200> sendJson;
+    sendJson["NODE"] = node;
+    // Serial.print("Node ");   //debugging prints
+    // Serial.print(node);
+    // Serial.println(":");
+    radio.openWritingPipe(nodeAddress);     // switches to the current node address to request data
+    readRadio();
+    sendJson["SENT"] = sent;
+    if (sent) {                     //ONLY UPDATE DATA ON SUCCESSFUL DATA RETREIVAL
+        sendJson["T1"] = dataFromNode.T1;
+        sendJson["T2"] = dataFromNode.T2;
+        sendJson["T3"] = dataFromNode.T3;
+        //TODO: add other variables, such as voltage, current, and others
+    }
+
+    String sendValue;                       // Serialize JSON Object to a string, which can be printed
+    serializeJson(sendJson, sendValue);     // would use serializeJson(sendJson, Serial), but this allows us to modify later if we want
+    Serial.println(sendValue);              // ALSO processing identifies when message is over by waiting for the '\n' (new line) note 
+
+    changeNode();           // go to next node
 
     delay(1000);
 }
@@ -183,45 +136,43 @@ void loop() {
 *   the acknowledgement response automatically switches between listening and writing modes, which proved better than manually doing so
 */
 void readRadio() {
-    Serial.println("[*] Attempting to transmit data to remote node.");
-    
+    // Sends the shutdown command for that node, which is stored in a boolean array
+    commandToNode.shutdown = shutdownArray[node];
     // boolean to indicate if radio.write() tx was successful
     bool tx_sent;
-    tx_sent = radio.write(&sendCommand, sizeof(sendCommand));
+    tx_sent = radio.write(&commandToNode, sizeof(commandToNode));
+
     // if tx success - receive and read smart-post ack reply
     if (tx_sent) {
         if (radio.isAckPayloadAvailable()) {
             // read acknowledgement payload and copy message to remoteNodeData 
-            radio.read(&data, sizeof(data));
-            sendJson["T1"] = data.T1;
-            sendJson["T2"] = data.T2;
-            sendJson["T3"] = data.T3;
-            // sendJson["T4"] = data.T4;
-            // sendJson["T5"] = data.T5;
-            // sendJson["T6"] = data.T6;
+            radio.read(&dataFromNode, sizeof(dataFromNode));
+            // sendJson["T1"] = dataFromNode.T1;
+            // sendJson["T2"] = dataFromNode.T2;
+            // sendJson["T3"] = dataFromNode.T3;
 
-            Serial.print("[+] Successfully received data from node.");
-            Serial.print("  ---- Temp was: ");
-            Serial.println(data.T1);
-            if (data.T1 > 80) {
-                sendCommand.shutdown = true;
-            } else {
-                sendCommand.shutdown = false;
-            }
+            // Serial.print("[+] Successfully received data from node.");
+            // Serial.print("  ---- Temp was: ");
+            // Serial.println(data.T1);
+            // if (dataFromNode.T1 > 80) {
+            //     commandToNode.shutdown = true;
+            // } else {
+            //     commandToNode.shutdown = false;
+            // }
         }
-        sendJson["sent"] = true;
+        sent = true;
     } 
     else {
-        Serial.println("[-] The transmission to the node failed.  ***********************************");
+        // Serial.println("[-] The transmission to the node failed.  ***********************************");
 
         //TODO: update json accordingly. May not want to change temperature variables though
-        sendJson["sent"] = false;
+        sent = false;
     }
-    Serial.println("------------------------------------------");
+    // Serial.println("------------------------------------------");
 }
 
 
-/* Function: changeNode
+/* Function: changeNode()
 *   Updates the nodeAddress to the next node by changing the last 2 variables of nodeAddress. (recall nodeAddress[5] = {'N','O','D', 0, 1};)
 *   KEEP THE LAST 2 VARIABLES OF nodeAddress AS INTS FOR THIS FUNCTION TO WORK 
 *   To change max # of nodes, just change the NUM_NODES variable
@@ -233,5 +184,17 @@ void changeNode() {
     }
     nodeAddress[3] = node / 10;
     nodeAddress[4] = node % 10;
-    sendJson["NODE"] = node;
+    // sendJson["NODE"] = node;
+}
+/* Function: changeNode(int n)
+*   Updates the node and nodeAddress to specified node. Doesn't allow for nonexistent nodes
+*/
+void changeNode(int n) {
+  if (n > NUM_NODES || n < 0) {
+    Serial.println("Node does not exist");
+  } else {
+    node = n;
+    nodeAddress[3] = n / 10;
+    nodeAddress[4] = n % 10;
+  }
 }

@@ -24,6 +24,7 @@
 #define NUM_TEMP_SENSORS 3
 #define CE_PIN 7
 #define CSN_PIN 8
+#define LEDPIN 3
 
 /* GENERAL VARIABLES */
 int TEMP_THRESH = 90;       // When in overheat, thresh is lower number. Allows for autonomous restart. Val is arbitrary
@@ -58,9 +59,6 @@ struct Data_Package {
   float T1 = 0.0;
   float T2 = 0.0;
   float T3 = 0.0;
-  float T4 = 0.0;
-  float T5 = 0.0;
-  float T6 = 0.0;
 };
 Data_Package data;
 Data_From_Master dataFromMaster;
@@ -73,6 +71,8 @@ Data_From_Master dataFromMaster;
 void setup() {
   Serial.begin(9600);
   while (!Serial) {}
+
+  pinMode(LEDPIN, OUTPUT);
 
   radioSetup();
   tempSensorSetup();
@@ -204,6 +204,9 @@ void radioCheckAndReply(void) {
     radio.read( &dataFromMaster, sizeof(dataFromMaster) );
     if (dataFromMaster.shutdown == true) {
       Serial.println("SHUTDOWN SHUTDOWN SHUTDOWN");
+      digitalWrite(LEDPIN, LOW);
+    } else {
+      digitalWrite(LEDPIN, HIGH);
     }
     Serial.println("Received request from master - sending preloaded data.");
 

@@ -21,68 +21,19 @@ int newLine = 10;        // 10 is binary for 'return' or 'new line'.
 
 
 void setup() {
-  mySerial = new Serial(this, "COM6", 9600);
+  /* General setup of the window */
+  mySerial = new Serial(this, "COM4", 9600);
+  size(1500, 800);  // siza deez app windows (x and y dimensions of application window)
+  font = loadFont("SansSerif.plain-16.vlw");
+  textFont(font);
+  
   /* Creating array of data objects to record each node's data */
   data[] dataArray = new data[60];
   for (int i = 0; i < 60; i++) {
     dataArray[i] = new data();
   }
   
-  size(1500, 800);  // siza deez app windows (x and y dimensions of application window)
-  font = loadFont("SansSerif.plain-16.vlw");
-  textFont(font);
-
-  cp5 = new ControlP5(this);
-  PFont p = createFont("Verdana",16); 
-  ControlFont controlFont = new ControlFont(p);
-  cp5.setFont(controlFont);
-  
-  cp5.getTab("default")
-     .activateEvent(true)
-     .setLabel("Overview")
-     .setId(1)
-     .setHeight(40)
-     .setWidth(100)
-     ;
-  cp5.addTab("Nodes")
-    .setHeight(40)
-    .setWidth(100)
-    ;
-  
-  DropdownList droplist = cp5.addDropdownList("Nodes")
-    .setPosition(0, 40).setSize(90, 700)
-    .setBarHeight(40)
-    .setItemHeight(50)
-    .setBackgroundColor(color(213, 216, 220))
-    .align(0, 100, 100, 0);
-  
-  for (int i = 0; i < 60; i++) {
-    droplist.addItem("Node: " + i,i);
-  }
-  
-  
-  
-  
-  
-  
-  cp5.addButton("node1")    //"Node 1" is the name of the button
-    .setPosition(100, 50)
-    .setSize(100, 50);
-  ;
-  cp5.addButton("node2")    //"Node 1" is the name of the button
-    .setPosition(100, 150)
-    .setSize(100, 50)
-    .setColorBackground(color(255, 0, 0));
-  ;
-  cp5.addButton("on")    //"Node 1" is the name of the button
-    .setPosition(800, 50)
-    .setSize(100, 50);
-  ;
-  cp5.addButton("off")    //"Node 1" is the name of the button
-    .setPosition(800, 150)
-    .setSize(100, 50)
-    .setColorBackground(color(255, 0, 0));
-  ;
+  controlP5Setup();
 }
 
 void draw() {
@@ -135,14 +86,64 @@ void draw() {
   }
 }
 
-void on() {
-  println("on");
-  mySerial.write('o');
+
+void controlP5Setup() {
+  cp5 = new ControlP5(this);
+  PFont p = createFont("Verdana",16); 
+  ControlFont controlFont = new ControlFont(p);
+  cp5.setFont(controlFont);
+  
+  cp5.getTab("default")
+     .activateEvent(true)
+     .setLabel("Overview")
+     .setId(1)
+     .setHeight(40)
+     .setWidth(100)
+     ;
+  cp5.addTab("Nodes")
+    .setHeight(40)
+    .setWidth(100)
+    ;
+  
+  DropdownList droplist = cp5.addDropdownList("Nodes")
+    .setPosition(0, 40).setSize(90, 700)
+    .setBarHeight(40)
+    .setItemHeight(50)
+    .setBackgroundColor(color(213, 216, 220))
+    .align(0, 100, 100, 0);
+  
+  for (int i = 0; i < 60; i++) {
+    droplist.addItem("Node: " + i,i);
+  }
+  
+  cp5.addButton("node1")    //"Node 1" is the name of the button
+    .setPosition(100, 50)
+    .setSize(100, 50);
+  ;
+  cp5.addButton("node2")    //"Node 1" is the name of the button
+    .setPosition(100, 150)
+    .setSize(100, 50)
+    .setColorBackground(color(255, 0, 0));
+  ;
+  cp5.addButton("on")    //"Node 1" is the name of the button
+    .setPosition(800, 50)
+    .setSize(100, 50);
+  ;
+  cp5.addButton("shutdown")    //"Node 1" is the name of the button
+    .setPosition(800, 150)
+    .setSize(120, 50)
+    .setColorBackground(color(255, 0, 0));
+  ;
 }
 
-void off() {
+void on() {
+  println("on");
+  mySerial.write("{NODE:" + nodeDisplayed + ",SHUTDOWN:" + false + "}");
+}
+
+void shutdown() {
   println("off");
-  mySerial.write('f');
+  mySerial.write("{NODE:" + nodeDisplayed + ",SHUTDOWN:" + true + "}");
 }
 
 void node1() {

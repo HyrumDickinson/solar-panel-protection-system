@@ -6,7 +6,7 @@ Serial mySerial;
 
 void setup() {
   size(1200, 600);  // siza deez app windows (x and y dimensions of application window)
-  mySerial = new Serial(this, "COM4", 9600);
+  mySerial = new Serial(this, "COM6", 9600);
   
   fill(0, 0, 0);
   cp5 = new ControlP5(this);
