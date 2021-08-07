@@ -9,6 +9,7 @@ class data {
   boolean overVolt;
   boolean overCurr;
   boolean shutdown;
+  boolean connected;
 
   /* GENERAL VARIABLES */
   float tempThreshFarenheit = 10;       //! arbitrary number chosen for testing
@@ -28,6 +29,7 @@ class data {
     overVolt = false;
     overCurr = false;
     shutdown = false;
+    connected = false;
   }
   
   /* Constructor
@@ -42,7 +44,8 @@ class data {
       boolean oh, 
       boolean ov, 
       boolean oc,
-      boolean sd
+      boolean sd, 
+      boolean cn
     ) {
     temp1 = t1;
     temp2 = t2;
@@ -53,6 +56,8 @@ class data {
     overVolt = ov;
     overCurr = oc;
     shutdown = sd;
+    connected = cn;
+    
   }  
 
   /* Function: setTemps
