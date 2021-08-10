@@ -1,3 +1,18 @@
+/*************************************************************************
+ *                      PROTECTION SYSTEM GUI                            *
+ *      This is the Graphical User Interface (gui) for the Solar Panel   *
+ *      Protection System. This file should be stored with assisted      *
+ *      classes: (INSERT CLASSES HERE). This is heavily reliant on the   *
+ *      controlP5 library for buttons and gui development.               *
+ *      This code is reliant on a serial connection to the MAIN NODE     *
+ *                                                                       *
+ *      Refer to (INSERT DOC HERE) for more info.                        *
+ *      Author: Benjamin Olaivar                                         *
+ *                                                                       *
+ *        Last modified: 08/10/2021                                      *
+ *                                                                       *
+ *************************************************************************/
+
 /* LIBRARIES */
 import controlP5.*;
 import processing.serial.*;  // including the serial object libarary
@@ -203,33 +218,45 @@ void updateData() {
         catch (Exception e) {
             println("Failed parsing JSON");
         }
-
-        if (sent == true) {          // If the jsonPackage was parsed correnctly, this works
-            dataArray[nodeUpdated].setTemps(parsedJson.getFloat("T1"), parsedJson.getFloat("T2"), parsedJson.getFloat("T3"));
-            // dataArray[nodeUpdated].setVoltage(parsedJson.getFloat("V"));
-            // dataArray[nodeUpdated].setCurrent(parsedJson.getFloat("C"));
-            
-            float[] tempArray = {parsedJson.getFloat("T1"), parsedJson.getFloat("T2"), parsedJson.getFloat("T3")};
-
-            boolean overHeat = tempArray[0] >= tempThresh || tempArray[1] >= tempThresh || tempArray[2] >= tempThresh;
-            boolean overVolt = false;     //= parsedJson.getFloat("V") >= voltThresh;
-            boolean overCurr = false;     //= parsedJson.getFloat("C") >= currThresh;
-            if (overHeat || overVolt || overCurr) {
-              cp5.getController("panel" + nodeUpdated).setColorBackground(color(213, 0, 50));
+        
+        try {
+            if (sent == true) {          // If the jsonPackage was parsed correnctly, this works
+              dataArray[nodeUpdated].setTemps(parsedJson.getFloat("T1"), parsedJson.getFloat("T2"), parsedJson.getFloat("T3"));
+              // dataArray[nodeUpdated].setVoltage(parsedJson.getFloat("V"));
+              // dataArray[nodeUpdated].setCurrent(parsedJson.getFloat("C"));
+              
+              float[] tempArray = {parsedJson.getFloat("T1"), parsedJson.getFloat("T2"), parsedJson.getFloat("T3")};
+  
+              boolean overHeat = tempArray[0] >= tempThresh || tempArray[1] >= tempThresh || tempArray[2] >= tempThresh;
+              boolean overVolt = false;     //= parsedJson.getFloat("V") >= voltThresh;
+              boolean overCurr = false;     //= parsedJson.getFloat("C") >= currThresh;
+              if (overHeat || overVolt || overCurr) {
+                  cp5.getController("panel" + nodeUpdated).setColorBackground(color(213, 0, 50));
+              }
+              sent = false;
+            } else {
+                cp5.getController("panel" + nodeUpdated).setColorBackground(color(166, 168, 171));
             }
-            sent = false;
-        } else {
-          cp5.getController("panel" + nodeUpdated).setColorBackground(color(166, 168, 171));
+        } catch (Exception e) {
+            println("Failed updating Data");
         }
     
     }
 }
 
 
+/* Function: enable()
+*   this is linked to the 'enable' button under the 'Monitor' tab. when the button is clicked, this function
+*   is automatically called. This sends out a JSON command telling whcih node to activate
+*/
 void enable() {
   println("on");
   mySerial.write("{NODE:" + nodeDisplayed + ",SHUTDOWN:" + false + "}");
 }
+/* Function: disable()
+*   this is linked to the 'disable' button under the 'Monitor' tab. when the button is clicked, this function
+*   is automatically called. This sends out a JSON command telling whcih node to deactivate
+*/
 void disable() {
   println("off");
   mySerial.write("{NODE:" + nodeDisplayed + ",SHUTDOWN:" + true + "}");
