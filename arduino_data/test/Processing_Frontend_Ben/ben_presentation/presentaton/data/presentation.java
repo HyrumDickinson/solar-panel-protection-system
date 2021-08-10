@@ -57,6 +57,8 @@ void controlP5Setup() {
     .setColorActive(color(232, 74, 39))
     .setColorBackground(color(19, 41, 75))
     .setColorForeground(color(30, 81, 150))
+    // .activateEvent(true)
+    // .setId(1)
     ;
   cp5.addTab("Overview")
      .setHeight(76)
@@ -64,6 +66,8 @@ void controlP5Setup() {
      .setColorActive(color(232, 74, 39))
      .setColorBackground(color(19, 41, 75))
      .setColorForeground(color(30, 81, 150))
+    //  .activateEvent(true)
+    //  .setId(2)
      ;
   cp5.addTab("Settings")
     .setHeight(76)
@@ -71,8 +75,9 @@ void controlP5Setup() {
     .setColorActive(color(232, 74, 39))
     .setColorBackground(color(19, 41, 75))
     .setColorForeground(color(30, 81, 150))
+    // .activateEvent(true)
+    // .setId(3)
     ;
-  
   cp5.getTab("default")
     .activateEvent(true)
     .setId(1)
@@ -129,21 +134,27 @@ void controlP5Setup() {
   cp5.getController("oof").moveTo("Settings");
 }
 
-
+/* Function: draw()
+*   Acts as the 'loop' function from arduino IDE. creates all the shapes/text on the screen
+*/
 void draw() {
-  background(232, 233, 234);
-  stroke(color(19, 41, 75));    // The stroke is the OUTLINE of the shape/thing
-  fill(color(19, 41, 75));      // the fill is the INSIDE COLOR of the shape/thing
-  rect(0, 0, width, 75);        // Blue header rectangle
+    background(232, 233, 234);
+    stroke(color(19, 41, 75));    // The stroke is the OUTLINE of the shape/thing
+    fill(color(19, 41, 75));      // the fill is the INSIDE COLOR of the shape/thing
+    rect(0, 0, width, 75);        // Blue header rectangle
 
-  updateData();
+    updateData();
 
-  if (cp5.getTab("default").isActive()) {
-    updateDisplayData();
-  }
+    // Will only display the temperatures on the default ('Monitor') tab
+    if (cp5.getTab("default").isActive()) {
+        updateDisplayData();
+    }
 }
 
 
+/* Function: controlEvent()
+*   Handles all events from controlP5 items, such as buttons and tabs. Button Id's 1-60 are dedicated to the solar panel buttons
+*/
 void controlEvent(ControlEvent theControlEvent) {
   if (theControlEvent.isTab()) {
     println("event from tab : "+theControlEvent.getTab().getName()+" with id "+theControlEvent.getTab().getId());
@@ -162,13 +173,13 @@ void updateDisplayData() {
         float[] temps = dataArray[nodeDisplayed].getTempsFarenheit();
 
         fill(0, 0, 0);
-        text("Temp 1: ", 500, 150); 
-        text(temps[0], 600, 150);
-        text("Temp 2: ", 500, 200);
-        text(temps[1], 600, 200);
-        text("Temp 3: ", 500, 250); 
-        text(temps[2], 600, 250);
-        text(nodeDisplayed, 700, 250);
+        text("Temp 1: ", 700, 150); 
+        text(temps[0], 800, 150);
+        text("Temp 2: ", 700, 200);
+        text(temps[1], 800, 200);
+        text("Temp 3: ", 700, 250); 
+        text(temps[2], 800, 250);
+        text(nodeDisplayed, 900, 250);
     }
 }
 
@@ -194,13 +205,15 @@ void updateData() {
         }
 
         if (sent == true) {          // If the jsonPackage was parsed correnctly, this works
-            boolean overHeat = false;
-            boolean overVolt = false;
-            boolean overCurr = false;
             dataArray[nodeUpdated].setTemps(parsedJson.getFloat("T1"), parsedJson.getFloat("T2"), parsedJson.getFloat("T3"));
             // dataArray[nodeUpdated].setVoltage(parsedJson.getFloat("V"));
             // dataArray[nodeUpdated].setCurrent(parsedJson.getFloat("C"));
             
+            float[] tempArray = {parsedJson.getFloat("T1"), parsedJson.getFloat("T2"), parsedJson.getFloat("T3")};
+
+            boolean overHeat = tempArray[0] >= tempThresh || tempArray[1] >= tempThresh || tempArray[2] >= tempThresh;
+            boolean overVolt = false;     //= parsedJson.getFloat("V") >= voltThresh;
+            boolean overCurr = false;     //= parsedJson.getFloat("C") >= currThresh;
             if (overHeat || overVolt || overCurr) {
               cp5.getController("panel" + nodeUpdated).setColorBackground(color(213, 0, 50));
             }
