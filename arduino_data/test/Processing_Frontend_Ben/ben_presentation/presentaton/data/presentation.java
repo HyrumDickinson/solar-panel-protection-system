@@ -4,7 +4,9 @@
  *      Protection System. This file should be stored with assisted      *
  *      classes: (INSERT CLASSES HERE). This is heavily reliant on the   *
  *      controlP5 library for buttons and gui development.               *
- *      This code is reliant on a serial connection to the MAIN NODE     *
+ *      This code is reliant on a serial connection to the MAIN NODE.    *
+ *                                                                       *
+ *      Code should be ran in PROCESSING IDE                             *
  *                                                                       *
  *      Refer to (INSERT DOC HERE) for more info.                        *
  *      Author: Benjamin Olaivar                                         *
@@ -17,13 +19,23 @@
 import controlP5.*;
 import processing.serial.*;  // including the serial object libarary
 
+/* CONTANTS */
+final int NUMNODES = 60;
+color UOFI_BLUE = color(19, 41, 75);
+color UOFI_BLUE_HOVER = color(30, 81, 150);
+color UIC_RED = color(213, 0, 50);
+color URBANA_ORANGE = color(232, 74, 39);
+color COOL_GRAY_6 = color(166, 168, 171);
+
+
 /* INITIALIZATION */
 ControlP5 cp5;
 Serial mySerial;
 PFont font;
-data[] dataArray = new data[61];
+data[] dataArray = new data[NUMNODES];
 
 /* GENERAL VARIABLES */
+int activeTab;
 int newLine = 10;        // 10 is binary for 'return' or 'new line'.
 float tempThresh = 10.0;
 float voltThresh = 0.0;
@@ -41,19 +53,19 @@ int nodeUpdated;
 
 
 void setup() {
+  mySerial = new Serial(this, "COM4", 9600);
   
   /* General setup of the window */
-  mySerial = new Serial(this, "COM4", 9600);
   size(1600, 900);  // siza deez app windows (x and y dimensions of application window)
   font = loadFont("ArialMT-18.vlw");
   textFont(font);
   
   /* Creating array of data objects to record each node's data */
-  for (int i = 0; i < 61; i++) {
+  for (int i = 0; i < NUMNODES; i++) {
     dataArray[i] = new data();
   }
-  
-  controlP5Setup();
+
+  controlP5Setup();     // initiate all the buttons/tabs
 }
 
 /* Function: controlP5Setup()
@@ -69,48 +81,50 @@ void controlP5Setup() {
     .setLabel("Monitor")
     .setHeight(76)
     .setWidth(115)
-    .setColorActive(color(232, 74, 39))
-    .setColorBackground(color(19, 41, 75))
-    .setColorForeground(color(30, 81, 150))
-    // .activateEvent(true)
-    // .setId(1)
+    .setColorActive(URBANA_ORANGE)
+    .setColorBackground(UOFI_BLUE)
+    .setColorForeground(UOFI_BLUE_HOVER)
+    .activateEvent(true)
+    .setId(1)
     ;
   cp5.addTab("Overview")
      .setHeight(76)
      .setWidth(115)
-     .setColorActive(color(232, 74, 39))
-     .setColorBackground(color(19, 41, 75))
-     .setColorForeground(color(30, 81, 150))
-    //  .activateEvent(true)
-    //  .setId(2)
+     .setColorActive(URBANA_ORANGE)
+     .setColorBackground(UOFI_BLUE)
+     .setColorForeground(UOFI_BLUE_HOVER)
+     .activateEvent(true)
+     .setId(2)
      ;
   cp5.addTab("Settings")
     .setHeight(76)
     .setWidth(115)
-    .setColorActive(color(232, 74, 39))
-    .setColorBackground(color(19, 41, 75))
-    .setColorForeground(color(30, 81, 150))
-    // .activateEvent(true)
-    // .setId(3)
-    ;
-  cp5.getTab("default")
-    .activateEvent(true)
-    .setId(1)
-  ;
-  cp5.getTab("Overview")
-    .activateEvent(true)
-    .setId(2)
-  ;
-  cp5.getTab("Settings")
+    .setColorActive(URBANA_ORANGE)
+    .setColorBackground(UOFI_BLUE)
+    .setColorForeground(UOFI_BLUE_HOVER)
     .activateEvent(true)
     .setId(3)
-  ;
+    ;
+//   cp5.getTab("default")
+//     .activateEvent(true)
+//     .setId(1)
+//   ;
+//   cp5.getTab("Overview")
+//     .activateEvent(true)
+//     .setId(2)
+//   ;
+//   cp5.getTab("Settings")
+//     .activateEvent(true)
+//     .setId(3)
+//   ;
   
+  // create panel buttons starting at xpos, ypos
   int xpos = 120;
-  int ypos = 70;
-  for (int i = 0; i < 60; i++) {
+  int ypos = 120;
+  int buttonsInRow = 5;     // creates a new line every x nodes. 
+  for (int i = 0; i < NUMNODES; i++) {
     
-    if(i % 5 == 0) {
+    if(i % buttonsInRow == 0) {
       xpos = 100;
       ypos += 48;
     }
@@ -134,7 +148,7 @@ void controlP5Setup() {
   cp5.addButton("disable")    //"disable" is the name of the button
     .setPosition(1000, 800)
     .setSize(120, 50)
-    .setColorBackground(color(230, 6, 6))
+    .setColorBackground(UIC_RED)
     .setColorForeground(color(195, 34, 34))
     .setColorActive(color(220, 0, 0))
   ;
@@ -142,7 +156,7 @@ void controlP5Setup() {
    cp5.addButton("oof")    //"oof" is the name of the button
     .setPosition(1000, 800)
     .setSize(120, 50)
-    .setColorBackground(color(230, 6, 6))
+    .setColorBackground(UIC_RED)
     .setColorForeground(color(195, 34, 34))
     .setColorActive(color(220, 0, 0))
   ;
@@ -154,26 +168,35 @@ void controlP5Setup() {
 */
 void draw() {
     background(232, 233, 234);
-    stroke(color(19, 41, 75));    // The stroke is the OUTLINE of the shape/thing
-    fill(color(19, 41, 75));      // the fill is the INSIDE COLOR of the shape/thing
+    stroke(UOFI_BLUE);    // The stroke is the OUTLINE of the shape/thing
+    fill(UOFI_BLUE);      // the fill is the INSIDE COLOR of the shape/thing
     rect(0, 0, width, 75);        // Blue header rectangle
 
     updateData();
 
     // Will only display the temperatures on the default ('Monitor') tab
-    if (cp5.getTab("default").isActive()) {
+    if (activeTab == 1 || activeTab == 0) {
+        fill(UOFI_BLUE);
+        stroke(UOFI_BLUE);
+        rect(1400, height / 3, 125, height / 3);
+        
         updateDisplayData();
+    } else if (activeTab == 2) {
+      fill(UOFI_BLUE);
+      stroke(UOFI_BLUE);
+      rect(100, 100, 100, 100);
     }
 }
 
 
 /* Function: controlEvent()
-*   Handles all events from controlP5 items, such as buttons and tabs. Button Id's 1-60 are dedicated to the solar panel buttons
+*   Handles all events from controlP5 items, such as buttons and tabs. Button Id's 1-NUMNODES are dedicated to the solar panel buttons
 */
 void controlEvent(ControlEvent theControlEvent) {
   if (theControlEvent.isTab()) {
     println("event from tab : "+theControlEvent.getTab().getName()+" with id "+theControlEvent.getTab().getId());
-  } else if (theControlEvent.getId() > 0 && theControlEvent.getId() <= 60) {
+    activeTab = theControlEvent.getTab().getId();
+  } else if (theControlEvent.getId() > 0 && theControlEvent.getId() <= NUMNODES) {
     nodeDisplayed = theControlEvent.getId();
     println("switched to node " + nodeDisplayed);
   }
@@ -181,11 +204,11 @@ void controlEvent(ControlEvent theControlEvent) {
 
 
 /* Function updateDisplayData()
-*   If on the monitor tab, this function displays the node data for the selected node
+*   If on the 'Monitor' tab, this function displays the node data for the selected node
 */
 void updateDisplayData() {
-    if (nodeDisplayed > 0 && nodeDisplayed <= 60) {
-        float[] temps = dataArray[nodeDisplayed].getTempsFarenheit();
+    if (nodeDisplayed > 0 && nodeDisplayed <= NUMNODES) {
+        float[] temps = dataArray[nodeDisplayed - 1].getTempsFarenheit();
 
         fill(0, 0, 0);
         text("Temp 1: ", 700, 150); 
@@ -221,9 +244,9 @@ void updateData() {
         
         try {
             if (sent == true) {          // If the jsonPackage was parsed correnctly, this works
-              dataArray[nodeUpdated].setTemps(parsedJson.getFloat("T1"), parsedJson.getFloat("T2"), parsedJson.getFloat("T3"));
-              // dataArray[nodeUpdated].setVoltage(parsedJson.getFloat("V"));
-              // dataArray[nodeUpdated].setCurrent(parsedJson.getFloat("C"));
+              dataArray[nodeUpdated - 1].setTemps(parsedJson.getFloat("T1"), parsedJson.getFloat("T2"), parsedJson.getFloat("T3"));
+              // dataArray[nodeUpdated - 1].setVoltage(parsedJson.getFloat("V"));
+              // dataArray[nodeUpdated - 1].setCurrent(parsedJson.getFloat("C"));
               
               float[] tempArray = {parsedJson.getFloat("T1"), parsedJson.getFloat("T2"), parsedJson.getFloat("T3")};
   
@@ -231,11 +254,11 @@ void updateData() {
               boolean overVolt = false;     //= parsedJson.getFloat("V") >= voltThresh;
               boolean overCurr = false;     //= parsedJson.getFloat("C") >= currThresh;
               if (overHeat || overVolt || overCurr) {
-                  cp5.getController("panel" + nodeUpdated).setColorBackground(color(213, 0, 50));
+                  cp5.getController("panel" + nodeUpdated).setColorBackground(UIC_RED);
               }
               sent = false;
             } else {
-                cp5.getController("panel" + nodeUpdated).setColorBackground(color(166, 168, 171));
+                cp5.getController("panel" + nodeUpdated).setColorBackground(COOL_GRAY_6);
             }
         } catch (Exception e) {
             println("Failed updating Data");
