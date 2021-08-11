@@ -54,10 +54,9 @@ float overheatThreshold = defaultOverheatTemp;            // Modifiable Temperat
 float overVoltageThreshold = defaultVoltageThreshold;     // Modifiable Voltage (in Volts)   that triggers overVoltage status. Can be modified on 'Settings' tab
 float overCurrentThreshold = defaultCurrentThreshold;     // Modifiable Current (in Amps)    that triggers overCurrent status. Can be modified on 'Settings' tab
 
-float temporaryOverheatThresh = overheatThreshold;
+float temporaryOverheatThresh = overheatThreshold;        // Temporary values added from 'Settings' changes before confirming their changes
 float temporaryOverVoltThresh = overVoltageThreshold;
 float temporaryOverCurrThresh = overCurrentThreshold;
-boolean thresholdsChanged = false;
 
 
 /************************************************************************************************* SETUP FUNCTIONS *************************************************************************************************/
@@ -298,6 +297,7 @@ void updateData() {
               boolean overHeat = tempArray[0] >= overheatThreshold || tempArray[1] >= overheatThreshold || tempArray[2] >= overheatThreshold;
               boolean overVolt = false;     //= parsedJson.getFloat("V") >= overVoltageThreshold;
               boolean overCurr = false;     //= parsedJson.getFloat("C") >= overCurrentThreshold;
+              
               if (overHeat || overVolt || overCurr) {
                   cp5.getController("panel" + nodeUpdated).setColorBackground(UIC_RED);
               } else  {
@@ -358,12 +358,11 @@ void defaultSettings() {
 void changeOverheatThresh(String inputValue) {
   inputValue = inputValue.trim();       // Cuts off any blank spaces in the inputValue
   
-  if (inputValue.equals("") || inputValue == null) {      // input from the textfield will at least be "", not null. Added null check for good practice
+  if (inputValue.equals("") || inputValue == null) {                // intput should never be null. Added null check for good measure
     println("Empty or null entry. Please enter a valid value.");
   } else {
     try {
         temporaryOverheatThresh = Float.valueOf(inputValue);
-        thresholdsChanged = true;
         println("staged temporary Overheat val:  " + inputValue);
     } catch(Exception e) {
         println(e);
@@ -379,12 +378,11 @@ void changeOverheatThresh(String inputValue) {
 void changeOverVoltageThresh(String inputValue) {
   inputValue = inputValue.trim();       // Cuts off any blank spaces in the inputValue
   
-  if (inputValue.equals("") || inputValue == null) {      // input from the textfield will at least be "", not null. Added null check for good practice
+  if (inputValue.equals("") || inputValue == null) {                // intput should never be null. Added null check for good measure
     println("Empty or null entry. Please enter a valid value.");
   } else {
     try {
         temporaryOverVoltThresh = Float.valueOf(inputValue);
-        thresholdsChanged = true;
         println("staged temporary OverVoltage val:  " + inputValue);
     } catch(Exception e) {
         println(e);
@@ -400,12 +398,11 @@ void changeOverVoltageThresh(String inputValue) {
 void changeOverCurrentThresh(String inputValue) {
   inputValue = inputValue.trim();       // Cuts off any blank spaces in the inputValue
   
-  if (inputValue.equals("") || inputValue == null) {      // input from the textfield will at least be "", not null. Added null check for good practice
+  if (inputValue.equals("") || inputValue == null) {                // intput should never be null. Added null check for good measure
     println("Empty or null entry. Please enter a valid value.");
   } else {
     try {
         temporaryOverCurrThresh = Float.valueOf(inputValue);
-        thresholdsChanged = true;
         println("staged temporary OverCurrent val:  " + inputValue);
     } catch(Exception e) {
         println(e);
@@ -426,8 +423,7 @@ void confirmChanges() {
   println("overheat    threshold changed to " + overheatThreshold);
   println("overVoltage threshold changed to " + overVoltageThreshold);
   println("overCurrent threshold changed to " + overCurrentThreshold);
-  thresholdsChanged = false;
   cp5.getController("confirmChanges").hide();
   
-  //mySerial.write("ok");
+//   mySerial.write("{OH:" + overheatThreshold + ",OV:" + overVoltageThreshold + ",OC:" + overCurrentThreshold + "}");
 }

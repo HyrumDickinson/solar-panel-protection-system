@@ -7,7 +7,7 @@
  *      Refer to (INSERT DOC HERE) for more info.                         *
  *      Author: Benjamin Olaivar                                         *
  *                                                                       *
- *        Last modified: 07/22/2021                                      *
+ *        Last modified: 08/11/2021                                      *
  *                                                                       *
  *************************************************************************/
 
@@ -29,6 +29,11 @@
 int node = 1;
 bool shutdownArray[60];
 
+/* GENERAL VARIABLES */
+float overheat_Threshold = 90;       // When in overheat, thresh is lower number. Allows for autonomous restart. Val is arbitrary
+float overVoltage_Threshold;
+float overCurrent_Threshold;
+
 /* JSON VARIABLES */
 bool sent = true;          // indicates if a message has been sent
 
@@ -40,6 +45,9 @@ byte nodeAddress[5] = {'N','O','D', 0, 1};      // setup radio pipe address for 
 
 struct Command_Package {
     bool shutdown = false;
+    float overheatThresh;
+    float overVoltageThresh;
+    float overCurrentThresh;
 };
 struct Data_Package {
   bool overheat = false;
@@ -94,35 +102,43 @@ void radioSetup() {
  */
 void loop() {
     if (Serial.available()) {
-//    {"NODE":2,"SHUTDOWN":false}
+//    {"NODE":2,"SHUTDOWN":false} OR {"OH":0.0,"OV":0.0,"OC":0.0}
       String val = Serial.readString();
       StaticJsonDocument<200> jsonFromFrontend;
       deserializeJson(jsonFromFrontend, val);
-      changeNode(jsonFromFrontend["NODE"]);
-      shutdownArray[node] = jsonFromFrontend["SHUTDOWN"];
+      
+//      try {                         // trying as {"NODE":2,"SHUTDOWN":false}
+//        changeNode(jsonFromFrontend["NODE"]);
+//        shutdownArray[node] = jsonFromFrontend["SHUTDOWN"];
+//      } catch (...) {}
+//      try {                         // trying as {"OH":0.0,"OV":0.0,"OC":0.0}
+        overheat_Threshold = jsonFromFrontend["OH"];       // When in overheat, thresh is lower number. Allows for autonomous restart. Val is arbitrary
+        overVoltage_Threshold = jsonFromFrontend["OV"];
+        overCurrent_Threshold = jsonFromFrontend["OC"];
+//      } catch(...) {}
     }
 
 
     /*  Creating JSON doc to store data from nodes. 
         successful data retreival:       {"NODE":#,"SENT":true,"T1":#.##,"T2":#.##, ...}
         unsuccessful data retreival:    {"NODE":#,"SENT":false}*/
-    StaticJsonDocument<200> sendJson;
-    sendJson["NODE"] = node;
+    StaticJsonDocument<200> jsonToFrontend;
+    jsonToFrontend["NODE"] = node;
     // Serial.print("Node ");   //debugging prints
     // Serial.print(node);
     // Serial.println(":");
     radio.openWritingPipe(nodeAddress);     // switches to the current node address to request data
     readRadio();
-    sendJson["SENT"] = sent;
+    jsonToFrontend["SENT"] = sent;
     if (sent) {                     //ONLY UPDATE DATA ON SUCCESSFUL DATA RETREIVAL
-        sendJson["T1"] = dataFromNode.T1;
-        sendJson["T2"] = dataFromNode.T2;
-        sendJson["T3"] = dataFromNode.T3;
+        jsonToFrontend["T1"] = dataFromNode.T1;
+        jsonToFrontend["T2"] = dataFromNode.T2;
+        jsonToFrontend["T3"] = dataFromNode.T3;
         //TODO: add other variables, such as voltage, current, and others
     }
 
     String sendValue;                       // Serialize JSON Object to a string, which can be printed
-    serializeJson(sendJson, sendValue);     // would use serializeJson(sendJson, Serial), but this allows us to modify later if we want
+    serializeJson(jsonToFrontend, sendValue);     // would use serializeJson(jsonToFrontend, Serial), but this allows us to modify later if we want
     Serial.println(sendValue);              // ALSO processing identifies when message is over by waiting for the '\n' (new line) note 
 
     changeNode();           // go to next node
@@ -138,6 +154,9 @@ void loop() {
 void readRadio() {
     // Sends the shutdown command for that node, which is stored in a boolean array
     commandToNode.shutdown = shutdownArray[node];
+    commandToNode.overheatThresh = overheat_Threshold;
+    commandToNode.overVoltageThresh = overVoltage_Threshold;
+    commandToNode.overCurrentThresh = overCurrent_Threshold;
     // boolean to indicate if radio.write() tx was successful
     bool tx_sent;
     tx_sent = radio.write(&commandToNode, sizeof(commandToNode));
@@ -147,9 +166,9 @@ void readRadio() {
         if (radio.isAckPayloadAvailable()) {
             // read acknowledgement payload and copy message to remoteNodeData 
             radio.read(&dataFromNode, sizeof(dataFromNode));
-            // sendJson["T1"] = dataFromNode.T1;
-            // sendJson["T2"] = dataFromNode.T2;
-            // sendJson["T3"] = dataFromNode.T3;
+            // jsonToFrontend["T1"] = dataFromNode.T1;
+            // jsonToFrontend["T2"] = dataFromNode.T2;
+            // jsonToFrontend["T3"] = dataFromNode.T3;
 
             // Serial.print("[+] Successfully received data from node.");
             // Serial.print("  ---- Temp was: ");
@@ -184,7 +203,7 @@ void changeNode() {
     }
     nodeAddress[3] = node / 10;
     nodeAddress[4] = node % 10;
-    // sendJson["NODE"] = node;
+    // jsonToFrontend["NODE"] = node;
 }
 /* Function: changeNode(int n)
 *   Updates the node and nodeAddress to specified node. Doesn't allow for nonexistent nodes
