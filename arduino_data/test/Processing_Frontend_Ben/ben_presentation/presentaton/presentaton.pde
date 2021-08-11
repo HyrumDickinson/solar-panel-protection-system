@@ -228,14 +228,6 @@ void draw() {
     // Will only display the temperatures on the default ('Monitor') tab
     if (activeTab == 2) {
         updateDisplayData();
-    } else if (activeTab == 3) {
-        if (thresholdsChanged) {
-            cp5.getController("confirmChanges").show();
-        } else {
-            cp5.getController("confirmChanges").hide();
-            
-            
-        }
     }
 }
 
@@ -244,15 +236,17 @@ void draw() {
 *   Handles all events from controlP5 items, such as buttons and tabs. Button Id's 1-NUMNODES are dedicated to the solar panel buttons
 */
 void controlEvent(ControlEvent theControlEvent) {
-  if (theControlEvent.isTab()) {
+  if (theControlEvent.isTab()) {                                        // Activated whenever a tab is clicked
     println("event from tab : "+theControlEvent.getTab().getName()+" with id "+theControlEvent.getTab().getId());
     activeTab = theControlEvent.getTab().getId();
-  } else if (theControlEvent.isAssignableFrom(Textfield.class)) {
-  
-    
-  } else if (theControlEvent.getId() > 0 && theControlEvent.getId() <= NUMNODES) {
+
+  } else if (theControlEvent.isAssignableFrom(Textfield.class)) {       // Activated whenever a value is entered into a textfield (currently only on 'Settings' tab)    
+    cp5.getController("confirmChanges").show();
+
+  } else if (theControlEvent.getId() > 0 && theControlEvent.getId() <= NUMNODES) {      // Activated if not tab or textfield (only other objects are buttons w/ ID's 1-NUMNODES)
     nodeDisplayed = theControlEvent.getId();
     println("switched to node " + nodeDisplayed);
+
   }
 }
 
@@ -435,6 +429,7 @@ void confirmChanges() {
   println("overVoltage threshold changed to " + overVoltageThreshold);
   println("overCurrent threshold changed to " + overCurrentThreshold);
   thresholdsChanged = false;
+  cp5.getController("confirmChanges").hide();
   
   //mySerial.write("ok");
 }

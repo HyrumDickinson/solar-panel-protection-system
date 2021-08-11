@@ -59,6 +59,9 @@ float temporaryOverVoltThresh = overVoltageThreshold;
 float temporaryOverCurrThresh = overCurrentThreshold;
 boolean thresholdsChanged = false;
 
+
+/************************************************************************************************* SETUP FUNCTIONS *************************************************************************************************/
+
 /* Function: setup()
 *   Initializes all buttons/tabs/serial connecections required
 */
@@ -203,16 +206,7 @@ void controlP5Setup() {
 }
 
 
-
-
-
-
-
-
-
-
-
-
+/************************************************************************************************* DRAW FUNCTIONS *************************************************************************************************/
 
 /* Function: draw()
 *   Acts as the 'loop' function from arduino IDE. creates all the shapes/text on the screen
@@ -228,14 +222,6 @@ void draw() {
     // Will only display the temperatures on the default ('Monitor') tab
     if (activeTab == 2) {
         updateDisplayData();
-    } else if (activeTab == 3) {
-        if (thresholdsChanged) {
-            cp5.getController("confirmChanges").show();
-        } else {
-            cp5.getController("confirmChanges").hide();
-            
-            
-        }
     }
 }
 
@@ -244,15 +230,17 @@ void draw() {
 *   Handles all events from controlP5 items, such as buttons and tabs. Button Id's 1-NUMNODES are dedicated to the solar panel buttons
 */
 void controlEvent(ControlEvent theControlEvent) {
-  if (theControlEvent.isTab()) {
+  if (theControlEvent.isTab()) {                                        // Activated whenever a tab is clicked
     println("event from tab : "+theControlEvent.getTab().getName()+" with id "+theControlEvent.getTab().getId());
     activeTab = theControlEvent.getTab().getId();
-  } else if (theControlEvent.isAssignableFrom(Textfield.class)) {
-  
-    
-  } else if (theControlEvent.getId() > 0 && theControlEvent.getId() <= NUMNODES) {
+
+  } else if (theControlEvent.isAssignableFrom(Textfield.class)) {       // Activated whenever a value is entered into a textfield (currently only on 'Settings' tab)    
+    cp5.getController("confirmChanges").show();
+
+  } else if (theControlEvent.getId() > 0 && theControlEvent.getId() <= NUMNODES) {      // Activated if not tab or textfield (only other objects are buttons w/ ID's 1-NUMNODES)
     nodeDisplayed = theControlEvent.getId();
     println("switched to node " + nodeDisplayed);
+
   }
 }
 
@@ -329,16 +317,16 @@ void updateData() {
 
 /* FUNCTIONS FOR OBJECTS ON THE 'Monitor' TAB */
 /* Function: enable()
-*   this is linked to the 'enable' button under the 'Monitor' tab. when the button is clicked, this function
-*   is automatically called. This sends out a JSON command telling whcih node to activate
+*   Linked to 'enable' button under 'Monitor' tab. When button is clicked, this function
+*   is automatically called. Sends out a JSON command telling which node to activate
 */
 void enable() {
   println("on");
   mySerial.write("{NODE:" + nodeDisplayed + ",SHUTDOWN:" + false + "}");
 }
 /* Function: disable()
-*   this is linked to the 'disable' button under the 'Monitor' tab. when the button is clicked, this function
-*   is automatically called. This sends out a JSON command telling whcih node to deactivate
+*   Linked to 'disable' button under 'Monitor' tab. When button is clicked, this function
+*   is automatically called. Sends out a JSON command telling which node to deactivate
 */
 void disable() {
   println("off");
@@ -349,8 +337,8 @@ void disable() {
 /* FUNCTIONS FOR OBJECTS ON THE 'Settings' TAB */
 
 /* Function: defaultSettings()
-*   this is linked to the 'defaultSettings' button under the 'Settings' tab. when the button is clicked, this function
-*   is automatically called. This sets the overheat, overVoltage, and overCurrent thresholds to their default values
+*   Linked to 'defaultSettings' button under 'Settings' tab. When button is clicked, this function
+*   is automatically called. Sets the overheat, overVoltage, and overCurrent thresholds to default values
 */
 void defaultSettings() {
   overheatThreshold = defaultOverheatTemp;
@@ -364,8 +352,8 @@ void defaultSettings() {
 }
 
 /* Function: changeOverheatThresh(String inputValue)
-*   this is linked to the 'defaultSettings' textfield under the 'Settings' tab. when the user hits 'enter', this function
-*   is automatically called. This sets the overheat value to user's input (must be a valid int/float)
+*   Linked to 'defaultSettings' textfield under 'Settings' tab. When the user hits 'enter', this function
+*   is automatically called. Sets the overheat value to user's input (must be a valid int/float)
 */
 void changeOverheatThresh(String inputValue) {
   inputValue = inputValue.trim();       // Cuts off any blank spaces in the inputValue
@@ -385,8 +373,8 @@ void changeOverheatThresh(String inputValue) {
 }
 
 /* Function: changeOverheatThresh(String inputValue)
-*   this is linked to the 'defaultSettings' textfield under the 'Settings' tab. when the user hits 'enter', this function
-*   is automatically called. This sets the overVoltage value to user's input (must be a valid int/float)
+*   Linked to 'defaultSettings' textfield under 'Settings' tab. When the user hits 'enter', this function
+*   is automatically called. Sets the overVoltage value to user's input (must be a valid int/float)
 */
 void changeOverVoltageThresh(String inputValue) {
   inputValue = inputValue.trim();       // Cuts off any blank spaces in the inputValue
@@ -406,8 +394,8 @@ void changeOverVoltageThresh(String inputValue) {
 }
 
 /* Function: changeOverheatThresh(String inputValue)
-*   this is linked to the 'defaultSettings' textfield under the 'Settings' tab. when the user hits 'enter', this function
-*   is automatically called. This sets the overCurrent value to user's input (must be a valid int/float)
+*   Linked to the 'defaultSettings' textfield under the 'Settings' tab. When the user hits 'enter', this function
+*   is automatically called. Sets the overCurrent value to user's input (valid int/float)
 */
 void changeOverCurrentThresh(String inputValue) {
   inputValue = inputValue.trim();       // Cuts off any blank spaces in the inputValue
@@ -427,6 +415,10 @@ void changeOverCurrentThresh(String inputValue) {
   
 }
 
+/* Function: confirmChanges()
+*   Linked to 'confirmChanges' button under 'Settings' tab. When clicked, this function is automatically called. Updates official thresholds, sends change command to serial, 
+*   and hides the button until changes are made
+*/
 void confirmChanges() {
   overheatThreshold = temporaryOverheatThresh;
   overVoltageThreshold = temporaryOverVoltThresh;
@@ -435,6 +427,7 @@ void confirmChanges() {
   println("overVoltage threshold changed to " + overVoltageThreshold);
   println("overCurrent threshold changed to " + overCurrentThreshold);
   thresholdsChanged = false;
+  cp5.getController("confirmChanges").hide();
   
   //mySerial.write("ok");
 }
