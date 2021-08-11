@@ -21,7 +21,11 @@ import processing.serial.*;  // including the serial object libarary
 
 /* CONTANTS */
 final int NUMNODES = 60;
-color UOFI_BLUE = color(19, 41, 75);
+final float defaultOverheatTemp = 10.0;            // Default Temperature (Farenheit) that triggers overheat status. Can revert to in 'Settings' tab
+final float defaultVoltageThreshold = 0.0;         // Default Voltage (in Volts)   that triggers overVoltage status. Can revert to in 'Settings' tab
+final float defaultCurrentThreshold = 0.0;         // Default Current (in Amps)    that triggers overCurrent status. Can revert to in 'Settings' tab
+
+color UOFI_BLUE = color(19, 41, 75);          // colors taken from official UIUC palette (https://www.uillinois.edu/OUR/brand/color_palettes)
 color UOFI_BLUE_HOVER = color(30, 81, 150);
 color UIC_RED = color(213, 0, 50);
 color URBANA_ORANGE = color(232, 74, 39);
@@ -35,12 +39,12 @@ PFont font;
 data[] dataArray = new data[NUMNODES];
 
 /* GENERAL VARIABLES */
-int activeTab;
+int activeTab;           // the current 
 int newLine = 10;        // 10 is binary for 'return' or 'new line'.
-float tempThresh = 10.0;
-float voltThresh = 0.0;
-float currThresh = 0.0;
 
+float overheatTemp = defaultOverheatTemp;             // Modifiable Temperature (Farenheit) that triggers overheat status. Can be modified on 'Settings' tab
+float voltageThreshold = defaultVoltageThreshold;     // Modifiable Voltage (in Volts)   that triggers overVoltage status. Can be modified on 'Settings' tab
+float currentThreshold = defaultCurrentThreshold;     // Modifiable Current (in Amps)    that triggers overCurrent status. Can be modified on 'Settings' tab
 
 /* JSON VARIABLES */
 JSONObject parsedJson;
@@ -77,8 +81,8 @@ void controlP5Setup() {
   ControlFont controlFont = new ControlFont(font);
   cp5.setFont(controlFont);
   
-   cp5.addTab("default")
-    .setLabel("Monitor")
+   cp5.addTab("default")      // The name of this tab is 'default'. You can change the display value with '.setLabel'
+    .setLabel("Overview")     // The displayed text on the tab
     .setHeight(76)
     .setWidth(115)
     .setColorActive(URBANA_ORANGE)
@@ -86,8 +90,9 @@ void controlP5Setup() {
     .setColorForeground(UOFI_BLUE_HOVER)
     .activateEvent(true)
     .setId(1)
+    //.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
     ;
-  cp5.addTab("Overview")
+  cp5.addTab("Monitor")      // I didn't change the 'label' (displayed text) because I'm satisifed with what's on here
      .setHeight(76)
      .setWidth(115)
      .setColorActive(URBANA_ORANGE)
@@ -95,6 +100,7 @@ void controlP5Setup() {
      .setColorForeground(UOFI_BLUE_HOVER)
      .activateEvent(true)
      .setId(2)
+     //.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
      ;
   cp5.addTab("Settings")
     .setHeight(76)
@@ -104,21 +110,10 @@ void controlP5Setup() {
     .setColorForeground(UOFI_BLUE_HOVER)
     .activateEvent(true)
     .setId(3)
+    //.getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
     ;
-//   cp5.getTab("default")
-//     .activateEvent(true)
-//     .setId(1)
-//   ;
-//   cp5.getTab("Overview")
-//     .activateEvent(true)
-//     .setId(2)
-//   ;
-//   cp5.getTab("Settings")
-//     .activateEvent(true)
-//     .setId(3)
-//   ;
   
-  // create panel buttons starting at xpos, ypos
+  // Creating the array of panel buttons shown on the 'Monitor' tab
   int xpos = 120;
   int ypos = 120;
   int buttonsInRow = 5;     // creates a new line every x nodes. 
@@ -134,33 +129,53 @@ void controlP5Setup() {
       .setPosition(xpos, ypos)
       .setSize(75, 45)
       .setId(i + 1)
+      .moveTo("Monitor")
     ;
     xpos += 77;
   }
-  
-  cp5.addButton("enable")    //"enable" is the name of the button
+
+  cp5.addButton("enable")    // "enable" is the name of the button
     .setPosition(800, 800)
     .setSize(120, 50)
     .setColorBackground(color(23, 207, 23))
     .setColorForeground(color(46, 184, 46))
     .setColorActive(color(0, 200, 0))
+    .moveTo("Monitor")
   ;
-  cp5.addButton("disable")    //"disable" is the name of the button
+  cp5.addButton("disable")    // "disable" is the name of the button
     .setPosition(1000, 800)
     .setSize(120, 50)
     .setColorBackground(UIC_RED)
     .setColorForeground(color(195, 34, 34))
     .setColorActive(color(220, 0, 0))
+    .moveTo("Monitor")
   ;
   
-   cp5.addButton("oof")    //"oof" is the name of the button
-    .setPosition(1000, 800)
+  
+  // Creating the various buttons on 'Settings' tab
+  cp5.addTextfield("changeOverheatThresh")
+    .setLabel("Overheat Temperature Value (F)")
+    .setPosition(1000, 500)
     .setSize(120, 50)
+    .moveTo("Settings")
+    .setColorCaptionLabel(color(0, 0, 0)) 
+  ;
+  
+  
+  
+  
+  
+  
+  
+   cp5.addButton("defaultSettings")    // "defaultSettings" is the name of the button
+    .setLabel("Set to Defaults")    // "Set to Defaults" is the text displayed
+    .setPosition(1000, 800)
+    .setSize(200, 50)
     .setColorBackground(UIC_RED)
     .setColorForeground(color(195, 34, 34))
     .setColorActive(color(220, 0, 0))
+    .moveTo("Settings")
   ;
-  cp5.getController("oof").moveTo("Settings");
 }
 
 /* Function: draw()
@@ -175,16 +190,12 @@ void draw() {
     updateData();
 
     // Will only display the temperatures on the default ('Monitor') tab
-    if (activeTab == 1 || activeTab == 0) {
-        fill(UOFI_BLUE);
-        stroke(UOFI_BLUE);
-        rect(1400, height / 3, 125, height / 3);
+    if (activeTab == 2) {
+        
         
         updateDisplayData();
-    } else if (activeTab == 2) {
-      fill(UOFI_BLUE);
-      stroke(UOFI_BLUE);
-      rect(100, 100, 100, 100);
+    } else if (activeTab == 1 || activeTab == 0) {
+        
     }
 }
 
@@ -196,6 +207,9 @@ void controlEvent(ControlEvent theControlEvent) {
   if (theControlEvent.isTab()) {
     println("event from tab : "+theControlEvent.getTab().getName()+" with id "+theControlEvent.getTab().getId());
     activeTab = theControlEvent.getTab().getId();
+  } else if (theControlEvent.isAssignableFrom(Textfield.class)) {
+  
+    
   } else if (theControlEvent.getId() > 0 && theControlEvent.getId() <= NUMNODES) {
     nodeDisplayed = theControlEvent.getId();
     println("switched to node " + nodeDisplayed);
@@ -208,6 +222,9 @@ void controlEvent(ControlEvent theControlEvent) {
 */
 void updateDisplayData() {
     if (nodeDisplayed > 0 && nodeDisplayed <= NUMNODES) {
+        fill(UOFI_BLUE);
+        stroke(UOFI_BLUE);
+        rect(1400, height / 3, 125, height / 3);
         float[] temps = dataArray[nodeDisplayed - 1].getTempsFarenheit();
 
         fill(0, 0, 0);
@@ -250,11 +267,13 @@ void updateData() {
               
               float[] tempArray = {parsedJson.getFloat("T1"), parsedJson.getFloat("T2"), parsedJson.getFloat("T3")};
   
-              boolean overHeat = tempArray[0] >= tempThresh || tempArray[1] >= tempThresh || tempArray[2] >= tempThresh;
-              boolean overVolt = false;     //= parsedJson.getFloat("V") >= voltThresh;
-              boolean overCurr = false;     //= parsedJson.getFloat("C") >= currThresh;
+              boolean overHeat = tempArray[0] >= overheatTemp || tempArray[1] >= overheatTemp || tempArray[2] >= overheatTemp;
+              boolean overVolt = false;     //= parsedJson.getFloat("V") >= overVoltageThreshold;
+              boolean overCurr = false;     //= parsedJson.getFloat("C") >= overCurrentThreshold;
               if (overHeat || overVolt || overCurr) {
                   cp5.getController("panel" + nodeUpdated).setColorBackground(UIC_RED);
+              } else  {
+                  cp5.getController("panel" + nodeUpdated).setColorBackground(UOFI_BLUE);
               }
               sent = false;
             } else {
@@ -283,4 +302,26 @@ void enable() {
 void disable() {
   println("off");
   mySerial.write("{NODE:" + nodeDisplayed + ",SHUTDOWN:" + true + "}");
+}
+
+
+/* Function: defaultSettings()
+*   this is linked to the 'defaultSettings' button under the 'Settings' tab. when the button is clicked, this function
+*   is automatically called. This sets the overheat, overVoltage, and overCurrent thresholds to their default values
+*/
+void defaultSettings() {
+  println("reset settings to default");
+  
+  overheatTemp = defaultOverheatTemp;
+  voltageThreshold = defaultVoltageThreshold;
+  currentThreshold = defaultCurrentThreshold; 
+}
+/* Function: changeOverheatThresh(String inputValue)
+*   this is linked to the 'defaultSettings' button under the 'Settings' tab. when the button is clicked, this function
+*   is automatically called. This sets the overheat, overVoltage, and overCurrent thresholds to their default values
+*/
+void changeOverheatThresh(String inputValue) {
+  println("changed oveheat threshold to " + inputValue);
+  
+  overheatTemp = Integer.valueOf(inputValue);
 }
