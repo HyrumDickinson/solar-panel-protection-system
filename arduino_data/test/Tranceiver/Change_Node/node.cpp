@@ -1,11 +1,17 @@
-/**************************************************************************
-*   Remote node - nRF24L01+ radio communications                          *
-*                                                                         *
-*          Author: Benjamin Olaivar                                       *
-*                                                                         *
-*          Last modified: 08/11/2021                                      *
-*                                                                         *
-***************************************************************************/
+
+  
+/*************************************************************************
+   Remote node - nRF24L01+ radio communications
+        A program to operate a remote-node slave device that sends
+        data to a command unit on a given request message. The radio
+        transceiver used is the nRF24L01+, and it operates using the
+        TMRh20 RF24 library.
+ *                                                                       *
+        Author: B.D. Fraser
+ *                                                                       *
+          Last modified: 27/06/2017
+ *                                                                       *
+ *************************************************************************/
 
 /* LIBRARIES */
 #include <SPI.h>
@@ -21,12 +27,9 @@
 #define CE_PIN 7
 #define CSN_PIN 8
 #define LEDPIN 3
-#define BADLEDPIN 4
 
 /* GENERAL VARIABLES */
-int overheat_Threshold = 90;       // When in overheat, thresh is lower number. Allows for autonomous restart. Val is arbitrary
-int overVoltage_Threshold;
-int overCurrent_Threshold;
+int TEMP_THRESH = 90;       // When in overheat, thresh is lower number. Allows for autonomous restart. Val is arbitrary
 int tempThresholdsBroken;   // Reads how many temp sensors have detected an exceeded temp thresh
 bool overheat = false;
 
@@ -43,11 +46,12 @@ float tempArray[NUM_TEMP_SENSORS];
 
 struct Data_From_Master {
   bool shutdown;
-  float overheatThresh;
-  float overVoltageThresh;
-  float overCurrentThresh;
 };
 struct Data_Package {
+  bool overheat = false;
+  bool overVolt = false;
+  bool overCurr = false;
+
   float V1 = 0.0;
   float V2 = 0.0;
   float V3 = 0.0;
@@ -64,14 +68,13 @@ Data_From_Master dataFromMaster;
 
 
 /* Function: setup
-*   Initialises the system wide configuration and settings prior to start
+      Initialises the system wide configuration and settings prior to start
 */
 void setup() {
   Serial.begin(9600);
   while (!Serial) {}
 
   pinMode(LEDPIN, OUTPUT);
-  pinMode(BADLEDPIN, OUTPUT);
 
   radioSetup();
   tempSensorSetup();
@@ -79,8 +82,8 @@ void setup() {
 
 
 /* Function: radioSetup()
-*  setup function for NRF24L01 transceiver. This version sets up an acknowledgment payload (AckPayload) so we don't
-*  have to manually switch between listening/writing modes. Also prints transceiver data (may romove)
+  setup function for NRF24L01 transceiver. This version sets up an acknowledgment payload (AckPayload) so we don't
+  have to manually switch between listening/writing modes. Also prints transceiver data (may romove)
 */
 void radioSetup() {
   radio.begin();
@@ -104,7 +107,7 @@ void radioSetup() {
 
 
 /* Function: tempSensorSetup
-*  initializes the temperature sensors (quantitiy determined by NUM_TEMP_SENSORS) and calls 'printTempSensorAddresses'
+  initializes the temperature sensors (quantitiy determined by NUM_TEMP_SENSORS) and calls 'printTempSensorAddresses'
 */
 void tempSensorSetup() {
   sensors.begin();
@@ -127,7 +130,7 @@ void tempSensorSetup() {
 }
 
 /* Function: printTempSensorAddresses
-*  Prints the addresses of each detected temperature device for debugging purposes
+  Prints the addresses of each detected temperature device for debugging purposes
 */
 void printTempSensorAddresses(DeviceAddress deviceAddress) {
   for (uint8_t i = 0; i < 8; i++) {
@@ -139,7 +142,7 @@ void printTempSensorAddresses(DeviceAddress deviceAddress) {
 
 
 /* Function: loop
-*   main loop program for the slave node - repeats continuously during system operation
+      main loop program for the slave node - repeats continuously during system operation
 */
 void loop() {
 
@@ -148,8 +151,8 @@ void loop() {
 
 
 /* Function: updateNodeData
-*   updates the temperature and voltage (later) variables for the node and stores it in the nRF24L01+ radio
-*   preloaded ack payload ready for sending on next received message
+      updates the temperature and voltage (later) variables for the node and stores it in the nRF24L01+ radio
+      preloaded ack payload ready for sending on next received message
 */
 void updateNodeData(void) {
   readTemperatures();
@@ -160,9 +163,9 @@ void updateNodeData(void) {
 
 
 /* Function: readTemperatures
-*  Cycles through each temp sensor and saves the readings to the 'data' struct. Also takes note of
-*  an overheat (currently waits for 2 sensors to overheat. This number is arbitrary)
-*  - may make separate function for overheat readings (for simplification)
+  Cycles through each temp sensor and saves the readings to the 'data' struct. Also takes note of
+  an overheat (currently waits for 2 sensors to overheat. This number is arbitrary)
+  - may make separate function for overheat readings (for simplification)
 */
 void readTemperatures() {
   sensors.requestTemperatures(); // reads temps from all sensors
@@ -172,20 +175,18 @@ void readTemperatures() {
   for (int i = 0; i < NUM_TEMP_SENSORS; i++) {
     if (sensors.getAddress(tempDeviceAddress, i)) {
       tempArray[i] = sensors.getTempF(tempDeviceAddress);  // reads temperature in degrees farenheit
-      if (tempArray[i] >= overheat_Threshold) {
+      if (tempArray[i] >= TEMP_THRESH) {
         tempThresholdsBroken += 1;
       }
     }
   }
-  if (tempThresholdsBroken >= 2) {    /* After initial overheat, other sensors may trigger as overheating due to overheat_Threshold change. This is expected */
+  if (tempThresholdsBroken >= 2) {    /* After initial overheat, other sensors may trigger as overheating due to TEMP_THRESH change. This is expected */
     overheat = true;
-    overheat_Threshold = 85;
-    digitalWrite(BADLEDPIN, HIGH);
+    TEMP_THRESH = 85;
   } else {     // does not wait for entire system cooldown. Again, going back to 1 or 2 faulty sensors ruining everything... this was an issue found in testing
     //TODO: find a way to get around faulty temperature sensors. Testing found that resetting the system worked...Maybe re-run tempSensorSetup occasionally
-    digitalWrite(BADLEDPIN, LOW);
     overheat = false;
-    overheat_Threshold = 90;
+    TEMP_THRESH = 90;
   }
 
   data.T1 = tempArray[0];   // updating readings in our data struct
@@ -196,8 +197,8 @@ void readTemperatures() {
 
 
 /* Function: radioCheckAndReply
-*  sends the preloaded node data over the nrf24l01 radio when
-*  a message is received by the master
+  sends the preloaded node data over the nrf24l01 radio when
+  a message is received by the master
 */
 void radioCheckAndReply(void) {
   // check for radio message and send sensor data using auto-ack
@@ -209,12 +210,8 @@ void radioCheckAndReply(void) {
     } else {
       digitalWrite(LEDPIN, HIGH);
     }
-    overheat_Threshold = dataFromMaster.overheatThresh;
-    overVoltage_Threshold = dataFromMaster.overVoltageThresh;
-    overCurrent_Threshold = dataFromMaster.overCurrentThresh;
     Serial.println("Received request from master - sending preloaded data.");
 
     // update the node count after sending ack payload - provides continually changing data
     updateNodeData();
   }
-}
