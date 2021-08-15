@@ -1,5 +1,3 @@
-
-  
 /*************************************************************************
    Remote node - nRF24L01+ radio communications
         A program to operate a remote-node slave device that sends
@@ -215,3 +213,4 @@ void radioCheckAndReply(void) {
     // update the node count after sending ack payload - provides continually changing data
     updateNodeData();
   }
+}

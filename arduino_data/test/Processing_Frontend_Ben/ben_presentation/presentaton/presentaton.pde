@@ -321,7 +321,7 @@ void updateData() {
 */
 void enable() {
   println("on");
-  mySerial.write("{NODE:" + nodeDisplayed + ",SHUTDOWN:" + false + "}");
+  mySerial.write("{COMMAND:" + 1 + ",NODE:" + nodeDisplayed + ",SHUTDOWN:" + false + "}");
 }
 /* Function: disable()
 *   Linked to 'disable' button under 'Monitor' tab. When button is clicked, this function
@@ -329,7 +329,7 @@ void enable() {
 */
 void disable() {
   println("off");
-  mySerial.write("{NODE:" + nodeDisplayed + ",SHUTDOWN:" + true + "}");
+  mySerial.write("{COMMAND:" + 1 + ",NODE:" + nodeDisplayed + ",SHUTDOWN:" + true + "}");
 }
 
 
@@ -424,5 +424,5 @@ void confirmChanges() {
   println("overCurrent threshold changed to " + overCurrentThreshold);
   cp5.getController("confirmChanges").hide();
   
-//   mySerial.write("{OH:" + overheatThreshold + ",OV:" + overVoltageThreshold + ",OC:" + overCurrentThreshold + "}");
+   mySerial.write("{COMMAND:" + 2 + ",ohThresh:" + overheatThreshold + ",ovThresh:" + overVoltageThreshold + ",ocThresh:" + overCurrentThreshold + "}");
 }

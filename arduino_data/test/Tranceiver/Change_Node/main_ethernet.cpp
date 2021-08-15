@@ -22,12 +22,16 @@
 /* CONSTANTS */
 #define CE_PIN 7        // set Chip-Enable (CE) and Chip-Select-Not (CSN) pins (for UNO)
 #define CSN_PIN 8
-#define NUM_NODES 2
+#define NUM_NODES 3
 #define CAPACITY 200    // the number of bytes required for our JSON (we use roughly 200)
 
 /* GENERAL VARIABLES */
 int node = 1;
 bool shutdownArray[60];
+
+float oh = 70.0;
+float ov = 0.0;
+float oc = 0.0;
 
 /* JSON VARIABLES */
 bool sent = true;          // indicates if a message has been sent
@@ -40,16 +44,12 @@ byte nodeAddress[5] = {'N','O','D', 0, 1};      // setup radio pipe address for 
 
 struct Command_Package {
     bool shutdown = false;
+    float ohthresh;
+    float ovthresh;
+    float octhresh;
 };
 struct Data_Package {
-  bool overheat = false;
-  bool overVolt = false;
-  bool overCurr = false;
-
-  float V1 = 0.0;
-  float V2 = 0.0;
-  float V3 = 0.0;
-
+  float V = 0.0;
   float C = 0.0;
 
   float T1 = 0.0;
@@ -98,8 +98,15 @@ void loop() {
       String val = Serial.readString();
       StaticJsonDocument<200> jsonFromFrontend;
       deserializeJson(jsonFromFrontend, val);
-      changeNode(jsonFromFrontend["NODE"]);
-      shutdownArray[node] = jsonFromFrontend["SHUTDOWN"];
+      if (jsonFromFrontend["COMMAND"] == 1) {
+            changeNode(jsonFromFrontend["NODE"]);
+            shutdownArray[node] = jsonFromFrontend["SHUTDOWN"];
+
+      } else if (jsonFromFrontend["COMMAND"] == 2) {
+          oh = jsonFromFrontend["ohThresh"];
+          ov = jsonFromFrontend["ovThresh"];
+          oc = jsonFromFrontend["ocThresh"];
+      }
     }
 
 
@@ -127,7 +134,7 @@ void loop() {
 
     changeNode();           // go to next node
 
-    delay(1000);
+    delay(250);
 }
 
 
@@ -138,6 +145,9 @@ void loop() {
 void readRadio() {
     // Sends the shutdown command for that node, which is stored in a boolean array
     commandToNode.shutdown = shutdownArray[node];
+    commandToNode.ohthresh = oh;
+    commandToNode.ovthresh = ov;
+    commandToNode.octhresh = oc;
     // boolean to indicate if radio.write() tx was successful
     bool tx_sent;
     tx_sent = radio.write(&commandToNode, sizeof(commandToNode));
