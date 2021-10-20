@@ -11,20 +11,16 @@ The latest stable, deployable version of the code is stored in the `main` branch
 ### `python-2-version` and `python-3-version`
 Until code is fully ported to Python 3, these branches are the `main` branches the code in their respective language.
 ### `original`
-It is important to note that the original code for this project is not my own. It was written by Dillon Vadgama, Douglas Lee, and Sachin Reddy as part of their original design project. The exact original code, including the original README, is stored in this branch. Under no circumstances should anything in the `original` branch be edited.
-
-The `original` branch is an exact copy of the files in <https://github.com/sachinreddy1/SolarPanelMonitor>. There may be instances over the course of this project where viewing his git commit history, rather than only his final project files, is useful.
-#### All others
+It is important to note that the original code for this project is not our own. It was written by Dillon Vadgama, Douglas Lee, and Sachin Reddy as part of a senior design project. The exact original code, including the original README, is stored in this branch. 
+### All others
 All other repos exist for code editing purposes and are changed or deleted at the discretion of Hyrum Dickinson or Benjamin Olaivar.
 
 ## Languages
 
-- `main` : Python 3
-- `python-3-version` : Python 3
-- `python-2-version` : Python 2
-- `original` : Python 2
-
-All README and WRITEME files are written in Markdown.
+Microprocessor code - Arduino Language
+Original GUI - Python 2 & Tkinter
+New GUI - Processing 3
+README & WRITEME files - Markdown
 
 ## Dependencies
 
@@ -34,7 +30,7 @@ All README and WRITEME files are written in Markdown.
 - pillow
 - datetime
 
-The original code was written to run with PIL, not pillow. However, PIL is currently an unsupported package whose own website recommends against its use. Pillow is a maintained fork of PIL, and should be backwards compatible.
+The original code was written to for PIL. PIL is now unsupported - its own website recommends against its use. Pillow is a maintained backwords-compatible fork of PIL.
 
 ## Run
 
@@ -44,5 +40,3 @@ The original code was written to run with PIL, not pillow. However, PIL is curre
 
 source venv/bin/activate
 python2 Setup.py py2app -A
-
-**For questions about this README, the repository, or the code in it, please contact Hyrum Dickinson at hyrumsd2@illinois.edu.**
